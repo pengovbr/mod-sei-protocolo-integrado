@@ -12,9 +12,9 @@ require_once dirname(__FILE__).'/../../../SEI.php';
 class ProtocoloIntegradoVersaoRN extends InfraRN {
 
   private $numSeg = 0;
-  private $versaoAtualDesteModulo = '1.1.3';
+  private $versaoAtualDesteModulo = '1.1.4';
   private $nomeParametroModulo = 'PI_VERSAO';
-  private $historicoVersoes = array('1.1.1','1.1.2','1.1.3');
+  private $historicoVersoes = array('1.1.1','1.1.2','1.1.3','1.1.4');
 
   public function __construct(){
     //parent::__construct(); 
@@ -105,6 +105,10 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 				//Versão do plugin com suporte multibancos : Mysql,SqlServer e Oracle
 				$instalacao = $this->instalarv113($strVersaoPreviaModuloProtocoloIntegrado);
 				break;
+			case '1.1.4':
+				//Versão do plugin com suporte multibancos : Mysql,SqlServer e Oracle
+				$instalacao = $this->instalarv114($strVersaoPreviaModuloProtocoloIntegrado);
+				break;
 			default:
 					$instalacao["operacoes"] = null;
 					$instalacao["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão do módulo".$strVersaoPreviaModuloProtocoloIntegrado." inválida";
@@ -148,6 +152,59 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 		
 	}
   }
+  private function instalarv114($strVersaoPreviaModuloProtocoloIntegrado){
+
+  		$objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
+  		$objProtocoloIntegradoParametrosRN  = new ProtocoloIntegradoParametrosRN();
+
+  		$resultado = array();
+  		if( strlen(ProtocoloIntegradoParametrosRN::$CHAVE_MODULO_PI)!=ProtocoloIntegradoParametrosRN::$NUM_CARACTERES_CHAVE_PI){
+
+  			$resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI.É necessário definir uma chave de 16 caracteres para variável CHAVE_MODULO_PI no arquivo ProtocoloIntegradoParametrosRN.php ";
+  			return $resultado;
+  		}
+  		if(InfraString::isBolVazia($strVersaoPreviaModuloProtocoloIntegrado)|| trim($strVersaoPreviaModuloProtocoloIntegrado)=='1.1.2'){
+
+  			  $instalacao = $this->instalarv113($strVersaoPreviaModuloProtocoloIntegrado);
+	          if(!isset($instalacao["erro"])){
+
+	                return $this->instalarv114('1.1.3');  
+	          }else{
+
+	              return $instalacao;
+	          }
+  				
+  		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)=='1.1.3'){
+
+  			$objProtocoloIntegradoParametrosDTO->retTodos();
+  		
+  			$objParametrosRetornados = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
+  			
+  			if(strlen($objParametrosRetornados->getStrSenhaWebservice())>0){
+
+  					$senhaEncriptada = rawurlencode($objProtocoloIntegradoParametrosRN->encriptaSenha(trim($objParametrosRetornados->getStrSenhaWebservice())));
+  					$objParametrosRetornados->setStrSenhaWebservice($senhaEncriptada);
+  					$objProtocoloIntegradoParametrosRN->alterar($objParametrosRetornados);
+  			}
+  			
+	  			//Criando a tabela de pacotes nos três bancos
+		  	if (BancoSEI::getInstance() instanceof InfraMySql){
+			    BancoSEI::getInstance()->executarSql("alter table md_pi_parametros modify column senha_webservice varchar(100)");
+			} else if (BancoSEI::getInstance() instanceof InfraSqlServer){
+				BancoSEI::getInstance()->executarSql("alter table md_pi_parametros alter column senha_webservice varchar(100)");
+			}else if (BancoSEI::getInstance() instanceof InfraOracle){
+			  		BancoSEI::getInstance()->executarSql("alter table md_pi_parametros modify( senha_webservice varchar(100))");
+			 }
+  			BancoSEI::getInstance()->executarSql('update infra_parametro set valor=\''.$this->versaoAtualDesteModulo.'\' where nome=\'PI_VERSAO\'');
+
+  		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)==trim($this->versaoAtualDesteModulo)){
+
+
+  				$resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão ".$strVersaoPreviaModuloProtocoloIntegrado." já instalada";
+  				return $resultado;
+
+  		}
+  }
   private function instalarv113($strVersaoPreviaModuloProtocoloIntegrado){
 
   		
@@ -155,6 +212,7 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
   		$this->logar(' INICIANDO OPERACOES DA INSTALACAO DA VERSAO 1.1.3 DO MODULO PROTOCOLO INTEGRADO NA BASE DO SEI');
   		
   		$erros = null;
+      $versao = '1.1.3';
 
   		$resultado = array();
   		$resultado["operacoes"] = null;
@@ -282,14 +340,14 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 					BancoSEI::getInstance()->executarSql($comando);
 				}      
 				*/
-			  	BancoSEI::getInstance()->executarSql('insert into infra_parametro(nome,valor) values(\'PI_VERSAO\', \''.$this->versaoAtualDesteModulo.'\')');	
+			  	BancoSEI::getInstance()->executarSql('insert into infra_parametro(nome,valor) values(\'PI_VERSAO\', \''.$versao.'\')');	
 				
 				
 				
-  		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)==trim($this->versaoAtualDesteModulo)){
+  		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)==$versao){
 
 
-  				 $resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão ".$strVersaoPreviaModuloProtocoloIntegrado." já instalada";
+  				$resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão ".$strVersaoPreviaModuloProtocoloIntegrado." já instalada";
   				return $resultado;
 
   		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)=='1.1.2'){
@@ -468,7 +526,7 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 			  		BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_monitora_processos', ($numAtividadesPacotes+1));
 			  	}
 
-			  	BancoSEI::getInstance()->executarSql('update infra_parametro set valor=\''.$this->versaoAtualDesteModulo.'\' where nome=\'PI_VERSAO\';');
+			  	BancoSEI::getInstance()->executarSql('update infra_parametro set valor=\''.$versao.'\' where nome=\'PI_VERSAO\';');
   		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)<'1.1.2'){
 
   			 $resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão ".$strVersaoPreviaModuloProtocoloIntegrado." não pode ser atualizada para versão ".$this->versaoAtualDesteModulo;

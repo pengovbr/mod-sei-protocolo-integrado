@@ -25,7 +25,18 @@ try {
   $objProtocoloIntegradoParametrosDTO->retTodos();
   
   $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
-  $objRetornoProtocoloIntegradoParametrosDTO = $objProtocoloIntegradoParametrosRN->listar($objProtocoloIntegradoParametrosDTO);
+  $objRetornoProtocoloIntegradoParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
+  $senhaWebService = '';
+
+  if(isset($_POST['txtSenhaServico'])){
+
+        $senhaWebService = $_POST['txtSenhaServico'];
+  }
+  else if(strlen(trim($objRetornoProtocoloIntegradoParametrosDTO->getStrSenhaWebservice()))>0){
+
+      $senhaWebService = $objProtocoloIntegradoParametrosRN->encriptaSenha(rawurldecode(trim($objRetornoProtocoloIntegradoParametrosDTO->getStrSenhaWebservice())));
+  
+  }
   
   switch($_GET['acao']){
    
@@ -36,7 +47,7 @@ try {
       $strDesabilitar = 'disabled="disabled"';
 	  
 	  if(isset($_POST['hdnFomularioSubmetido'])){
-	  		
+
 			$strValorSinPublicacaoRestritos='N';
 			if ($_POST['chkEnviarInformacoesProcessosRestritos']=='on'){
 				$strValorSinPublicacaoRestritos='S';
@@ -45,7 +56,9 @@ try {
 			$objProtocoloIntegradoParametrosDTO->setStrUrlWebservice($_POST['txtUrlServico']);
 			
 			$objProtocoloIntegradoParametrosDTO->setStrLoginWebservice($_POST['txtLoginServico']);
-			$objProtocoloIntegradoParametrosDTO->setStrSenhaWebservice($_POST['txtSenhaServico']);
+
+      $senha = rawurlencode($objProtocoloIntegradoParametrosRN->encriptaSenha($_POST['txtSenhaServico']));
+			$objProtocoloIntegradoParametrosDTO->setStrSenhaWebservice($senha);
 			$objProtocoloIntegradoParametrosDTO->setNumQuantidadeTentativas($_POST['txtQuantidadeTentativas']);
 			$objProtocoloIntegradoParametrosDTO->setNumAtividadesCarregar($_POST['txtQuantidadeAtividades']);
 			$objProtocoloIntegradoParametrosDTO->setStrEmailAdministrador($_POST['txtEmailAdministrador']);
@@ -105,8 +118,8 @@ function validarCadastroProtocololIntegradoParametros(){
 	    document.getElementById('txtLoginServico').focus();
 	    return false;
   	}
-  	if (infraTrim(document.getElementById('txtSenhaServico').value).length>20) {
-	    alert('O campo Senha deve ter no máximo 20 caracteres');
+  	if (infraTrim(document.getElementById('txtSenhaServico').value).length!=16) {
+	    alert('O campo Senha deve possuir 16 caracteres');
 	    document.getElementById('txtSenhaServico').focus();
 	    return false;
   	}
@@ -189,7 +202,7 @@ PaginaSEI::getInstance()->abrirAreaDados(null);
   <label id="lblLoginServico" for="txtLoginServico" accesskey="" class="infraLabelObrigatorio">Usuário</label><br/>
   <input type="text" id="txtLoginServico" name="txtLoginServico" class="infraText" size="10" value="<?=$objRetornoProtocoloIntegradoParametrosDTO->getStrLoginWebservice()?>"   tabindex="<?=PaginaSEI::getInstance()->getProxTabDados()?>" /><br/><br/><br/>
   <label id="lblSenhaServico" for="txtSenhaServico" accesskey="" class="infraLabelObrigatorio">Senha</label><br/>
-  <input type="password" id="txtSenhaServico" name="txtSenhaServico" class="infraText" size="20" value="<?=trim($objRetornoProtocoloIntegradoParametrosDTO->getStrSenhaWebservice())?>"   tabindex="<?=PaginaSEI::getInstance()->getProxTabDados()?>" /><br/><br/><br/>
+  <input type="password" id="txtSenhaServico" name="txtSenhaServico" class="infraText" size="20" value="<?=$senhaWebService?>"   tabindex="<?=PaginaSEI::getInstance()->getProxTabDados()?>" /><br/><br/><br/>
   
   <hr>
   <h2 style='font-weight:bold;text-decoration: underline;'>Tentativas de Reenvio</h2>

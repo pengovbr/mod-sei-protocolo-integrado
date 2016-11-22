@@ -42,13 +42,13 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 			
 			$this->login = $login;
 			$this->senha = $senha;
-			$this->url  = $url;
+			$this->url  =  preg_replace("/^http:/i", "https:", $url); 
 	        // Create the stream_context and add it to the options
 	        $this->context = stream_context_create();
 			$this->soap_defencoding='utf-8';
 	        $opcoes = array_merge($opcoes, array('stream_context' => $this->context,'local_cert'=>$this->certificado));
 			
-			//$this->validarConexaoWebService();
+			$this->validarConexaoWebService();
 			parent::SoapClient($url, $opcoes );
 			
 			
@@ -60,41 +60,61 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 		
 		$ch = curl_init();
 
-		curl_setopt($ch, CURLOPT_HEADER, true) ;  
+		curl_setopt($ch, CURLOPT_HEADER, true);  
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_NOBODY, true);
 		curl_setopt ($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; //Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
 		curl_setopt($ch, CURLOPT_URL,$this->url );
+		
 		
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,1 );
 		curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__).'/'.$this->certificado);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 		
 		$retorno = curl_exec($ch);
-		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-		$header = substr($retorno, 0, $header_size);
+		$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$header = substr($retorno, 0, $headerSize);
+		$e = null;
 		
 		if(stripos( $this->url,"?wsdl")===false){
+			
 			throw new InfraException("Endereço do serviço inválido ou serviço fora do ar.
 							Verifique se este endereço está corretamente informado nos parâmetros de integração ao Protocolo Integrado.",$e);
 	
 		}	
+	
 		if(curl_errno($ch)) {
+
+			$e =  new Exception($header."Requisição CURL resultou no seguinte erro: ".curl_error($ch)."(Código: ".curl_errno($ch).")");
 			if (curl_errno($ch)==60){
-				throw new InfraException("Certificado inválido ou ausente.",$e);
+					
+					throw new InfraException("Certificado inválido ou ausente.",$e);
 			}
 			else{
-				throw new InfraException("Endereço do serviço inválido ou serviço fora do ar.
-					Verifique se este endereço está corretamente informado nos parâmetros de integração ao Protocolo Integrado.",$e);
-			}			
+
+				
+				throw new InfraException("Ocorreu um problema ao realizar a conexão ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes",$e);
+			}
+
 		}else{
-			if(stripos( $header,"200 OK")===false){
-				throw new InfraException("Endereço do serviço inválido ou serviço fora do ar.
-							Verifique se este endereço está corretamente informado nos parâmetros de integração ao Protocolo Integrado.",$e);
+
+
+			if($httpCode!=200){
+
+				if(strlen($header)>0){
+
+					$e =  new Exception($header);
+
+				}else{
+
+					$e =  new Exception("503 Service Unavailable.Não foi possível conectar ao servidor");
+				}
+				throw new InfraException("Ocorreu um problema ao realizar a conexão ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes.",$e);
 	
 			}
 			
 		}
-		
 		
 	}
     // Override doRequest to calculate the authentication hash from the $request. 

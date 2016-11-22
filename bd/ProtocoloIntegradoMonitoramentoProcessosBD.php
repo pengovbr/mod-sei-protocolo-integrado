@@ -46,7 +46,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
 	 
 	  if ($numUnidadeTeste!=null){
 	      
-	      $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
+	      //$sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
 	  }
 
 
@@ -126,7 +126,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
 			 
 	  if ($numUnidadeTeste!=null){
 	      
-	      $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
+	      //$sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
 	  }
 
 

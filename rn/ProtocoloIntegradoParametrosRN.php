@@ -13,7 +13,10 @@ require_once dirname(__FILE__).'/../../../SEI.php';
 
 class ProtocoloIntegradoParametrosRN extends InfraRN {
   
-  public static $NUM_MAX_ANDAMENTOS_POR_VEZ = 500000;   
+  public static  $NUM_MAX_ANDAMENTOS_POR_VEZ = 500000; 
+  public static  $CHAVE_MODULO_PI = '123456789abcdefg';
+   public static $NUM_CARACTERES_CHAVE_PI = 16;
+
   public function __construct(){
     parent::__construct();
   }
@@ -21,7 +24,36 @@ class ProtocoloIntegradoParametrosRN extends InfraRN {
   protected function inicializarObjInfraIBanco(){
     return BancoSEI::getInstance();
   }
-  protected function listarConectado(ProtocoloIntegradoParametrosDTO $protocoloIntegradoParametrosDTO) {
+
+  /*
+  * Encripta senha de acesso ao PI através da operação XOR entre as variáveis $CHAVE_MODULO_PI e a senha de acesso ao PI 
+  */
+  function encriptaSenha($senha) {
+
+      // Chave do módulo definida para encriptar a senha de acesso ao WS do PI
+       $chave = ProtocoloIntegradoParametrosRN::$CHAVE_MODULO_PI;
+       
+       if(strlen(ProtocoloIntegradoParametrosRN::$CHAVE_MODULO_PI)!=ProtocoloIntegradoParametrosRN::$NUM_CARACTERES_CHAVE_PI){
+       
+        throw new InfraException ("Erro: Chave de encriptação do módulo não possui ".ProtocoloIntegradoParametrosRN::$NUM_CARACTERES_CHAVE_PI." caracteres");
+       }
+       if(ProtocoloIntegradoParametrosRN::$CHAVE_MODULO_PI == $senha){
+       
+         //throw new InfraException ("Erro: Senha informada não deve ser igual a chave de encriptação");
+       }
+       
+
+       // Senha que será salva na base
+    for ($senhaIncriptada = $senha, $x = 0, $y = 0; $x < strlen($senhaIncriptada); $x++){
+      
+    $senhaIncriptada{$x} = chr(ord($senhaIncriptada{$x}) ^ ord($chave{$y}));
+    $y = ($y >= (strlen($chave) - 1)) ? 0 : ++$y;
+    
+  }
+       
+       return $senhaIncriptada;
+ }
+   protected function listarConectado(ProtocoloIntegradoParametrosDTO $protocoloIntegradoParametrosDTO) {
     try {
   
       //Valida Permissao

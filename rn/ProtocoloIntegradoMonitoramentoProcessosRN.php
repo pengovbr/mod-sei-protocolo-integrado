@@ -497,12 +497,25 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			
 			PaginaSEI::getInstance() -> prepararOrdenacao($objPacoteDTO, 'IdProtocoloIntegradoPacoteEnvio', InfraDTO::$TIPO_ORDENACAO_ASC);
 			
-			PaginaSEI::getInstance() -> prepararPaginacao($objPacoteDTO, 50);
+			if(isset($filtro['filtroNumQuantidadeRegistrosPorPagina']) && $filtro['filtroNumQuantidadeRegistrosPorPagina']!=''){
+
+				PaginaSEI::getInstance() -> prepararPaginacao($objPacoteDTO, $filtro['filtroNumQuantidadeRegistrosPorPagina']);
+
+			}else{
+
+				PaginaSEI::getInstance() -> prepararPaginacao($objPacoteDTO, 50);
+			}
+			
 			
 		}
 		$arrObjPacotesDTO = $objPacoteRN -> listar($objPacoteDTO);
-		
+		$numPacotes = count($arrObjPacotesDTO);
 		if (isset($filtro['paginacao']) && $filtro['paginacao'] == true) {
+
+			if(isset($filtro['filtroNumQuantidadeRegistrosPorPagina']) && $filtro['filtroNumQuantidadeRegistrosPorPagina']!=''&&$numPacotes>$filtro['filtroNumQuantidadeRegistrosPorPagina']){
+
+				$objPacoteDTO->setNumRegistrosPaginaAtual($filtro['filtroNumQuantidadeRegistrosPorPagina']);
+			}
 			PaginaSEI::getInstance() -> processarPaginacao($objPacoteDTO);
 		}
 		$arrObjProcedimentoDTO = $this -> montarPacotesMonitorados($arrObjPacotesDTO, $filtro);
@@ -630,6 +643,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		$objProtocoloRN = new ProtocoloRN();
 		$objProtocoloIntegradoRN = new ProtocoloIntegradoRN();
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
+		$objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
 
 		$objParticipanteDTO = new ParticipanteDTO();
 		$objParticipanteDTO -> retNumIdContato();
@@ -656,7 +670,12 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		$this -> parametrosProtocolo = $objRetornoProtocoloIntegradoParametrosDTO;
 		$urlWebService = $objRetornoProtocoloIntegradoParametrosDTO -> getStrUrlWebservice();
 		$loginWebService = $objRetornoProtocoloIntegradoParametrosDTO -> getStrLoginWebservice();
+
+		//recupera senha salva na base que está encriptada
 		$senhaWebService = $objRetornoProtocoloIntegradoParametrosDTO -> getStrSenhaWebservice();
+
+		//Recupera senha de acesso através da encriptação da senha salva na base
+		$senhaWebService = $objProtocoloIntegradoParametrosRN->encriptaSenha(rawurldecode($senhaWebService));
 		if (strlen(trim($senhaWebService)) > 0 && strlen(trim($loginWebService)) > 0) {
 			$conexaoCliente = new ProtocoloIntegradoClienteWS($urlWebService, $loginWebService, $senhaWebService, $opcoes);
 		} else {
@@ -669,18 +688,18 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 
 		if (!is_int($retornoWS -> NumeroMaximoDocumentos)) {
-
+			
 			if ($retornoWS instanceof SoapFault) {
 
 				if (isset($retornoWS -> detail -> NegocioFault -> mensagemFault)) {
 
 					//throw new InfraException(utf8_decode($retornoWS->detail->NegocioFault->mensagemFault),$e);
 					throw new InfraException('Usuário e/ou senha inválidos para uso do serviço.
-					 Verifique se os parâmetros de integração ao Protocolo Integrado estão corretamente informados.', $e);
+					 Verifique se os parâmetros de integração ao Protocolo Integrado estão corretamente informados.', $retornoWS);
 				}
 
 			}
-			throw new InfraException('Não foi Possível Obter a  Quantidade Máxima de Documentos no WebService do Protocolo Integrado.', $e);
+			throw new InfraException('Não foi Possível Obter a  Quantidade Máxima de Documentos no WebService do Protocolo Integrado.', $retornoWS);
 		}
 		$quantidadeMaximaDocumentos = $retornoWS -> NumeroMaximoDocumentos;
 		$numMaximoTentativas = $objRetornoProtocoloIntegradoParametrosDTO -> getNumQuantidadeTentativas();

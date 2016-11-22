@@ -1,6 +1,6 @@
 <?
 
-class ProtocoloIntegradoIntegracao implements ISeiIntegracao{
+class ProtocoloIntegradoIntegracao extends SeiIntegracao {
   
   public function __construct(){
   	
@@ -11,42 +11,6 @@ class ProtocoloIntegradoIntegracao implements ISeiIntegracao{
 		infraAdicionarPath(dirname(__FILE__).'ws');
   }
 
-  public function montarBotaoProcedimento(SeiIntegracaoDTO $objSeiIntegracaoDTO){
-    return array();
-  }
   
-  public function montarIconeProcedimento(SeiIntegracaoDTO $objSeiIntegracaoDTO){
-    return array();
-  }
-  
-  public function montarBotaoDocumento(SeiIntegracaoDTO $objSeiIntegracaoDTO){
-    return array();
-  }
-  
-  public function montarIconeDocumento(SeiIntegracaoDTO $objSeiIntegracaoDTO){
-    return array();
-  }
-  public function montarBotaoControleProcessos(){
-    return array();
-  }
-  public function montarIconeControleProcessos($arrObjProcedimentoDTOIntegracao){
-    return array();
-  }
-  
-  
-  public function excluirProcedimento(ProcedimentoDTO $objProcedimentoDTO){
-  }
-  
-  public function atualizarConteudoDocumento(DocumentoDTO $objDocumentoDTO){
-  }
-    
-  public function excluirDocumento(DocumentoDTO $objDocumentoDTO){
-  }
-   public function montarIconeAcompanhamentoEspecial($arrObjProcedimentoDTO){
-  	
-  }
-  public function montarMensagemSituacaoProcedimento(ProcedimentoDTO $objProcedimentoDTO){
-
-  }
 }
 ?>
