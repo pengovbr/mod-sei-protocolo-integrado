@@ -12,11 +12,26 @@
 require_once dirname(__FILE__).'/../../../SEI.php';
 
 class ProtocoloIntegradoRN extends InfraRN {
-    
+  
+  
+  				
   public function __construct(){
     parent::__construct();
+   
   }
-
+  public function montaTarefasPadraoPublicacao(){
+  		 $tarefasPadraoPublicacao = array(
+  										TarefaRN::$TI_GERACAO_PROCEDIMENTO,TarefaRN::$TI_RELACIONAR_PROCEDIMENTO,TarefaRN::$TI_REMOCAO_RELACIONAMENTO_PROCEDIMENTO,TarefaRN::$TI_SOBRESTAMENTO,
+  										TarefaRN::$TI_REMOCAO_SOBRESTAMENTO,
+  									    TarefaRN::$TI_CONCLUSAO_PROCESSO_UNIDADE,TarefaRN::$TI_REABERTURA_PROCESSO_UNIDADE,
+									    TarefaRN::$TI_PROCESSO_REMETIDO_UNIDADE,TarefaRN::$TI_SOBRESTANDO_PROCESSO,
+									    TarefaRN::$TI_REMOCAO_SOBRESTANDO_PROCESSO,TarefaRN::$TI_SOBRESTADO_AO_PROCESSO,
+									    TarefaRN::$TI_REMOCAO_SOBRESTADO_AO_PROCESSO,TarefaRN::$TI_PROCESSO_RECEBIDO_UNIDADE,TarefaRN::$TI_ALTERACAO_NIVEL_ACESSO_GLOBAL,
+									    TarefaRN::$TI_CONCLUSAO_PROCESSO_USUARIO,TarefaRN::$TI_PROCESSO_CIENCIA,
+									    TarefaRN::$TI_ANEXADO_PROCESSO,TarefaRN::$TI_ANEXADO_AO_PROCESSO,TarefaRN::$TI_DESANEXADO_PROCESSO,TarefaRN::$TI_DESANEXADO_DO_PROCESSO,TarefaRN::$TI_ALTERACAO_NIVEL_ACESSO_PROCESSO,TarefaRN::$TI_ALTERACAO_GRAU_SIGILO_PROCESSO,TarefaRN::$TI_ALTERACAO_HIPOTESE_LEGAL_PROCESSO,TarefaRN::$TI_PROCESSO_ANEXADO_CIENCIA,TarefaRN::$TI_ATUALIZACAO_ANDAMENTO,
+									    );
+  		return $tarefasPadraoPublicacao;
+  }
   protected function inicializarObjInfraIBanco(){
     return BancoSEI::getInstance();
   }
@@ -214,7 +229,7 @@ class ProtocoloIntegradoRN extends InfraRN {
 				    	}else if(is_array($arrObjHipoteseLegalDTO)){
 				    		$strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', HipoteseLegalINT::formatarHipoteseLegal($arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrNome(), $arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrBaseLegal()), $strNomeTarefa);
 				    	}
-  					}else if(is_array($arrObjHipoteseLegalDTO)){
+  					}else if(is_array($arrObjHipoteseLegalDTO) && $arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]){
   						$strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', ', '.HipoteseLegalINT::formatarHipoteseLegal($arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrNome(), $arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrBaseLegal()), $strNomeTarefa);
   					}
 					

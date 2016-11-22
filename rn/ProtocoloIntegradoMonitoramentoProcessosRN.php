@@ -90,6 +90,29 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		}
 	}
 
+	protected function contarConectado(ProtocoloIntegradoMonitoramentoProcessosDTO $protocoloIntegradoMonitoramentoProcessosDTO) {
+		try {
+
+			//Valida Permissao
+			SessaoSEI::getInstance() -> validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
+
+			//Regras de Negocio
+			//$objInfraException = new InfraException();
+
+			//$objInfraException->lancarValidacoes();
+
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
+			$ret = $objBD -> contar($protocoloIntegradoMonitoramentoProcessosDTO);
+
+			//Auditoria
+
+			return $ret;
+
+		} catch(Exception $e) {
+			throw new InfraException('Erro Consultando Atividades monitoradas para publicação no Protocolo Integrado.', $e);
+		}
+	}
+
 	protected function publicarProcessosConectado(ProtocoloIntegradoMonitoramentoProcessosDTO $objProtocoloIntegradoParametrosDTO) {
 		$tempoInicial = time();
 
@@ -280,6 +303,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 					$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
 
+					
 					$objPacoteDTO -> setNumIdProtocolo($idProtocolo);
 					$objPacoteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO);
 					$objPacoteRN -> cadastrar($objPacoteDTO);
@@ -408,30 +432,50 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 					}
 				}
 			}
-			$strSqlNativo .= " protocolo_integrado_pacote_envio.id_protocolo IN (select id_protocolo from protocolo p where p.id_unidade_geradora IN (".$strUnidades.")) AND ";
+                        // Adriano MPOG - tratando novos IDs de tamanho máximo de 30 posições
+			$strSqlNativo .= " md_pi_pacote_envio.id_protocolo IN (select id_protocolo from protocolo p where p.id_unidade_geradora IN (".$strUnidades.")) AND ";
 		} 
+		//Adriano -MPOG - fazendo alterações para ficar multibancos o tratamento do formato de data
+		//Se campo inicial da data de geração do processo está preenchido
 		if (isset($filtro['filtroTxtPeriodoGeracaoDe']) && $filtro['filtroTxtPeriodoGeracaoDe'] != '') {
-			$dthFim = $filtro['filtroTxtPeriodoGeracaoDe'];
-			$arrDataInicio = str_replace('/', '-', $filtro['filtroTxtPeriodoGeracaoDe']);
-			$strDataInicio = date('Y-m-d', strtotime($arrDataInicio));
+
+			$strDataInicio = $filtro['filtroTxtPeriodoGeracaoDe'];
+			
+			//Código provisório para tratar unificação dos fontes
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
+			
+			$strDataInicialFormatada = $strDataInicio . " 00:00:00";
+			$strNovaDataInicial = $objBD -> retornarFormatoData($strDataInicialFormatada);
+			
+			//Se campo final da data de geração do processo está preenchido
 			if (isset($filtro['filtroTxtPeriodoGeracaoA']) && $filtro['filtroTxtPeriodoGeracaoA'] != '') {
-				$dthFim = $filtro['filtroTxtPeriodoGeracaoA'];
-				$arrDataFim = str_replace('/', '-', $dthFim);
-				$strDataFim = date('Y-m-d', strtotime($arrDataFim));
+
+				$strDataFim = $filtro['filtroTxtPeriodoGeracaoA'];
 				
-				$strSqlNativo .= " protocolo_integrado_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao>='".$strDataInicio." 00:00:00' AND p.dta_geracao<='".$strDataFim." 23:59:59') AND ";
+				
+				$strDataFinalFormatada = $strDataFim . " 23:59:59";
+				$strNovaDataFinal = $objBD -> retornarFormatoData($strDataFinalFormatada);
+				
+				//Trata SQL nativo para que considere apenas protocolos produzidos dentro daquele intervalo
+				$strSqlNativo .= " md_pi_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao>= ".$strNovaDataInicial." AND p.dta_geracao<= ".$strNovaDataFinal.") AND ";
 			
 			}else{
-				$strSqlNativo .=  " protocolo_integrado_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao>='".$strDataInicio." 00:00:00') AND ";
+			        //Trata SQL nativo para que considere apenas protocolos produzidos a partir da data inicial informada.
+				$strSqlNativo .=  " md_pi_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao>= ".$strNovaDataInicial. ") AND ";
 				
 			}
 		}else if(isset($filtro['filtroTxtPeriodoGeracaoA']) && $filtro['filtroTxtPeriodoGeracaoA'] != ''){
+			//Se apenas o segundo campo de data de geração do processo está preenchido, considera apenas os processos produzidos até aquela data
+			$strDataFim = $filtro['filtroTxtPeriodoGeracaoA'];
+
+			//Código provisório para tratar unificação dos fontes
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
+				
+			$strDataFinalFormatada = $strDataFim . " 23:59:59";
+			$strNovaDataFinal = $objBD -> retornarFormatoData($strDataFinalFormatada);
 			
-			$dthFim = $filtro['filtroTxtPeriodoGeracaoA'];
-			$arrDataFim = str_replace('/', '-', $dthFim);
-			$strDataFim = date('Y-m-d', strtotime($arrDataFim));
 			
-			$strSqlNativo .=  " protocolo_integrado_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao<='".$strDataFim." 23:59:59') AND ";
+			$strSqlNativo .=  " pi_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao<= ". $dthNovaDataFinal. ") AND ";
 			
 		}
 		if (isset($filtro['filtroTxtPeriodoDe']) && $filtro['filtroTxtPeriodoDe'] != '') {
@@ -522,6 +566,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 	public function listarProcessosPublicacao($filtro) {
 
+
 		$objProtocoloIntegradoRN = new ProtocoloIntegradoRN();
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
 		$objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
@@ -538,8 +583,11 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
  		$strSqlNativo = '';
 		if (isset($filtro['strDthAgendamentoExecutado'])){
 			$strDataAgendamentoExecutado = str_replace('/', '-', $filtro['strDthAgendamentoExecutado']);
-			$strDataAgendamentoExecutado = date('Y-m-d G:i:s', strtotime($strDataAgendamentoExecutado));
-			$strSqlNativo .=  "(dth_agendamento_executado is null OR dth_agendamento_executado<>'".$strDataAgendamentoExecutado."') AND ";
+			$strDataAgendamentoExecutado = date('d/m/Y G:i:s', strtotime($strDataAgendamentoExecutado));
+			$objPIMonitoraProcessosBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
+			
+			$strDataAgendamentoExecutado = $objPIMonitoraProcessosBD -> retornarFormatoData($strDataAgendamentoExecutado);
+			$strSqlNativo .=  "(dth_agendamento_executado is null OR dth_agendamento_executado<>".$strDataAgendamentoExecutado.") AND ";
 			
 		}
 		if (isset($filtro['numMaxResultados'])){
@@ -567,6 +615,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			$strSqlNativo = substr($strSqlNativo, 0,strlen($strSqlNativo)-3);
 			$objPacoteDTO->setStrCriterioSqlNativo($strSqlNativo);
 		}
+		
 		$arrObjPacotesDTO = $objPacoteRN -> listar($objPacoteDTO);
 		$arrObjProcedimentoDTO = $this -> montarPacotesMonitorados($arrObjPacotesDTO, $filtro);
 		return $arrObjProcedimentoDTO;
@@ -615,7 +664,9 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			throw new InfraException('Campos Login e Senha para Acesso ao WebService devem ser informados na tela de Configuração de Parâmetros do Protocolo Integrado.', $e);
 		}
 
+
 		$retornoWS = $conexaoCliente -> getQuantidadeMaximaDocumentosPorRequisicaoServidor();
+
 
 		if (!is_int($retornoWS -> NumeroMaximoDocumentos)) {
 
@@ -673,11 +724,14 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			$numTotal = $numTotal+count($arrObjProcessosMonitorados);
 			
 			$contador = 0;
+
 			foreach ($arrObjProcessosMonitorados as $pacote => $protocoloMonitorado) {
 				$contador = $contador+1;
 				$documento = $dom -> createElement("Documento");
 	
 				$objProtocoloDTO = $protocoloMonitorado['protocolo'];
+
+
 	
 				array_push($arrObjProtocoloEnviados, $objProtocoloDTO);
 				
@@ -834,8 +888,9 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 					$strNomeOperacao = $objProtocoloIntegradoRN -> transformarMensagemOperacao($numAtividade, $strMensagem);
 	
 					$itemHistorico = $dom -> createElement("ItemHistorico");
-	
-					$dataHoraOperacao = $dom -> createElement("DataHoraOperacao", date('c', strtotime($arrAtividades[$j] -> getDthDataAbertura())));
+				
+					$dataHoraOperacaoConvertida =  str_replace('/', '-', $arrAtividades[$j] -> getDthDataAbertura());
+					$dataHoraOperacao = $dom -> createElement("DataHoraOperacao", date('c', strtotime($dataHoraOperacaoConvertida)));
 					$unidadeOperacao = '';
 	
 					if ($arrAtividades[$j] -> getNumIdUnidade() != null) {

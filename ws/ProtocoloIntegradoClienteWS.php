@@ -48,7 +48,7 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 			$this->soap_defencoding='utf-8';
 	        $opcoes = array_merge($opcoes, array('stream_context' => $this->context,'local_cert'=>$this->certificado));
 			
-			$this->validarConexaoWebService();
+			//$this->validarConexaoWebService();
 			parent::SoapClient($url, $opcoes );
 			
 			
@@ -65,7 +65,7 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 		curl_setopt ($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; //Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
 		curl_setopt($ch, CURLOPT_URL,$this->url );
 		
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,1 );
 		curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__).'/'.$this->certificado);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 		

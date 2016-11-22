@@ -189,7 +189,7 @@ PaginaSEI::getInstance()->abrirAreaDados(null);
   <label id="lblLoginServico" for="txtLoginServico" accesskey="" class="infraLabelObrigatorio">Usuário</label><br/>
   <input type="text" id="txtLoginServico" name="txtLoginServico" class="infraText" size="10" value="<?=$objRetornoProtocoloIntegradoParametrosDTO->getStrLoginWebservice()?>"   tabindex="<?=PaginaSEI::getInstance()->getProxTabDados()?>" /><br/><br/><br/>
   <label id="lblSenhaServico" for="txtSenhaServico" accesskey="" class="infraLabelObrigatorio">Senha</label><br/>
-  <input type="password" id="txtSenhaServico" name="txtSenhaServico" class="infraText" size="20" value="<?=$objRetornoProtocoloIntegradoParametrosDTO->getStrSenhaWebservice()?>"   tabindex="<?=PaginaSEI::getInstance()->getProxTabDados()?>" /><br/><br/><br/>
+  <input type="password" id="txtSenhaServico" name="txtSenhaServico" class="infraText" size="20" value="<?=trim($objRetornoProtocoloIntegradoParametrosDTO->getStrSenhaWebservice())?>"   tabindex="<?=PaginaSEI::getInstance()->getProxTabDados()?>" /><br/><br/><br/>
   
   <hr>
   <h2 style='font-weight:bold;text-decoration: underline;'>Tentativas de Reenvio</h2>
@@ -206,7 +206,7 @@ PaginaSEI::getInstance()->abrirAreaDados(null);
   
   <h3 style='font-weight:bold; font-style: italic;'>Quantidade máxima de andamentos a enviar por vez:</h3><br/>
   <label id="lblQuantidadeTentativas" for="txtQuantidadeTentativas" accesskey="">
-  		Quando for executado o agendamento para um novo envio processos para o Protocolo Integrado, este parâmetro será utilizado como número máximo de andamentos a ser carregados para envio.
+  		Quando o agendamento for executado, este parâmetro será utilizado como número máximo de andamentos de processos a ser enviado.
   </label><br/><br/>
   <input type="text" id="txtQuantidadeAtividades" name="txtQuantidadeAtividades" class="infraText" size="8" value="<?=$objRetornoProtocoloIntegradoParametrosDTO->getNumAtividadesCarregar()?>"  tabindex="<?=PaginaSEI::getInstance()->getProxTabDados()?>" /> atividades<br/><br/><br/>
   

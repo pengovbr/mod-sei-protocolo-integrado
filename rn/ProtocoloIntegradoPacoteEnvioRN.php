@@ -26,34 +26,6 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
     return BancoSEI::getInstance();
   }
   
-  public function listarProtocoloIntegradoEnviar(){
-  	try{
-	  $sql = "select pipe.id_protocolo id_protocolo, pipe.sta_integracao sta_integracao, pipe.dth_situacao dth_situacao, pipe.dth_metadados dth_metadados, ". 
-	  			"pipe.num_tentativas_envio num_tentativas_envio, pipe.id_protocolo_integrado_pacote_envio id_protocolo_integrado_pacote_envio ". 
-	  		 "FROM  protocolo_integrado_pacote_envio pipe ".
-			 "WHERE sta_integracao<>'".ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO."' limit 1000";
-    	$resultadoProtocoloIntegradoPacoteEnvio = $this->getObjInfraIBanco()->consultarSql($sql);
-		$arrProtocoloIntegradoPacoteEnvioDTO = array();
-		foreach($resultadoProtocoloIntegradoPacoteEnvio as $item){
-			$objProtocoloIntegradoPacoteEnvioDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-			
-			$objProtocoloIntegradoPacoteEnvioDTO->setNumIdProtocolo($item['id_protocolo']);
-			$objProtocoloIntegradoPacoteEnvioDTO->setStrStaIntegracao($item['sta_integracao']);
-			$objProtocoloIntegradoPacoteEnvioDTO->setDthDataSituacao($item['dth_situacao']);
-			$objProtocoloIntegradoPacoteEnvioDTO->setDthDataMetadados($item['dth_metadados']);
-			$objProtocoloIntegradoPacoteEnvioDTO->setNumTentativasEnvio($item['num_tentativas_envio']);
-			$objProtocoloIntegradoPacoteEnvioDTO->setNumIdProtocoloIntegradoPacoteEnvio($item['id_protocolo_integrado_pacote_envio']);
-			
-			array_push($arrProtocoloIntegradoPacoteEnvioDTO,$objProtocoloIntegradoPacoteEnvioDTO);
-	
-  		}
-		return $arrProtocoloIntegradoPacoteEnvioDTO;
-      
-    }catch(Exception $e){
-      throw new InfraException('Erro ao carregar atividades.',$e);
-    }
-  }
-  
   protected function listarConectado(ProtocoloIntegradoPacoteEnvioDTO $protocoloIntegradoPacoteEnvioDTO) {
     try {
   
@@ -74,7 +46,30 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
       
   
     }catch(Exception $e){
-      throw new InfraException('Erro listando Tarefas.',$e);
+      throw new InfraException('Erro listando Pacotes.',$e);
+    }
+  }
+  protected function contarConectado(ProtocoloIntegradoPacoteEnvioDTO $protocoloIntegradoPacoteEnvioDTO) {
+    try {
+  
+      //Valida Permissao
+      SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento',__METHOD__,$protocoloIntegradoPacoteEnvioDTO);
+  
+      //Regras de Negocio
+      //$objInfraException = new InfraException();
+  
+      //$objInfraException->lancarValidacoes();
+  
+  
+      $objProtocoloBD = new ProtocoloIntegradoPacoteEnvioBD($this->getObjInfraIBanco());
+      $ret = $objProtocoloBD->contar($protocoloIntegradoPacoteEnvioDTO);
+    
+      return $ret;
+        
+      
+  
+    }catch(Exception $e){
+      throw new InfraException('Erro obtendo número de atividades monitoradas.',$e);
     }
   }
   protected function consultarControlado(ProtocoloIntegradoPacoteEnvioDTO $protocoloIntegradoPacoteEnvioDTO) {
@@ -89,7 +84,7 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
       //$objInfraException->lancarValidacoes();
   
   
-      $objProtocoloBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+      $objProtocoloBD = new ProtocoloIntegradoPacoteEnvioBD($this->getObjInfraIBanco());
       $ret = $objProtocoloBD->consultar($protocoloIntegradoPacoteEnvioDTO);
   
       //Auditoria
@@ -97,7 +92,7 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
       return $ret;
   
     }catch(Exception $e){
-      throw new InfraException('Erro listando Tarefas.',$e); 
+      throw new InfraException('Erro Consultando Pacote.',$e); 
     }
   }
    protected function cadastrarControlado(ProtocoloIntegradoPacoteEnvioDTO $protocoloIntegradoPacoteEnvioDTO){
@@ -109,17 +104,11 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
       //Regras de Negocio
       $objInfraException = new InfraException();
   
-      /*if ($objTarefaDTO->isSetStrNome()){
-        $this->validarStrNome($objTarefaDTO, $objInfraException);
-      }
-      
-      if ($objTarefaDTO->isSetStrSinHistoricoResumido()){
-        $this->validarStrSinHistoricoResumido($objTarefaDTO, $objInfraException);
-      }
-      */
+    
       $objInfraException->lancarValidacoes();
   
-      $objProtocoloBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+      $objProtocoloBD = new ProtocoloIntegradoPacoteEnvioBD($this->getObjInfraIBanco());
+     
       return $objProtocoloBD->cadastrar($protocoloIntegradoPacoteEnvioDTO);
   
   
@@ -137,14 +126,7 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
       //Regras de Negocio
       $objInfraException = new InfraException();
   
-      /*if ($objTarefaDTO->isSetStrNome()){
-        $this->validarStrNome($objTarefaDTO, $objInfraException);
-      }
-      
-      if ($objTarefaDTO->isSetStrSinHistoricoResumido()){
-        $this->validarStrSinHistoricoResumido($objTarefaDTO, $objInfraException);
-      }
-      */
+     
       $objInfraException->lancarValidacoes();
   
       $objPacoteBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());

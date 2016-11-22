@@ -62,6 +62,7 @@ try {
 		$arrParam = array();
 		$arrParam[0] = $objRetornoProtocoloIntegradoParametros;
 		$arrParam[1] = $filtro;
+
 		$objProtocoloIntegradoMonitoramentoProcessosRN->publicarProcessosMonitorados($arrParam);
 		
 		header('Location: '.SessaoSEI::getInstance()->assinarLink('controlador.php?acao='.$_GET['acao_origem']));
@@ -192,7 +193,7 @@ try {
 	  
 	  $strResultado .= '<td width="10%" align="center">'.$pacote['protocolo']->getStrProtocoloFormatado().'</td>';
 	   
-	  switch($pacote['sta_integracao']){
+	  switch(trim($pacote['sta_integracao'])){
 	  		
 	  	case ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO:
 			 $strResultado .= '<td width="10%"> Não Integrado </td>';

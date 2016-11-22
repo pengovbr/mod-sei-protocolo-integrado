@@ -45,5 +45,8 @@ class ProtocoloIntegradoIntegracao implements ISeiIntegracao{
    public function montarIconeAcompanhamentoEspecial($arrObjProcedimentoDTO){
   	
   }
+  public function montarMensagemSituacaoProcedimento(ProcedimentoDTO $objProcedimentoDTO){
+
+  }
 }
 ?>
