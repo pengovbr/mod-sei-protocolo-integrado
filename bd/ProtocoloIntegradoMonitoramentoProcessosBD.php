@@ -29,7 +29,8 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
       	$topSQLServer = "top ".$limit;
 
       }
-      if($maxIdAtividade>0){
+      
+      if($maxIdAtividade!=null && $maxIdAtividade>0){
 
       	 	$restricaoMaxAtividade = "AND a.id_atividade<".$maxIdAtividade . " ";
       }
@@ -46,7 +47,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
 	 
 	  if ($numUnidadeTeste!=null){
 	      
-	      //$sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
+	      $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
 	  }
 
 
@@ -88,6 +89,10 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
 		 	$maxIdAtividade = $this->getObjInfraIBanco()->formatarLeituraNum($item['id_atividade']);
 		 	
 	  }
+	  if (is_null($maxIdAtividade )) {
+		    $maxIdAtividade = 0;
+	  }
+
 	  return $maxIdAtividade;
   }
 
@@ -99,7 +104,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
       $topSQLServer = "";
 
       $this->maxIdAtividadeMonitorada = $this->consultaMaxAtividadeMonitorada();
-      
+
       $atividadesProcessosIneditos = $this->consultarNovasOperacoesProcessosNaoEnviados($this->maxIdAtividadeMonitorada,$limit,$numUnidadeTeste);
 
       if(count($atividadesProcessosIneditos) >= $limit){
@@ -126,7 +131,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
 			 
 	  if ($numUnidadeTeste!=null){
 	      
-	      //$sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
+	      $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
 	  }
 
 
@@ -180,7 +185,8 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
 	 
 	
   }
-   public function recuperarChavePrimaria(){
+
+  public function recuperarChavePrimaria(){
 
   		 $objMonitoramentoDTO = new ProtocoloIntegradoMonitoramentoProcessosDTO();
   		 $chavePrimaria = ""; 
@@ -202,6 +208,26 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
   		 }
 
 		
+  }
+  /**
+  ** Função Criada para recuperar o nome chaves estrangeiras em base Mysql da tabela de pacote
+  ** Dependendo da versão a rodar o script de atualização para 1.1.3,a foreign key terá nomes diferentes.
+  ** 
+  **/
+  public function recuperarChavesEstrangeirasv112(){
+
+       $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+       $chaveEstrangeira = ""; 
+       if (BancoSEI::getInstance() instanceof InfraMySql || BancoSEI::getInstance() instanceof InfraSqlServer){
+
+           $sql = "SELECT constraint_name FROM information_schema.TABLE_CONSTRAINTS  WHERE information_schema.TABLE_CONSTRAINTS.CONSTRAINT_TYPE = 'FOREIGN KEY' AND information_schema.TABLE_CONSTRAINTS.TABLE_SCHEMA = 'sei' AND information_schema.TABLE_CONSTRAINTS.TABLE_NAME = 'protocolo_integrado_monitoramento_processos';";
+           $rs = $this->getObjInfraIBanco()->consultarSql($sql);
+           //var_dump($rs);
+           return $rs;
+
+
+       }
+
   }
   public function consultarParticipantesDocumentosAssinadosProcesso($idProtocolo){
   	

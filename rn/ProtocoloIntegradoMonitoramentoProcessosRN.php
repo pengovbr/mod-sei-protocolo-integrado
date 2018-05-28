@@ -297,8 +297,13 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				$objPacoteExistenteDTO -> retTodos();
 				$objPacoteExistenteDTO -> setNumIdProtocolo($idProtocolo);
 				$objPacoteExistenteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO);
-				$objPacoteRetorno = $objPacoteRN -> consultar($objPacoteExistenteDTO);
-	
+				$objPacoteExistenteDTO->setNumMaxRegistrosRetorno(1);
+				$arrPacoteRetorno = $objPacoteRN -> listar($objPacoteExistenteDTO);
+				$objPacoteRetorno = null;
+				if(count($arrPacoteRetorno)>0){
+
+					$objPacoteRetorno = $arrPacoteRetorno[0];
+				}
 				if ($objPacoteRetorno == null) {
 
 					$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();

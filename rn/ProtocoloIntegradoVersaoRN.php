@@ -12,9 +12,9 @@ require_once dirname(__FILE__).'/../../../SEI.php';
 class ProtocoloIntegradoVersaoRN extends InfraRN {
 
   private $numSeg = 0;
-  private $versaoAtualDesteModulo = '1.1.4';
+  private $versaoAtualDesteModulo = '1.1.5';
   private $nomeParametroModulo = 'PI_VERSAO';
-  private $historicoVersoes = array('1.1.1','1.1.2','1.1.3','1.1.4');
+  private $historicoVersoes = array('1.1.1','1.1.2','1.1.3','1.1.4','1.1.5');
 
   public function __construct(){
     //parent::__construct(); 
@@ -109,6 +109,10 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 				//Versão do plugin com suporte multibancos : Mysql,SqlServer e Oracle
 				$instalacao = $this->instalarv114($strVersaoPreviaModuloProtocoloIntegrado);
 				break;
+			case '1.1.5':
+				//Versão do plugin com suporte multibancos : Mysql,SqlServer e Oracle
+				$instalacao = $this->instalarv115($strVersaoPreviaModuloProtocoloIntegrado);
+				break;
 			default:
 					$instalacao["operacoes"] = null;
 					$instalacao["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão do módulo".$strVersaoPreviaModuloProtocoloIntegrado." inválida";
@@ -152,6 +156,63 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 		
 	}
   }
+  private function instalarv115($strVersaoPreviaModuloProtocoloIntegrado){
+
+  		$objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
+  		$objProtocoloIntegradoParametrosRN  = new ProtocoloIntegradoParametrosRN();
+      $objInfraMetaBD = new InfraMetaBD(BancoSEI::getInstance());
+
+  		$resultado = array();
+  		if( strlen(ProtocoloIntegradoParametrosRN::$CHAVE_MODULO_PI)!=ProtocoloIntegradoParametrosRN::$NUM_CARACTERES_CHAVE_PI){
+
+  			$resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI.É necessário definir uma chave de 16 caracteres para variável CHAVE_MODULO_PI no arquivo ProtocoloIntegradoParametrosRN.php ";
+  			return $resultado;
+  		}
+  		if(trim($strVersaoPreviaModuloProtocoloIntegrado)==trim($this->versaoAtualDesteModulo)){
+
+
+  				$resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão ".$strVersaoPreviaModuloProtocoloIntegrado." já instalada";
+  				return $resultado;
+
+  		}else{
+
+  			$this->instalarv114($strVersaoPreviaModuloProtocoloIntegrado);
+  		}
+
+      if(!InfraString::isBolVazia($strVersaoPreviaModuloProtocoloIntegrado)){
+      
+         
+          $objInfraSequencia = new InfraSequencia(BancoSEI::getInstance());
+          $objInfraSequenciaBD = new InfraSequenciaBD(BancoSEI::getInstance());
+          $objInfraSequenciaDTO = new InfraSequenciaDTO();
+          $objInfraSequenciaDTO->setStrNome('infra_agendamento_tarefa');
+          $objInfraSequenciaDTO->retDblNumAtual();
+          $objInfraSequencia = $objInfraSequenciaBD->consultar($objInfraSequenciaDTO);
+          $numProximoValorSequencia = $objInfraSequencia->getDblNumAtual();
+          $numMaxIdAgendamento = $this->getMaxIdAgendamento();
+
+          if($numProximoValorSequencia<$numMaxIdAgendamento){
+
+                
+                $objInfraSequenciaDTO = new InfraSequenciaDTO();
+          
+                $objInfraSequenciaDTO->setDblNumAtual($numMaxIdAgendamento);
+                $objInfraSequenciaDTO->setStrNome('infra_agendamento_tarefa');
+                $objInfraSequenciaBD->alterar($objInfraSequenciaDTO);
+
+          }
+
+      }
+      $objAgendamentoDTO  = $this->adicionarAgendamento('ProtocoloIntegradoAgendamentoRN::publicarProtocoloIntegrado','Processo de Publicação do PI','D','2');
+      $objAgendamentoDTO  = $this->adicionarAgendamento('ProtocoloIntegradoAgendamentoRN::notificarProcessosComFalhaPublicacaoProtocoloIntegrado','Agendamento do alarme de e-mail disparado quando há falha na publicação de pacotes','D','17');
+      $objAgendamentoDTO  = $this->adicionarAgendamento('ProtocoloIntegradoAgendamentoRN::notificarNovosPacotesNaoSendoGerados','Agendamento do alarme de e-mail disparado quando novos pacotes não estão sendo gerados','D','12');
+      
+      $objInfraMetaBD->excluirChaveEstrangeira('md_pi_mensagem','fk_md_pi_mensagem_tarefa');
+
+      BancoSEI::getInstance()->executarSql('ALTER TABLE md_pi_mensagem ADD CONSTRAINT fk_md_pi_mensagem_tarefa FOREIGN KEY (id_tarefa) REFERENCES tarefa (id_tarefa) ON DELETE CASCADE');
+
+  		BancoSEI::getInstance()->executarSql('update infra_parametro set valor=\''.$this->versaoAtualDesteModulo.'\' where nome=\'PI_VERSAO\'');
+  }
   private function instalarv114($strVersaoPreviaModuloProtocoloIntegrado){
 
   		$objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
@@ -163,39 +224,39 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
   			$resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI.É necessário definir uma chave de 16 caracteres para variável CHAVE_MODULO_PI no arquivo ProtocoloIntegradoParametrosRN.php ";
   			return $resultado;
   		}
-  		if(InfraString::isBolVazia($strVersaoPreviaModuloProtocoloIntegrado)|| trim($strVersaoPreviaModuloProtocoloIntegrado)=='1.1.2'){
+     	if(InfraString::isBolVazia($strVersaoPreviaModuloProtocoloIntegrado)|| trim($strVersaoPreviaModuloProtocoloIntegrado)=='1.1.2'){
 
   			  $instalacao = $this->instalarv113($strVersaoPreviaModuloProtocoloIntegrado);
 	          if(!isset($instalacao["erro"])){
-
-	                return $this->instalarv114('1.1.3');  
+				
+					return $this->instalarv114('1.1.3');  
 	          }else{
 
 	              return $instalacao;
 	          }
   				
   		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)=='1.1.3'){
-
-  			$objProtocoloIntegradoParametrosDTO->retTodos();
-  		
-  			$objParametrosRetornados = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
-  			
-  			if(strlen($objParametrosRetornados->getStrSenhaWebservice())>0){
-
-  					$senhaEncriptada = rawurlencode($objProtocoloIntegradoParametrosRN->encriptaSenha(trim($objParametrosRetornados->getStrSenhaWebservice())));
-  					$objParametrosRetornados->setStrSenhaWebservice($senhaEncriptada);
-  					$objProtocoloIntegradoParametrosRN->alterar($objParametrosRetornados);
-  			}
-  			
-	  			//Criando a tabela de pacotes nos três bancos
+			
+			//Alterando tamanho da coluna senha_webservice nos três bancos
 		  	if (BancoSEI::getInstance() instanceof InfraMySql){
 			    BancoSEI::getInstance()->executarSql("alter table md_pi_parametros modify column senha_webservice varchar(100)");
 			} else if (BancoSEI::getInstance() instanceof InfraSqlServer){
 				BancoSEI::getInstance()->executarSql("alter table md_pi_parametros alter column senha_webservice varchar(100)");
 			}else if (BancoSEI::getInstance() instanceof InfraOracle){
 			  		BancoSEI::getInstance()->executarSql("alter table md_pi_parametros modify( senha_webservice varchar(100))");
-			 }
-  			BancoSEI::getInstance()->executarSql('update infra_parametro set valor=\''.$this->versaoAtualDesteModulo.'\' where nome=\'PI_VERSAO\'');
+			}
+			$objProtocoloIntegradoParametrosDTO->retTodos();
+			$objParametrosRetornados = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
+		  
+			if($objParametrosRetornados->getStrSenhaWebservice()!=null && strlen(trim($objParametrosRetornados->getStrSenhaWebservice()))>0){
+
+			  $senhaEncriptada = rawurlencode($objProtocoloIntegradoParametrosRN->encriptaSenha(trim($objParametrosRetornados->getStrSenhaWebservice())));
+			  $objParametrosRetornados->setStrSenhaWebservice($senhaEncriptada);
+			  $objProtocoloIntegradoParametrosRN->alterar($objParametrosRetornados);
+			}
+      
+  			
+			BancoSEI::getInstance()->executarSql('update infra_parametro set valor=\'1.1.4\' where nome=\'PI_VERSAO\'');
 
   		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)==trim($this->versaoAtualDesteModulo)){
 
@@ -212,7 +273,7 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
   		$this->logar(' INICIANDO OPERACOES DA INSTALACAO DA VERSAO 1.1.3 DO MODULO PROTOCOLO INTEGRADO NA BASE DO SEI');
   		
   		$erros = null;
-      $versao = '1.1.3';
+     	$versao = '1.1.3';
 
   		$resultado = array();
   		$resultado["operacoes"] = null;
@@ -340,7 +401,7 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 					BancoSEI::getInstance()->executarSql($comando);
 				}      
 				*/
-			  	BancoSEI::getInstance()->executarSql('insert into infra_parametro(nome,valor) values(\'PI_VERSAO\', \''.$versao.'\')');	
+			  BancoSEI::getInstance()->executarSql('insert into infra_parametro(nome,valor) values(\'PI_VERSAO\', \''.$versao.'\')');	
 				
 				
 				
@@ -352,20 +413,30 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 
   		}else if(trim($strVersaoPreviaModuloProtocoloIntegrado)=='1.1.2'){
 
-  				$objInfraMetaBD->excluirChaveEstrangeira('protocolo_integrado','fk_protocolo_integrado_tarefa');
+          $objProtocoloIntegradoBD = new ProtocoloIntegradoBD($this->getObjInfraIBanco());
+          $chavesEstrangeirasProtocoloIntegrado = $objProtocoloIntegradoBD->recuperarChavesEstrangeirasv112();
+          foreach($chavesEstrangeirasProtocoloIntegrado as $key=>$arrChaveEstrangeiraProtocoloIntegrado){
+
+                $objInfraMetaBD->excluirChaveEstrangeira('protocolo_integrado',$arrChaveEstrangeiraProtocoloIntegrado[0]);
+          }
   				
   				$objPacoteBD = new ProtocoloIntegradoPacoteEnvioBD($this->getObjInfraIBanco());
-  				$chavesEstrangeirasPacote = $objPacoteBD->recuperarChavesEstrangeiras();
+  				$chavesEstrangeirasPacote = $objPacoteBD->recuperarChavesEstrangeirasv112();
 
-  				foreach($chavesEstrangeirasPacote as $key=>$chaveEstrangeiraPacote){
+  				foreach($chavesEstrangeirasPacote as $key=>$arrChaveEstrangeiraPacote){
 
   						//$this->logar($chaveEstrangeiraPacote);
-  						$objInfraMetaBD->excluirChaveEstrangeira('protocolo_integrado_pacote_envio',$chaveEstrangeiraPacote[0]);
+  						$objInfraMetaBD->excluirChaveEstrangeira('protocolo_integrado_pacote_envio',$arrChaveEstrangeiraPacote[0]);
   				}
-  				$objInfraMetaBD->excluirChaveEstrangeira('protocolo_integrado_monitoramento_processos','fk_protocolo_integrado_monitoramento_processos_pacote_envio');
 
-  				$objInfraMetaBD->excluirChaveEstrangeira('protocolo_integrado_monitoramento_processos','fk_protocolo_integrado_monitoramento_processos_atividade');
+          $objProtocoloIntegradoMonitoramentoProcessosBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+          $chavesEstrangeirasMonitoramentoProcessos = $objProtocoloIntegradoMonitoramentoProcessosBD->recuperarChavesEstrangeirasv112();
+  				
+          foreach($chavesEstrangeirasMonitoramentoProcessos as $key=>$arrChaveEstrangeiraMonitoramentoProcessos){
 
+              //$this->logar($chaveEstrangeiraPacote);
+              $objInfraMetaBD->excluirChaveEstrangeira('protocolo_integrado_monitoramento_processos',$arrChaveEstrangeiraMonitoramentoProcessos[0]);
+          }
 				
   				if (BancoSEI::getInstance() instanceof InfraMySql){
 			  		BancoSEI::getInstance()->executarSql('RENAME TABLE protocolo_integrado to md_pi_mensagem');
@@ -407,13 +478,8 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 			  	} else if (BancoSEI::getInstance() instanceof InfraSqlServer){
 
 			  		BancoSEI::getInstance()->executarSql("ALTER TABLE md_pi_pacote_envio add  id_md_pi_pacote_envio bigint;");
-			  		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
-			  		foreach($arrPacotesPrevios as $key=>$value){
 
-			  			BancoSEI::getInstance()->executarSql('update md_pi_pacote_envio set id_md_pi_pacote_envio=\''.$value->getNumIdProtocoloIntegradoPacoteEnvio().'\' where id_protocolo_integrado_pacote_envio=\''.$value->getNumIdProtocoloIntegradoPacoteEnvio().'\';');
-			  			
-
-					}
+					BancoSEI::getInstance()->executarSql("update md_pi_pacote_envio set id_md_pi_pacote_envio=id_protocolo_integrado_pacote_envio"); 
 					$nomeRestricaoChavePrimaria = $objPacoteBD->recuperarChavePrimaria();
 					
 					BancoSEI::getInstance()->executarSql("ALTER TABLE md_pi_pacote_envio drop constraint ".$nomeRestricaoChavePrimaria."; ");
@@ -503,27 +569,32 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 				$objInfraMetaBD->criarIndice('md_pi_monitora_processos','i02_md_pi_monitora_processos',array('id_md_pi_pacote_envio'));
 
 
-				$objProtocoloIntegradoPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
+				/*$objProtocoloIntegradoPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
 				$objProtocoloIntegradoPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-  				$numPacotes =  $objProtocoloIntegradoPacoteRN->contar($objProtocoloIntegradoPacoteDTO);
+  				$numPacotes =  $objProtocoloIntegradoPacoteRN->contar($objProtocoloIntegradoPacoteDTO);*/
+
+        $maxIdPacote = $this->getMaxIdPacote();
 
 				if (BancoSEI::getInstance() instanceof InfraMySql){
-			  		BancoSEI::getInstance()->executarSql('create table seq_md_pi_pacote_envio (id bigint not null primary key AUTO_INCREMENT, campo char(1) null) AUTO_INCREMENT = '.($numPacotes+1));
+			  		BancoSEI::getInstance()->executarSql('create table seq_md_pi_pacote_envio (id bigint not null primary key AUTO_INCREMENT, campo char(1) null) AUTO_INCREMENT = '.($maxIdPacote+1));
 			  	} else if (BancoSEI::getInstance() instanceof InfraSqlServer){
-			  		BancoSEI::getInstance()->executarSql('create table seq_md_pi_pacote_envio (id bigint identity('.($numPacotes+1).',1), campo char(1) null)');
+			  		BancoSEI::getInstance()->executarSql('create table seq_md_pi_pacote_envio (id bigint identity('.($maxIdPacote+1).',1), campo char(1) null)');
 			  	} else if (BancoSEI::getInstance() instanceof InfraOracle){
-			  		BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_pacote_envio', ($numPacotes+1));
+			  		BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_pacote_envio', ($maxIdPacote+1));
 			  	}
 
-				$objProtocoloIntegradoMonitoraProcessoRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
+				/*$objProtocoloIntegradoMonitoraProcessoRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
 				$objProtocoloIntegradoMonitoraProcessoDTO = new ProtocoloIntegradoMonitoramentoProcessosDTO();
-  				$numAtividadesPacotes =  $objProtocoloIntegradoMonitoraProcessoRN->contar($objProtocoloIntegradoMonitoraProcessoDTO);
+  				$numAtividadesPacotes =  $objProtocoloIntegradoMonitoraProcessoRN->contar($objProtocoloIntegradoMonitoraProcessoDTO);*/
+
+        $maxIdProcesso = $this->getMaxIdProcesso();
+
 				if (BancoSEI::getInstance() instanceof InfraMySql){
-			  		BancoSEI::getInstance()->executarSql('create table seq_md_pi_monitora_processos (id bigint not null primary key AUTO_INCREMENT, campo char(1) null) AUTO_INCREMENT = '.($numAtividadesPacotes+1));
+			  		BancoSEI::getInstance()->executarSql('create table seq_md_pi_monitora_processos (id bigint not null primary key AUTO_INCREMENT, campo char(1) null) AUTO_INCREMENT = '.($maxIdProcesso+1));
 			  	} else if (BancoSEI::getInstance() instanceof InfraSqlServer){
-			  		BancoSEI::getInstance()->executarSql('create table seq_md_pi_monitora_processos (id bigint identity('.($numAtividadesPacotes+1).',1), campo char(1) null)');
+			  		BancoSEI::getInstance()->executarSql('create table seq_md_pi_monitora_processos (id bigint identity('.($maxIdProcesso+1).',1), campo char(1) null)');
 			  	} else if (BancoSEI::getInstance() instanceof InfraOracle){
-			  		BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_monitora_processos', ($numAtividadesPacotes+1));
+			  		BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_monitora_processos', ($maxIdProcesso+1));
 			  	}
 
 			  	BancoSEI::getInstance()->executarSql('update infra_parametro set valor=\''.$versao.'\' where nome=\'PI_VERSAO\';');
@@ -602,8 +673,6 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 		  			,15,'','','','N','S',100000);");
 			}
 			
-			
-			
 			/*
 			$numCountElementos = BancoSEI::getInstance()->executarSql("select * from infra_agendamento_tarefa where comando='ProtocoloIntegradoAgendamentoRN::publicarProtocoloIntegrado'");
 			if ($numCountElementos==0){
@@ -638,6 +707,125 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
 		}
 		return $resultado;
   }
+  private function getMaxIdAgendamento(){
+      
+      $objAgendamentoDTO = new InfraAgendamentoTarefaDTO();
+      $objAgendamentoRN = new InfraAgendamentoTarefaRN();
+      $objAgendamentoDTO->retNumIdInfraAgendamentoTarefa();
+      $numMaxIdAgendamento = 0;
+      
+      $objAgendamentoBD = new InfraAgendamentoTarefaBD(BancoSEI::getInstance());
+      $objAgendamentoDTO->retNumIdInfraAgendamentoTarefa();
+      $arrAgendamentos =  $objAgendamentoBD->listar($objAgendamentoDTO);
+      foreach($arrAgendamentos as $key =>$value){
+
+            $idAgendamento = $value->getNumIdInfraAgendamentoTarefa();
+            if($idAgendamento>$numMaxIdAgendamento){
+
+                $numMaxIdAgendamento = $idAgendamento;
+            }
+      }
+      return $numMaxIdAgendamento;
+       
+      
+  }
+  private function getMaxIdPacote(){
+              
+    $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+    $objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
+    $objPacoteDTO->retNumIdProtocoloIntegradoPacoteEnvio();
+    $numMaxIdPacote = 0;
+              
+    $objPacoteBD = new ProtocoloIntegradoPacoteEnvioBD(BancoSEI::getInstance());
+    $objPacoteDTO->retNumIdProtocoloIntegradoPacoteEnvio();
+    $arrPacotes =  $objPacoteBD->listar($objPacoteDTO);
+    foreach($arrPacotes as $key =>$value){
+
+          $idPacote = $value->getNumIdProtocoloIntegradoPacoteEnvio();
+          if($idPacote>$numMaxIdPacote){
+
+              $numMaxIdPacote = $idPacote;
+          }
+    }
+    return $numMaxIdPacote;
+
+
+  }
+  private function getMaxIdProcesso(){
+              
+    $objProcessoDTO = new ProtocoloIntegradoMonitoramentoProcessosDTO();
+    $objProcessoRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
+    $objProcessoDTO->retNumIdProtocoloIntegradoMonitoramentoProcessos();
+    $numMaxIdProcesso = 0;
+              
+    $objProcessoBD = new ProtocoloIntegradoMonitoramentoProcessosBD(BancoSEI::getInstance());
+    $objProcessoDTO->retNumIdProtocoloIntegradoMonitoramentoProcessos();
+    $arrProcessos =  $objProcessoBD->listar($objProcessoDTO);
+    foreach($arrProcessos as $key =>$value){
+
+          $idProcesso = $value->getNumIdProtocoloIntegradoMonitoramentoProcessos();
+          if($idProcesso>$numMaxIdProcesso){
+
+              $numMaxIdProcesso = $idProcesso;
+          }
+    }
+    return $numMaxIdProcesso;
+
+
+  }
+  private function recuperaAgendamento($strComando){
+
+       $objAgendamentoDTO = new InfraAgendamentoTarefaDTO();
+       $objAgendamentoDTO->retNumIdInfraAgendamentoTarefa();
+       $objAgendamentoDTO->setStrComando($strComando);
+       $objAgendamentoDTO->setBolExclusaoLogica(false);
+
+       $objAgendamentoRN = new InfraAgendamentoTarefaRN();
+       $objAgendamentoBD = new InfraAgendamentoTarefaBD(BancoSEI::getInstance());
+       $objAgendamentoDTO =  $objAgendamentoBD->consultar($objAgendamentoDTO);
+       
+       return $objAgendamentoDTO;
+       
+    }
+    private function cadastrarAgendamento($objAgendamentoDTO){
+
+       $objAgendamentoRN = new InfraAgendamentoTarefaRN();
+       $objAgendamentoBD = new InfraAgendamentoTarefaBD(BancoSEI::getInstance());
+       $objAgendamentoDTO =  $objAgendamentoBD->cadastrar($objAgendamentoDTO);
+       
+       return $objAgendamentoDTO;
+       
+    }
+    private function adicionarAgendamento($strComando, $strDescricao, $strPeriodicidadeExecucao,$strComplementoPeriodicidade,$strParametro=null){
+
+        $objAgendamentoDTO = $this->recuperaAgendamento($strComando);
+        if ($objAgendamentoDTO==null){
+
+            $objAgendamentoDTO = new InfraAgendamentoTarefaDTO();
+            $objAgendamentoDTO->setNumIdInfraAgendamentoTarefa(null);
+            $objAgendamentoDTO->setStrComando($strComando);
+            $objAgendamentoDTO->setStrDescricao($strDescricao);
+            $objAgendamentoDTO->setStrStaPeriodicidadeExecucao($strPeriodicidadeExecucao);
+            $objAgendamentoDTO->setStrPeriodicidadeComplemento($strComplementoPeriodicidade);
+            if($strParametro==null){
+
+                 $objAgendamentoDTO->setStrParametro('');
+              
+            }else{
+
+                 $objAgendamentoDTO->setStrParametro($strParametro);
+            }
+            $objAgendamentoDTO->setDthUltimaExecucao(null);
+            $objAgendamentoDTO->setDthUltimaConclusao(null);
+            $objAgendamentoDTO->setStrSinSucesso('N');
+            $objAgendamentoDTO->setStrEmailErro('');
+            
+            $objAgendamentoDTO->setStrSinAtivo('N');
+            $objAgendamentoDTO = $this->cadastrarAgendamento($objAgendamentoDTO);
+       }
+       return $objAgendamentoDTO;
+    }
+
 	
 	
 }
