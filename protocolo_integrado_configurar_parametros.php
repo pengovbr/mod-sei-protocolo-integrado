@@ -1,6 +1,6 @@
-<?
+<?php
 try {
-  require_once dirname(__FILE__).'/../../SEI.php';
+  require_once dirname(__FILE__).'/../../../SEI.php';
 
   session_start();
 
@@ -234,11 +234,11 @@ PaginaSEI::getInstance()->abrirAreaDados(null);
   <button type="submit" accesskey="S" name="sbmAlterarOrgao" value="Salvar" class="infraButton"><span class="infraTeclaAtalho">S</span>alvar</button>	
   <?
   PaginaSEI::getInstance()->fecharAreaDados();
-
   //PaginaSEI::getInstance()->montarAreaDebug();
   //PaginaSEI::getInstance()->montarBarraComandosInferior($arrComandos);
   ?>
 </form>
+
 <?  
 PaginaSEI::getInstance()->fecharBody();
 PaginaSEI::getInstance()->fecharHtml();

@@ -1,6 +1,4 @@
-<?
-ini_set('max_execution_time', '0');
-ini_set('memory_limit', '-1');
+<?php
 /**
  * TRIBUNAL REGIONAL FEDERAL DA 4ª REGIÃO
  *
@@ -11,7 +9,9 @@ ini_set('memory_limit', '-1');
  * Versão no CVS: $Id$
  */
 
-require_once dirname(__FILE__) . '/../../../SEI.php';
+ini_set('max_execution_time', '0');
+ini_set('memory_limit', '-1');
+require_once dirname(__FILE__) . '/../../../../SEI.php';
 
 class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
@@ -26,179 +26,178 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 	}
 
 	protected function listarConectado(ProtocoloIntegradoMonitoramentoProcessosDTO $protocoloIntegradoMonitoramentoProcessosDTO) {
-		try {
+		
+	    try {
 
 			//Valida Permissao
-			SessaoSEI::getInstance() -> validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
+			SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
 
 			//Regras de Negocio
 			//$objInfraException = new InfraException();
-
 			//$objInfraException->lancarValidacoes();
 
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
-			$ret = $objBD -> listar($protocoloIntegradoMonitoramentoProcessosDTO);
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+			$ret = $objBD->listar($protocoloIntegradoMonitoramentoProcessosDTO);
 
 			return $ret;
-
+			
 		} catch(Exception $e) {
 			throw new InfraException('Erro ao listar atividades monitoradas para publicação no Protocolo Integrado.', $e);
 		}
+		
 	}
 
 	protected function listarAtividadesPublicacaoConectado(ProtocoloIntegradoMonitoramentoProcessosDTO $protocoloIntegradoMonitoramentoProcessosDTO) {
-		try {
+		
+	    try {
 
 			//Valida Permissao
-			SessaoSEI::getInstance() -> validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
+			SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
 
 			//Regras de Negocio
 			//$objInfraException = new InfraException();
-
 			//$objInfraException->lancarValidacoes();
 
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
-			$ret = $objBD -> consultarAtividadesPublicacao($protocoloIntegradoMonitoramentoProcessosDTO -> getNumIdPacote());
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+			$ret = $objBD->consultarAtividadesPublicacao($protocoloIntegradoMonitoramentoProcessosDTO->getNumIdPacote());
 
 			return $ret;
-
+			
 		} catch(Exception $e) {
 			throw new InfraException('Erro ao listar atividades monitoradas para publicação no Protocolo Integrado.', $e);
 		}
+		
 	}
 
 	protected function consultarConectado(ProtocoloIntegradoMonitoramentoProcessosDTO $protocoloIntegradoMonitoramentoProcessosDTO) {
-		try {
+		
+	    try {
 
 			//Valida Permissao
-			SessaoSEI::getInstance() -> validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
+			SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
 
 			//Regras de Negocio
 			//$objInfraException = new InfraException();
-
 			//$objInfraException->lancarValidacoes();
 
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
-			$ret = $objBD -> consultar($protocoloIntegradoMonitoramentoProcessosDTO);
-
-			//Auditoria
-
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+			$ret = $objBD->consultar($protocoloIntegradoMonitoramentoProcessosDTO);
+			
 			return $ret;
 
 		} catch(Exception $e) {
 			throw new InfraException('Erro Consultando Atividades monitoradas para publicação no Protocolo Integrado.', $e);
 		}
+		
 	}
 
 	protected function contarConectado(ProtocoloIntegradoMonitoramentoProcessosDTO $protocoloIntegradoMonitoramentoProcessosDTO) {
-		try {
+		
+	    try {
 
 			//Valida Permissao
-			SessaoSEI::getInstance() -> validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
+			SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
 
 			//Regras de Negocio
 			//$objInfraException = new InfraException();
-
 			//$objInfraException->lancarValidacoes();
 
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
-			$ret = $objBD -> contar($protocoloIntegradoMonitoramentoProcessosDTO);
-
-			//Auditoria
-
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+			$ret = $objBD->contar($protocoloIntegradoMonitoramentoProcessosDTO);
+			
 			return $ret;
 
 		} catch(Exception $e) {
 			throw new InfraException('Erro Consultando Atividades monitoradas para publicação no Protocolo Integrado.', $e);
 		}
+		
 	}
 
 	protected function publicarProcessosConectado(ProtocoloIntegradoMonitoramentoProcessosDTO $objProtocoloIntegradoParametrosDTO) {
-		$tempoInicial = time();
-
-		try{
-			SessaoSEI::getInstance() -> validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $objProtocoloIntegradoParametrosDTO);
+		
+	    $tempoInicial = time();
+		try {
+			SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $objProtocoloIntegradoParametrosDTO);
 
 			//Regras de Negocio
 			$objInfraException = new InfraException();
-	
-			$objInfraException -> lancarValidacoes();
+			$objInfraException->lancarValidacoes();
 			
 			$objRetorno;
 			$objProtocoloIntegradoParametrosRN;
 	
 			$objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
-			$objProtocoloIntegradoParametrosDTO -> retTodos();
+			$objProtocoloIntegradoParametrosDTO->retTodos();
 	
+			InfraDebug::getInstance()->gravar('Buscando Configuração de Publicação no Protocolo Integrado');
 			$objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
+			$objRetorno = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
 	
-			InfraDebug::getInstance() -> gravar('Buscando Configuração de Publicação no Protocolo Integrado');
-			$objRetorno = $objProtocoloIntegradoParametrosRN -> consultar($objProtocoloIntegradoParametrosDTO);
-	
-			$objRetorno -> setStrSinExecutandoPublicacao('S');
-			$objProtocoloIntegradoParametrosRN -> alterar($objRetorno);
+			$objRetorno->setStrSinExecutandoPublicacao('S');
+			$objProtocoloIntegradoParametrosRN->alterar($objRetorno);
 			
-			$this -> cadastrarAtividadesIntegracao($objRetorno->getNumAtividadesCarregar());
+			$this->cadastrarAtividadesIntegracao($objRetorno->getNumAtividadesCarregar());
 			
-			InfraDebug::getInstance() -> gravar('Publicando Metadados e Operações dos Processos no Protocolo Integrado');
+			InfraDebug::getInstance()->gravar('Publicando Metadados e Operações dos Processos no Protocolo Integrado');
 			$arr = array();
 			$arrParam[0] = $objRetorno;
 			$arrParam[1] = null;
-			$this -> publicarProcessosMonitorados($arrParam);
+			$this->publicarProcessosMonitorados($arrParam);
 			
-			$objRetorno -> setDthDataUltimoProcessamento(date('d/m/Y H:i:s'));
-			$objRetorno -> setStrSinExecutandoPublicacao('N');
-			$objProtocoloIntegradoParametrosRN -> alterar($objRetorno);
+			$objRetorno->setDthDataUltimoProcessamento(date('d/m/Y H:i:s'));
+			$objRetorno->setStrSinExecutandoPublicacao('N');
+			$objProtocoloIntegradoParametrosRN->alterar($objRetorno);
 	
 			$tempoFinal = time();
 			$tempo = $tempoFinal - $tempoInicial;
 			
-		}
-		catch(Exception $e){
+		} catch (Exception $e) {
 			throw new InfraException('Erro acontecido', $e);
 		}
 		
 	}
 
 	protected function cadastrarControlado(ProtocoloIntegradoMonitoramentoProcessosDTO $protocoloIntegradoMonitoramentoProcessosDTO) {
-		try {
+		
+	    try {
 
 			//Valida Permissao
-			SessaoSEI::getInstance() -> validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
+			SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloIntegradoMonitoramentoProcessosDTO);
 
 			//Regras de Negocio
 			$objInfraException = new InfraException();
 
-			/*if ($objTarefaDTO->isSetStrNome()){
-			 $this->validarStrNome($objTarefaDTO, $objInfraException);
-			 }
-
-			 if ($objTarefaDTO->isSetStrSinHistoricoResumido()){
-			 $this->validarStrSinHistoricoResumido($objTarefaDTO, $objInfraException);
-			 }
-			 */
-			$objInfraException -> lancarValidacoes();
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
-			$objBD -> cadastrar($protocoloIntegradoMonitoramentoProcessosDTO);
+            /*if ($objTarefaDTO->isSetStrNome()) {
+                $this->validarStrNome($objTarefaDTO, $objInfraException);
+            }
+            if ($objTarefaDTO->isSetStrSinHistoricoResumido()) {
+                $this->validarStrSinHistoricoResumido($objTarefaDTO, $objInfraException);
+            }
+            */
+			
+			$objInfraException->lancarValidacoes();
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+			$objBD->cadastrar($protocoloIntegradoMonitoramentoProcessosDTO);
 
 		} catch(Exception $e) {
 			throw new InfraException('Erro Cadastrando atividades monitoradas para publicação no Protocolo Integrado.', $e);
 		}
+		
 	}
 
 	protected function consultarParticipantesDocumentosAssinadosProcessoConectado(ProtocoloDTO $protocoloDTO) {
 		try {
 
 			//Valida Permissao
-			SessaoSEI::getInstance() -> validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloDTO);
+			SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento', __METHOD__, $protocoloDTO);
 
 			//Regras de Negocio
 			//$objInfraException = new InfraException();
 
 			//$objInfraException->lancarValidacoes();
 
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
-			$ret = $objBD -> consultarParticipantesDocumentosAssinadosProcesso($protocoloDTO -> getDblIdProtocolo());
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
+			$ret = $objBD->consultarParticipantesDocumentosAssinadosProcesso($protocoloDTO->getDblIdProtocolo());
 
 			return $ret;
 
@@ -207,55 +206,50 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		}
 	}
 
-	protected function cadastrarAtividadesIntegracaoConectado($numMaxAtividades) {
+    protected function cadastrarAtividadesIntegracaoConectado($numMaxAtividades) {
 		
 		$tempo1 = time();
-		
 		$numUnidadeTeste = null;
-		try{
+		try {
 			$objInfraParametroDTO = new InfraParametroDTO();
 			$objParametroBD = new InfraParametroBD($this->getObjInfraIBanco());
 			$objInfraParametroDTO->setStrNome('ID_UNIDADE_TESTE');
 			$objInfraParametroDTO->retTodos();
 	    	$ret = $objParametroBD->listar($objInfraParametroDTO);
-			if (count($ret)>0){
+			if (count($ret)>0) {
 		 		$objInfra = $ret[0];
 				$numUnidadeTeste = $objInfra->getStrValor();
 			}
-		}
-		catch(Exception $e){
-			
-		}
+		} catch(Exception $e) {}
+		
 		try {
 			//Valida Permissao
 			//SessaoSEI::getInstance()->validarAuditarPermissao('protocolo_integrado_monitoramento',__METHOD__,$protocoloIntegradoMonitoramentoProcessosDTO);
 
 			//Regras de Negocio
 			$objInfraException = new InfraException();
+			$objInfraException->lancarValidacoes();
 
-			$objInfraException -> lancarValidacoes();
-
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
 			$arrProtocolos = array();
 
 			$numTotal = 0;
 			$numRodada = 0;
 			$numCarregarPorRodada = 30000;
-			while (true)
-			{
+			while (true) {
 				$numRodada = $numRodada+1;
 				
 				$qtCarregar = $numCarregarPorRodada;
-				if ($numTotal>=$numMaxAtividades){
+				if ($numTotal>=$numMaxAtividades) {
 					break;
 				}
-				if ($numTotal+$numCarregarPorRodada>$numMaxAtividades){
+				if ($numTotal+$numCarregarPorRodada>$numMaxAtividades) {
 					$qtCarregar = $numMaxAtividades-$numTotal;
 				}
-				$arrAtividadesMonitoradasDTO = $objBD -> consultarNovasOperacoesProcesso($qtCarregar, $numUnidadeTeste);
+				$arrAtividadesMonitoradasDTO = $objBD->consultarNovasOperacoesProcesso($qtCarregar, $numUnidadeTeste);
 				
 				$numTotalRodada = count($arrAtividadesMonitoradasDTO);
-				if ($numTotalRodada==0){
+				if ($numTotalRodada==0) {
 					break;
 				}
 				$numTotal = $numTotal+$numTotalRodada;
@@ -268,7 +262,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				
 				unset($arrAtividadesMonitoradasDTO);
 				
-				if ($numTotalRodada<$numCarregarPorRodada){
+				if ($numTotalRodada<$numCarregarPorRodada) {
 					break;
 				}
 			}
@@ -281,27 +275,27 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 	}
 
 	protected function cadastrarAtividadesBatchControlado($arrParam) {
+	    
 		$numTotalRodada = $arrParam[0];
 		$arrAtividadesMonitoradasDTO = $arrParam[1];
 		$arrProtocolos = $arrParam[2];
 		
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
 		for ($i = 0; $i < $numTotalRodada; $i++) {
-			
 			$objProtocoloIntegradoMonitoramentoDTO = $arrAtividadesMonitoradasDTO[$i];
-			$idProtocolo = $objProtocoloIntegradoMonitoramentoDTO -> getNumIdProtocolo();
+			$idProtocolo = $objProtocoloIntegradoMonitoramentoDTO->getNumIdProtocolo();
 	
 			if (!in_array($idProtocolo, $arrProtocolos)) {
 	
 				$objPacoteExistenteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-				$objPacoteExistenteDTO -> retTodos();
-				$objPacoteExistenteDTO -> setNumIdProtocolo($idProtocolo);
-				$objPacoteExistenteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO);
+				$objPacoteExistenteDTO->retTodos();
+				$objPacoteExistenteDTO->setNumIdProtocolo($idProtocolo);
+				$objPacoteExistenteDTO->setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO);
 				$objPacoteExistenteDTO->setNumMaxRegistrosRetorno(1);
-				$arrPacoteRetorno = $objPacoteRN -> listar($objPacoteExistenteDTO);
+				$arrPacoteRetorno = $objPacoteRN->listar($objPacoteExistenteDTO);
 				$objPacoteRetorno = null;
-				if(count($arrPacoteRetorno)>0){
-
+				
+				if(count($arrPacoteRetorno)>0) {
 					$objPacoteRetorno = $arrPacoteRetorno[0];
 				}
 				if ($objPacoteRetorno == null) {
@@ -309,54 +303,49 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 					$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
 
 					
-					$objPacoteDTO -> setNumIdProtocolo($idProtocolo);
-					$objPacoteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO);
-					$objPacoteRN -> cadastrar($objPacoteDTO);
+					$objPacoteDTO->setNumIdProtocolo($idProtocolo);
+					$objPacoteDTO->setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO);
+					$objPacoteRN->cadastrar($objPacoteDTO);
 	
-					$objPacoteDTO -> retTodos();
-					$ret = $objPacoteRN -> consultar($objPacoteDTO);
-					$idPacote = $ret -> getNumIdProtocoloIntegradoPacoteEnvio();
+					$objPacoteDTO->retTodos();
+					$ret = $objPacoteRN->consultar($objPacoteDTO);
+					$idPacote = $ret->getNumIdProtocoloIntegradoPacoteEnvio();
 	
 					$arrProtocolos[$i] = $idProtocolo;
 					$arrIdPacote[$idProtocolo] = $idPacote;
 				} else {
 	
 					$arrProtocolos[$i] = $idProtocolo;
-					$arrIdPacote[$idProtocolo] = $objPacoteRetorno -> getNumIdProtocoloIntegradoPacoteEnvio();
+					$arrIdPacote[$idProtocolo] = $objPacoteRetorno->getNumIdProtocoloIntegradoPacoteEnvio();
 				}
 	
 			}
 	
-			$objProtocoloIntegradoMonitoramentoDTO -> setNumIdPacote($arrIdPacote[$idProtocolo]);
-	
-			$this -> cadastrar($objProtocoloIntegradoMonitoramentoDTO);
+			$objProtocoloIntegradoMonitoramentoDTO->setNumIdPacote($arrIdPacote[$idProtocolo]);
+			$this->cadastrar($objProtocoloIntegradoMonitoramentoDTO);
 
 		}
 	}
 
-	protected function alterarControlado($arrParam) {
-		
-	}
+	protected function alterarControlado($arrParam) {}
 
 	public function getSituacoesIntegracao() {
-
 		$strItensSelSituacoesIntegracoes = array('' => 'Todos', ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO => 'Não Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO => 'Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL => 'Erro Negocial', ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA => 'Falha Infra');
-
-		return $strItensSelSituacoesIntegracoes;
+        return $strItensSelSituacoesIntegracoes;
 	}
 	
 	public function getUnidadesGeradoras() {
 
 		$objInfraSip = new InfraSip(SessaoSEI::getInstance());
 
-		$ret = $objInfraSip -> carregarUnidades(SessaoSEI::getInstance() -> getNumIdSistema());
+		$ret = $objInfraSip->carregarUnidades(SessaoSEI::getInstance()->getNumIdSistema());
 		$arrUnidadesSip = array();
 
 		$srtSeparador = ":UNI:";
 		$strItensUnidadesCompacto = array();
 		foreach ($ret as $uni) {
 			$numIdUnidade = $uni[InfraSip::$WS_UNIDADE_ID];
-			if ($numIdUnidade!=''){
+			if ($numIdUnidade!='') {
 				$strItensUnidadesCompacto[$numIdUnidade]=$uni[InfraSip::$WS_UNIDADE_SIGLA].$srtSeparador.$numIdUnidade;		
 			}
 		}
@@ -364,7 +353,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		
 		$strItensUnidades = array();
 		$strItensUnidades[0]='*';
-		foreach ($strItensUnidadesCompacto as $uni=>$uni2){
+		foreach ($strItensUnidadesCompacto as $uni=>$uni2) {
 			$strFragmentos = explode($srtSeparador, $uni2);
 			$strItensUnidades[$strFragmentos[1]] = $strFragmentos[0]; 
 		}
@@ -373,71 +362,67 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 	}
 
 	public function listarProcessosMonitoradosControlado($filtro = array()) {
+	    
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
-
 		$objProtocoloIntegradoDTO = new ProtocoloIntegradoDTO();
 		$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-		$objPacoteDTO -> retNumIdProtocolo();
-		$objPacoteDTO -> retStrStaIntegracao();
-		$objPacoteDTO -> retDthDataSituacao();
-		$objPacoteDTO -> retDthDataMetadados();
-		$objPacoteDTO -> retNumTentativasEnvio();
-		$objPacoteDTO -> retStrProtocoloFormatado();
-		$objPacoteDTO -> retNumIdProtocoloIntegradoPacoteEnvio();
+		$objPacoteDTO->retNumIdProtocolo();
+		$objPacoteDTO->retStrStaIntegracao();
+		$objPacoteDTO->retDthDataSituacao();
+		$objPacoteDTO->retDthDataMetadados();
+		$objPacoteDTO->retNumTentativasEnvio();
+		$objPacoteDTO->retStrProtocoloFormatado();
+		$objPacoteDTO->retNumIdProtocoloIntegradoPacoteEnvio();
 
-		$objPacoteDTO -> retNumIdProtocoloIntegradoPacoteEnvio();
+		$objPacoteDTO->retNumIdProtocoloIntegradoPacoteEnvio();
 		$strSqlNativo = '';
 		
-		
 		if (isset($filtro['filtroCodProtocolo']) && $filtro['filtroCodProtocolo'] != '') {
-
 			$strProtocoloFormatadoLimpo = InfraUtil::retirarFormatacao($filtro['filtroCodProtocolo']);
 			$objProtocolo = new ProtocoloDTO();
-			$objProtocolo -> retDblIdProtocolo();
+			$objProtocolo->retDblIdProtocolo();
 			$objProtocoloRN = new ProtocoloRN();
-			$objProtocolo -> setStrProtocoloFormatadoPesquisa($strProtocoloFormatadoLimpo . '%', InfraDTO::$OPER_LIKE);
-			$arrProtocolosRetornados = $objProtocoloRN -> listarRN0668($objProtocolo);
+			$objProtocolo->setStrProtocoloFormatadoPesquisa($strProtocoloFormatadoLimpo . '%', InfraDTO::$OPER_LIKE);
+			$arrProtocolosRetornados = $objProtocoloRN->listarRN0668($objProtocolo);
 
 			$arrIdProtocolo = array();
 			for ($k = 0; $k < count($arrProtocolosRetornados); $k++) {
-
-				array_push($arrIdProtocolo, $arrProtocolosRetornados[$k] -> getDblIdProtocolo());
+				array_push($arrIdProtocolo, $arrProtocolosRetornados[$k]->getDblIdProtocolo());
 			}
 			if (count($arrIdProtocolo) > 0) {
-				$objPacoteDTO -> setNumIdProtocolo($arrIdProtocolo, InfraDTO::$OPER_IN);
+				$objPacoteDTO->setNumIdProtocolo($arrIdProtocolo, InfraDTO::$OPER_IN);
 			} else {
-				$objPacoteDTO -> setNumIdProtocolo(-1);
+				$objPacoteDTO->setNumIdProtocolo(-1);
 			}
-
 		}
+		
 		if (isset($filtro['filtroSelSitucaoIntegracao']) && $filtro['filtroSelSitucaoIntegracao'] != '') {
 
-			$objPacoteDTO -> setStrStaIntegracao($filtro['filtroSelSitucaoIntegracao']);
-		}else if(!isset($filtro['filtroSelSitucaoIntegracao'])){
-			
+			$objPacoteDTO->setStrStaIntegracao($filtro['filtroSelSitucaoIntegracao']);
+		} else if (!isset($filtro['filtroSelSitucaoIntegracao'])) {
 			$strSqlNativo .= "sta_integracao<>'NI' AND ";
 		}
+		
 		if (isset($filtro['filtroSelUnidade']) && $filtro['filtroSelUnidade'] != '' && $filtro['filtroSelUnidade'] != 0) {
 			$strUnidades = $filtro['filtroSelUnidade'];
-			if (isset($filtro['filtroIncluirUnidadesFilhas']) && $filtro['filtroIncluirUnidadesFilhas']=='on'){
+			if (isset($filtro['filtroIncluirUnidadesFilhas']) && $filtro['filtroIncluirUnidadesFilhas']=='on') {
 				$objInfraSip = new InfraSip(SessaoSEI::getInstance());
-				$ret = $objInfraSip -> carregarUnidades(SessaoSEI::getInstance() -> getNumIdSistema());
+				$ret = $objInfraSip->carregarUnidades(SessaoSEI::getInstance()->getNumIdSistema());
 				$arrUnidadesSip = array();				
 				
 				$numUnidade = $filtro['filtroSelUnidade'];
 				foreach ($ret as $uni) {
 					$numIdUnidade = $uni[InfraSip::$WS_UNIDADE_ID];
-					if ($numIdUnidade!='' && $numIdUnidade==$numUnidade){
+					if ($numIdUnidade!='' && $numIdUnidade==$numUnidade) {
 						$numIdUnidadesInferor = $uni[InfraSip::$WS_UNIDADE_SUBUNIDADES];
 						
-						foreach ($numIdUnidadesInferor as $numIdUnidadeInferor){
+						foreach ($numIdUnidadesInferor as $numIdUnidadeInferor) {
 							$strUnidades = $strUnidades.",".$numIdUnidadeInferor;
 						}
-				
 					}
 				}
 			}
-                        // Adriano MPOG - tratando novos IDs de tamanho máximo de 30 posições
+            // Adriano MPOG - tratando novos IDs de tamanho máximo de 30 posições
 			$strSqlNativo .= " md_pi_pacote_envio.id_protocolo IN (select id_protocolo from protocolo p where p.id_unidade_geradora IN (".$strUnidades.")) AND ";
 		} 
 		//Adriano -MPOG - fazendo alterações para ficar multibancos o tratamento do formato de data
@@ -447,83 +432,68 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			$strDataInicio = $filtro['filtroTxtPeriodoGeracaoDe'];
 			
 			//Código provisório para tratar unificação dos fontes
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
 			
 			$strDataInicialFormatada = $strDataInicio . " 00:00:00";
-			$strNovaDataInicial = $objBD -> retornarFormatoData($strDataInicialFormatada);
+			$strNovaDataInicial = $objBD->retornarFormatoData($strDataInicialFormatada);
 			
 			//Se campo final da data de geração do processo está preenchido
 			if (isset($filtro['filtroTxtPeriodoGeracaoA']) && $filtro['filtroTxtPeriodoGeracaoA'] != '') {
-
 				$strDataFim = $filtro['filtroTxtPeriodoGeracaoA'];
-				
-				
 				$strDataFinalFormatada = $strDataFim . " 23:59:59";
-				$strNovaDataFinal = $objBD -> retornarFormatoData($strDataFinalFormatada);
+				$strNovaDataFinal = $objBD->retornarFormatoData($strDataFinalFormatada);
 				
 				//Trata SQL nativo para que considere apenas protocolos produzidos dentro daquele intervalo
 				$strSqlNativo .= " md_pi_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao>= ".$strNovaDataInicial." AND p.dta_geracao<= ".$strNovaDataFinal.") AND ";
-			
-			}else{
-			        //Trata SQL nativo para que considere apenas protocolos produzidos a partir da data inicial informada.
+			} else {
+		        //Trata SQL nativo para que considere apenas protocolos produzidos a partir da data inicial informada.
 				$strSqlNativo .=  " md_pi_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao>= ".$strNovaDataInicial. ") AND ";
-				
 			}
-		}else if(isset($filtro['filtroTxtPeriodoGeracaoA']) && $filtro['filtroTxtPeriodoGeracaoA'] != ''){
+			
+		} else if (isset($filtro['filtroTxtPeriodoGeracaoA']) && $filtro['filtroTxtPeriodoGeracaoA'] != '') {
 			//Se apenas o segundo campo de data de geração do processo está preenchido, considera apenas os processos produzidos até aquela data
 			$strDataFim = $filtro['filtroTxtPeriodoGeracaoA'];
 
 			//Código provisório para tratar unificação dos fontes
-			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
+			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
 				
 			$strDataFinalFormatada = $strDataFim . " 23:59:59";
-			$strNovaDataFinal = $objBD -> retornarFormatoData($strDataFinalFormatada);
-			
+			$strNovaDataFinal = $objBD->retornarFormatoData($strDataFinalFormatada);
 			
 			$strSqlNativo .=  " pi_pacote_envio.id_protocolo IN (select p.id_protocolo from protocolo p where p.dta_geracao<= ". $dthNovaDataFinal. ") AND ";
-			
 		}
+		
 		if (isset($filtro['filtroTxtPeriodoDe']) && $filtro['filtroTxtPeriodoDe'] != '') {
-
-			$objPacoteDTO -> adicionarCriterio(array('DataSituacao'), array(InfraDTO::$OPER_MAIOR_IGUAL), array($filtro['filtroTxtPeriodoDe'] . ' 00:00:00'));
+			$objPacoteDTO->adicionarCriterio(array('DataSituacao'), array(InfraDTO::$OPER_MAIOR_IGUAL), array($filtro['filtroTxtPeriodoDe'] . ' 00:00:00'));
 		}
 		if (isset($filtro['filtroTxtPeriodoA']) && $filtro['filtroTxtPeriodoA'] != '') {
-
-			$objPacoteDTO -> adicionarCriterio(array('DataSituacao'), array(InfraDTO::$OPER_MENOR_IGUAL), array($filtro['filtroTxtPeriodoA'] . ' 23:59:59'));
+			$objPacoteDTO->adicionarCriterio(array('DataSituacao'), array(InfraDTO::$OPER_MENOR_IGUAL), array($filtro['filtroTxtPeriodoA'] . ' 23:59:59'));
 		}
-		if($strSqlNativo!=''){
-					
+		if ($strSqlNativo!='') {
 			$strSqlNativo = trim($strSqlNativo);	
 			$strSqlNativo = substr($strSqlNativo, 0,strlen($strSqlNativo)-3);
 			$objPacoteDTO->setStrCriterioSqlNativo($strSqlNativo);
 		}
+		
 		if (isset($filtro['paginacao']) && $filtro['paginacao'] == true) {
+			PaginaSEI::getInstance()->prepararOrdenacao($objPacoteDTO, 'IdProtocoloIntegradoPacoteEnvio', InfraDTO::$TIPO_ORDENACAO_ASC);
 			
-			
-			PaginaSEI::getInstance() -> prepararOrdenacao($objPacoteDTO, 'IdProtocoloIntegradoPacoteEnvio', InfraDTO::$TIPO_ORDENACAO_ASC);
-			
-			if(isset($filtro['filtroNumQuantidadeRegistrosPorPagina']) && $filtro['filtroNumQuantidadeRegistrosPorPagina']!=''){
-
-				PaginaSEI::getInstance() -> prepararPaginacao($objPacoteDTO, $filtro['filtroNumQuantidadeRegistrosPorPagina']);
-
-			}else{
-
-				PaginaSEI::getInstance() -> prepararPaginacao($objPacoteDTO, 50);
+			if (isset($filtro['filtroNumQuantidadeRegistrosPorPagina']) && $filtro['filtroNumQuantidadeRegistrosPorPagina']!='') {
+				PaginaSEI::getInstance()->prepararPaginacao($objPacoteDTO, $filtro['filtroNumQuantidadeRegistrosPorPagina']);
+			} else {
+				PaginaSEI::getInstance()->prepararPaginacao($objPacoteDTO, 50);
 			}
-			
-			
 		}
-		$arrObjPacotesDTO = $objPacoteRN -> listar($objPacoteDTO);
+		
+		$arrObjPacotesDTO = $objPacoteRN->listar($objPacoteDTO);
 		$numPacotes = count($arrObjPacotesDTO);
 		if (isset($filtro['paginacao']) && $filtro['paginacao'] == true) {
-
-			if(isset($filtro['filtroNumQuantidadeRegistrosPorPagina']) && $filtro['filtroNumQuantidadeRegistrosPorPagina']!=''&&$numPacotes>$filtro['filtroNumQuantidadeRegistrosPorPagina']){
-
+			if(isset($filtro['filtroNumQuantidadeRegistrosPorPagina']) && $filtro['filtroNumQuantidadeRegistrosPorPagina']!=''&&$numPacotes>$filtro['filtroNumQuantidadeRegistrosPorPagina']) {
 				$objPacoteDTO->setNumRegistrosPaginaAtual($filtro['filtroNumQuantidadeRegistrosPorPagina']);
 			}
-			PaginaSEI::getInstance() -> processarPaginacao($objPacoteDTO);
+			PaginaSEI::getInstance()->processarPaginacao($objPacoteDTO);
 		}
-		$arrObjProcedimentoDTO = $this -> montarPacotesMonitorados($arrObjPacotesDTO, $filtro);
+		$arrObjProcedimentoDTO = $this->montarPacotesMonitorados($arrObjPacotesDTO, $filtro);
 		
 		return $arrObjProcedimentoDTO;
 	}
@@ -537,53 +507,46 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		$objProtocoloIntegradoRN = new ProtocoloIntegradoRN();
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
 		$objProtocoloIntegradoMonitoramentoProcessosDTO = new ProtocoloIntegradoMonitoramentoProcessosDTO();
-		$objProtocoloIntegradoMonitoramentoProcessosDTO -> retNumIdProtocoloIntegradoMonitoramentoProcessos();
-		$objProtocoloIntegradoMonitoramentoProcessosDTO -> retNumIdAtividade();
-		$objProtocoloIntegradoMonitoramentoProcessosDTO -> retNumIdProtocolo();
+		$objProtocoloIntegradoMonitoramentoProcessosDTO->retNumIdProtocoloIntegradoMonitoramentoProcessos();
+		$objProtocoloIntegradoMonitoramentoProcessosDTO->retNumIdAtividade();
+		$objProtocoloIntegradoMonitoramentoProcessosDTO->retNumIdProtocolo();
 
 		$objProtocoloIntegradoDTO = new ProtocoloIntegradoDTO();
 
 		for ($p = 0; $p < $numPacotes; $p++) {
 
-			$idProtocolo = $arrObjPacotesDTO[$p] -> getNumIdProtocolo();
-
-			$situacaoPacote = $arrObjPacotesDTO[$p] -> getStrStaIntegracao();
-
-			$dataSituacao = $arrObjPacotesDTO[$p] -> getDthDataSituacao();
+			$idProtocolo = $arrObjPacotesDTO[$p]->getNumIdProtocolo();
+			$situacaoPacote = $arrObjPacotesDTO[$p]->getStrStaIntegracao();
+			$dataSituacao = $arrObjPacotesDTO[$p]->getDthDataSituacao();
 
 			//$objProtocoloIntegradoMonitoramentoProcessosDTO->setNumIdProtocolo($arrObjPacotesDTO[$p]->getNumIdProtocolo());
-
-			$pacote = $arrObjPacotesDTO[$p] -> getNumIdProtocoloIntegradoPacoteEnvio();
+			$pacote = $arrObjPacotesDTO[$p]->getNumIdProtocoloIntegradoPacoteEnvio();
 			$arrObjProcedimentoDTO[$pacote]['atividades'] = array();
 
 			$objProtocolo = new ProtocoloDTO();
-			$objProtocolo -> retStrNomeTipoProcedimentoDocumento();
-			$objProtocolo -> retStrProtocoloFormatado();
-			$objProtocolo -> retStrDescricao();
-			$objProtocolo -> retStrProtocoloFormatadoPesquisa();
-			$objProtocolo -> retDblIdProtocolo();
-			$objProtocolo -> retDtaGeracao();
-			$objProtocolo -> retStrNomeTipoProcedimentoProcedimento();
+			$objProtocolo->retStrNomeTipoProcedimentoDocumento();
+			$objProtocolo->retStrProtocoloFormatado();
+			$objProtocolo->retStrDescricao();
+			$objProtocolo->retStrProtocoloFormatadoPesquisa();
+			$objProtocolo->retDblIdProtocolo();
+			$objProtocolo->retDtaGeracao();
+			$objProtocolo->retStrNomeTipoProcedimentoProcedimento();
 
-			$objProtocolo -> setDblIdProtocolo($idProtocolo);
-			$objProtocolo -> setDblIdProtocolo($arrObjPacotesDTO[$p] -> getNumIdProtocolo());
+			$objProtocolo->setDblIdProtocolo($idProtocolo);
+			$objProtocolo->setDblIdProtocolo($arrObjPacotesDTO[$p]->getNumIdProtocolo());
 
-			$arrObjProcedimentoDTO[$pacote]['protocolo'] = $objProtocoloRN -> consultarRN0186($objProtocolo);
+			$arrObjProcedimentoDTO[$pacote]['protocolo'] = $objProtocoloRN->consultarRN0186($objProtocolo);
 			$arrObjProcedimentoDTO[$pacote]['sta_integracao'] = $situacaoPacote;
-			$arrObjProcedimentoDTO[$pacote]['dth_metadados'] = $arrObjPacotesDTO[$p] -> getDthDataMetadados();
-			$arrObjProcedimentoDTO[$pacote]['id_pacote'] = $arrObjPacotesDTO[$p] -> getNumIdProtocoloIntegradoPacoteEnvio();
-			$arrObjProcedimentoDTO[$pacote]['num_tentativas'] = $arrObjPacotesDTO[$p] -> getNumTentativasEnvio();
+			$arrObjProcedimentoDTO[$pacote]['dth_metadados'] = $arrObjPacotesDTO[$p]->getDthDataMetadados();
+			$arrObjProcedimentoDTO[$pacote]['id_pacote'] = $arrObjPacotesDTO[$p]->getNumIdProtocoloIntegradoPacoteEnvio();
+			$arrObjProcedimentoDTO[$pacote]['num_tentativas'] = $arrObjPacotesDTO[$p]->getNumTentativasEnvio();
 			$arrObjProcedimentoDTO[$pacote]['dth_situacao'] = $dataSituacao;
-			
-			
-
 		}
+		
 		return $arrObjProcedimentoDTO;
-
 	}
 
 	public function listarProcessosPublicacao($filtro) {
-
 
 		$objProtocoloIntegradoRN = new ProtocoloIntegradoRN();
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
@@ -592,54 +555,50 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 		$objProtocoloIntegradoDTO = new ProtocoloIntegradoDTO();
 		$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-		$objPacoteDTO -> retNumIdProtocolo();
-		$objPacoteDTO -> retStrStaIntegracao();
-		$objPacoteDTO -> retDthDataSituacao();
-		$objPacoteDTO -> retDthDataMetadados();
-		$objPacoteDTO -> retNumTentativasEnvio();
-		$objPacoteDTO -> retNumIdProtocoloIntegradoPacoteEnvio();
+		$objPacoteDTO->retNumIdProtocolo();
+		$objPacoteDTO->retStrStaIntegracao();
+		$objPacoteDTO->retDthDataSituacao();
+		$objPacoteDTO->retDthDataMetadados();
+		$objPacoteDTO->retNumTentativasEnvio();
+		$objPacoteDTO->retNumIdProtocoloIntegradoPacoteEnvio();
  		$strSqlNativo = '';
-		if (isset($filtro['strDthAgendamentoExecutado'])){
+ 		
+		if (isset($filtro['strDthAgendamentoExecutado'])) {
 			$strDataAgendamentoExecutado = str_replace('/', '-', $filtro['strDthAgendamentoExecutado']);
 			$strDataAgendamentoExecutado = date('d/m/Y G:i:s', strtotime($strDataAgendamentoExecutado));
-			$objPIMonitoraProcessosBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this -> getObjInfraIBanco());
+			$objPIMonitoraProcessosBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
 			
-			$strDataAgendamentoExecutado = $objPIMonitoraProcessosBD -> retornarFormatoData($strDataAgendamentoExecutado);
+			$strDataAgendamentoExecutado = $objPIMonitoraProcessosBD->retornarFormatoData($strDataAgendamentoExecutado);
 			$strSqlNativo .=  "(dth_agendamento_executado is null OR dth_agendamento_executado<>".$strDataAgendamentoExecutado.") AND ";
-			
 		}
-		if (isset($filtro['numMaxResultados'])){
-			$objPacoteDTO -> setNumMaxRegistrosRetorno($filtro['numMaxResultados']);
+		if (isset($filtro['numMaxResultados'])) {
+			$objPacoteDTO->setNumMaxRegistrosRetorno($filtro['numMaxResultados']);
 		}
-		if (isset($filtro['numPagina'])){
-			$objPacoteDTO -> setNumPaginaAtual($filtro['numPagina']);
+		if (isset($filtro['numPagina'])) {
+			$objPacoteDTO->setNumPaginaAtual($filtro['numPagina']);
 		}
 		if (isset($filtro['pacotes'])) {
-			$objPacoteDTO -> setNumIdProtocoloIntegradoPacoteEnvio($filtro['pacotes'], InfraDTO::$OPER_IN);
-		}
-		else{
+			$objPacoteDTO->setNumIdProtocoloIntegradoPacoteEnvio($filtro['pacotes'], InfraDTO::$OPER_IN);
+		} else {
 			if (isset($filtro['numMaxTentativas'])) {
 				$strSqlNativo .=  "sta_integracao='NI' OR (sta_integracao<>'I' AND num_tentativas_envio<".$filtro['numMaxTentativas'].") AND ";
-				
-			}
-			else{
+			} else {
 				$strSqlNativo .=  "sta_integracao<>'I' AND ";
-				
 			}
 		}
-		if($strSqlNativo!=''){
-					
+		if($strSqlNativo!='') {
 			$strSqlNativo = trim($strSqlNativo);	
 			$strSqlNativo = substr($strSqlNativo, 0,strlen($strSqlNativo)-3);
 			$objPacoteDTO->setStrCriterioSqlNativo($strSqlNativo);
 		}
 		
-		$arrObjPacotesDTO = $objPacoteRN -> listar($objPacoteDTO);
-		$arrObjProcedimentoDTO = $this -> montarPacotesMonitorados($arrObjPacotesDTO, $filtro);
+		$arrObjPacotesDTO = $objPacoteRN->listar($objPacoteDTO);
+		$arrObjProcedimentoDTO = $this->montarPacotesMonitorados($arrObjPacotesDTO, $filtro);
 		return $arrObjProcedimentoDTO;
 	}
 
 	public function publicarProcessosMonitorados($arrObjRetornoProtocoloIntegradoParametrosDTOFiltro) {
+	    
 		$objRetornoProtocoloIntegradoParametrosDTO = $arrObjRetornoProtocoloIntegradoParametrosDTOFiltro[0];
 		$filtro = $arrObjRetornoProtocoloIntegradoParametrosDTOFiltro[1];
 		
@@ -651,15 +610,15 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		$objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
 
 		$objParticipanteDTO = new ParticipanteDTO();
-		$objParticipanteDTO -> retNumIdContato();
-		$objParticipanteDTO -> retStrNomeContato();
-		$objParticipanteDTO -> retStrSiglaContato();
+		$objParticipanteDTO->retNumIdContato();
+		$objParticipanteDTO->retStrNomeContato();
+		$objParticipanteDTO->retStrSiglaContato();
 		
 		$dom = new DOMDocument("1.0", "UTF-8");
-		$dom -> preserveWhiteSpace = false;
-		$dom -> formatOutput = true;
+		$dom->preserveWhiteSpace = false;
+		$dom->formatOutput = true;
 
-		$root = $dom -> createElement("ListaDocumentos");
+		$root = $dom->createElement("ListaDocumentos");
 
 		$objTipoProcedimentoRN = new TipoProcedimentoRN();
 		$arrObjPacotesEnviados = array();
@@ -668,16 +627,14 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 		$quantidadeDocumentos = 1;
 
-		$opcoes = array("soap_version" => SOAP_1_1, "trace" => 1, 'exceptions' => 0, 'encoding' => ' UTF-8'
-		//'local_cert' => $certificado
-		);
+		$opcoes = array("soap_version" => SOAP_1_1, "trace" => 1, 'exceptions' => 0, 'encoding' => ' UTF-8');
 
-		$this -> parametrosProtocolo = $objRetornoProtocoloIntegradoParametrosDTO;
-		$urlWebService = $objRetornoProtocoloIntegradoParametrosDTO -> getStrUrlWebservice();
-		$loginWebService = $objRetornoProtocoloIntegradoParametrosDTO -> getStrLoginWebservice();
+		$this->parametrosProtocolo = $objRetornoProtocoloIntegradoParametrosDTO;
+		$urlWebService = $objRetornoProtocoloIntegradoParametrosDTO->getStrUrlWebservice();
+		$loginWebService = $objRetornoProtocoloIntegradoParametrosDTO->getStrLoginWebservice();
 
 		//recupera senha salva na base que está encriptada
-		$senhaWebService = $objRetornoProtocoloIntegradoParametrosDTO -> getStrSenhaWebservice();
+		$senhaWebService = $objRetornoProtocoloIntegradoParametrosDTO->getStrSenhaWebservice();
 
 		//Recupera senha de acesso através da encriptação da senha salva na base
 		$senhaWebService = $objProtocoloIntegradoParametrosRN->encriptaSenha(rawurldecode($senhaWebService));
@@ -689,14 +646,14 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		}
 
 
-		$retornoWS = $conexaoCliente -> getQuantidadeMaximaDocumentosPorRequisicaoServidor();
+		$retornoWS = $conexaoCliente->getQuantidadeMaximaDocumentosPorRequisicaoServidor();
 
 
-		if (!is_int($retornoWS -> NumeroMaximoDocumentos)) {
+		if (!is_int($retornoWS->NumeroMaximoDocumentos)) {
 			
 			if ($retornoWS instanceof SoapFault) {
 
-				if (isset($retornoWS -> detail -> NegocioFault -> mensagemFault)) {
+				if (isset($retornoWS->detail->NegocioFault->mensagemFault)) {
 
 					//throw new InfraException(utf8_decode($retornoWS->detail->NegocioFault->mensagemFault),$e);
 					throw new InfraException('Usuário e/ou senha inválidos para uso do serviço.
@@ -706,8 +663,8 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			}
 			throw new InfraException('Não foi Possível Obter a  Quantidade Máxima de Documentos no WebService do Protocolo Integrado.', $retornoWS);
 		}
-		$quantidadeMaximaDocumentos = $retornoWS -> NumeroMaximoDocumentos;
-		$numMaximoTentativas = $objRetornoProtocoloIntegradoParametrosDTO -> getNumQuantidadeTentativas();
+		$quantidadeMaximaDocumentos = $retornoWS->NumeroMaximoDocumentos;
+		$numMaximoTentativas = $objRetornoProtocoloIntegradoParametrosDTO->getNumQuantidadeTentativas();
 
 		$unidadesOperacao = array();
 		$unidadesOperacaoId = array();
@@ -715,7 +672,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 		$strHierarquiaUnidade = '';
 		$objInfraSip = new InfraSip(SessaoSEI::getInstance());
-		$ret = $objInfraSip -> carregarUnidades(SessaoSEI::getInstance() -> getNumIdSistema());
+		$ret = $objInfraSip->carregarUnidades(SessaoSEI::getInstance()->getNumIdSistema());
 
 		$arrUnidadesSip = array();
 
@@ -738,11 +695,11 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		$strInicioPublicacao = date('d/m/Y H:i:s');
 		$filtro['strDthAgendamentoExecutado'] = $strInicioPublicacao;
 		
-		while (true){
+		while (true) {
 			$numRodada = $numRodada+1;
-			$arrObjProcessosMonitorados = $this -> listarProcessosPublicacao($filtro);
+			$arrObjProcessosMonitorados = $this->listarProcessosPublicacao($filtro);
 			
-			if (count($arrObjProcessosMonitorados)==0){
+			if (count($arrObjProcessosMonitorados)==0) {
 				break;
 			}
 			$numTotal = $numTotal+count($arrObjProcessosMonitorados);
@@ -751,7 +708,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 			foreach ($arrObjProcessosMonitorados as $pacote => $protocoloMonitorado) {
 				$contador = $contador+1;
-				$documento = $dom -> createElement("Documento");
+				$documento = $dom->createElement("Documento");
 	
 				$objProtocoloDTO = $protocoloMonitorado['protocolo'];
 
@@ -759,26 +716,26 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 	
 				array_push($arrObjProtocoloEnviados, $objProtocoloDTO);
 				
-				$objParticipanteDTO -> setDblIdProtocolo($objProtocoloDTO -> getDblIdProtocolo());
+				$objParticipanteDTO->setDblIdProtocolo($objProtocoloDTO->getDblIdProtocolo());
 	
-				$objParticipanteDTO -> setStrStaParticipacao(array(ParticipanteRN::$TP_INTERESSADO), InfraDTO::$OPER_IN);
+				$objParticipanteDTO->setStrStaParticipacao(array(ParticipanteRN::$TP_INTERESSADO), InfraDTO::$OPER_IN);
 	
-				$objParticipanteDTO -> setOrdNumSequencia(InfraDTO::$TIPO_ORDENACAO_ASC);
+				$objParticipanteDTO->setOrdNumSequencia(InfraDTO::$TIPO_ORDENACAO_ASC);
 	
 				$objParticipanteRN = new ParticipanteRN();
-				$arrObjParticipanteDTO = $objParticipanteRN -> listarRN0189($objParticipanteDTO);
+				$arrObjParticipanteDTO = $objParticipanteRN->listarRN0189($objParticipanteDTO);
 				$arrIdParticipanteProcesso = array();
 				foreach ($arrObjParticipanteDTO as $ch => $val) {
 	
-					array_push($arrIdParticipanteProcesso, $val -> getNumIdContato());
+					array_push($arrIdParticipanteProcesso, $val->getNumIdContato());
 				}
-				$arrDocumentosAssinadosDTO = $this -> consultarParticipantesDocumentosAssinadosProcesso($objProtocoloDTO);
+				$arrDocumentosAssinadosDTO = $this->consultarParticipantesDocumentosAssinadosProcesso($objProtocoloDTO);
 	
 				if (is_array($arrDocumentosAssinadosDTO) && count($arrDocumentosAssinadosDTO) > 0) {
 	
 					foreach ($arrDocumentosAssinadosDTO as $key => $participante) {
 	
-						if (!in_array($participante -> getNumIdContato(), $arrIdParticipanteProcesso)) {
+						if (!in_array($participante->getNumIdContato(), $arrIdParticipanteProcesso)) {
 							array_push($arrObjParticipanteDTO, $participante);
 						}
 					}
@@ -789,17 +746,17 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				$arrObjParticipanteDTO = array_unique($arrObjParticipanteDTO);
 	
 				$objRelProtocoloAssuntoDTO = new RelProtocoloAssuntoDTO();
-				$objRelProtocoloAssuntoDTO -> setDistinct(true);
-				$objRelProtocoloAssuntoDTO -> retNumSequencia();
-				$objRelProtocoloAssuntoDTO -> retNumIdAssunto();
-				$objRelProtocoloAssuntoDTO -> retStrCodigoEstruturadoAssunto();
-				$objRelProtocoloAssuntoDTO -> retStrDescricaoAssunto();
+				$objRelProtocoloAssuntoDTO->setDistinct(true);
+				$objRelProtocoloAssuntoDTO->retNumSequencia();
+				$objRelProtocoloAssuntoDTO->retNumIdAssunto();
+				$objRelProtocoloAssuntoDTO->retStrCodigoEstruturadoAssunto();
+				$objRelProtocoloAssuntoDTO->retStrDescricaoAssunto();
 				//$objRelProtocoloAssuntoDTO->setDblIdProtocolo($arrProtocolos,InfraDTO::$OPER_IN);
-				$objRelProtocoloAssuntoDTO -> setDblIdProtocolo($objProtocoloDTO -> getDblIdProtocolo());
-				$objRelProtocoloAssuntoDTO -> setOrdNumSequencia(InfraDTO::$TIPO_ORDENACAO_ASC);
+				$objRelProtocoloAssuntoDTO->setDblIdProtocolo($objProtocoloDTO->getDblIdProtocolo());
+				$objRelProtocoloAssuntoDTO->setOrdNumSequencia(InfraDTO::$TIPO_ORDENACAO_ASC);
 	
 				$objRelProtocoloAssuntoRN = new RelProtocoloAssuntoRN();
-				$arrObjRelProtocoloAssuntoDTO = $objRelProtocoloAssuntoRN -> listarRN0188($objRelProtocoloAssuntoDTO);
+				$arrObjRelProtocoloAssuntoDTO = $objRelProtocoloAssuntoRN->listarRN0188($objRelProtocoloAssuntoDTO);
 	
 				foreach ($arrObjRelProtocoloAssuntoDTO as $key => $value) {
 	
@@ -807,119 +764,119 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				}
 				unset($arrObjRelProtocoloAssuntoDTO);
 	
-				$codigoProtocolo = $dom -> createElement("Protocolo", $objProtocoloDTO -> getStrProtocoloFormatadoPesquisa());
+				$codigoProtocolo = $dom->createElement("Protocolo", $objProtocoloDTO->getStrProtocoloFormatadoPesquisa());
 	
-				list($day, $month, $year) = explode('/', $objProtocoloDTO -> getDtaGeracao());
+				list($day, $month, $year) = explode('/', $objProtocoloDTO->getDtaGeracao());
 				$dataGeracaoConvertida = sprintf('%s-%s-%s', $year, $month, $day);
-				$dataGeracao = $dom -> createElement("DataHoraProducao", date('c', strtotime($dataGeracaoConvertida)));
+				$dataGeracao = $dom->createElement("DataHoraProducao", date('c', strtotime($dataGeracaoConvertida)));
 	
-				$tipoProcedimento = $dom -> createElement("Especie", "Processo");
-				if (strlen(trim($objProtocoloDTO -> getStrDescricao())) > 0) {
-					$assunto = $dom -> createElement("Assunto", InfraString::formatarXML($objProtocoloDTO -> getStrNomeTipoProcedimentoProcedimento() . ' - ' . $objProtocoloDTO -> getStrDescricao()));
+				$tipoProcedimento = $dom->createElement("Especie", "Processo");
+				if (strlen(trim($objProtocoloDTO->getStrDescricao())) > 0) {
+					$assunto = $dom->createElement("Assunto", InfraString::formatarXML($objProtocoloDTO->getStrNomeTipoProcedimentoProcedimento() . ' - ' . $objProtocoloDTO->getStrDescricao()));
 				} else {
 	
-					$assunto = $dom -> createElement("Assunto", InfraString::formatarXML($objProtocoloDTO -> getStrNomeTipoProcedimentoProcedimento()));
+					$assunto = $dom->createElement("Assunto", InfraString::formatarXML($objProtocoloDTO->getStrNomeTipoProcedimentoProcedimento()));
 				}
 	
 				// $identificacao =  $dom->createElement("IdentificacaoDocumento", $identificacaoPrimeiroDocumentoAssinado);
 	
-				$documento -> appendChild($codigoProtocolo);
-				$documento -> appendChild($dataGeracao);
-				$documento -> appendChild($tipoProcedimento);
-				$documento -> appendChild($assunto);
+				$documento->appendChild($codigoProtocolo);
+				$documento->appendChild($dataGeracao);
+				$documento->appendChild($tipoProcedimento);
+				$documento->appendChild($assunto);
 				// $documento->appendChild($identificacao);
 	
 				$objRelProtocoloProtocoloDTO = new RelProtocoloProtocoloDTO();
 				$objRelProtocoloProtocoloRN = new RelProtocoloProtocoloRN();
-				$objRelProtocoloProtocoloDTO -> retStrProtocoloFormatadoProtocolo2();
-				$objRelProtocoloProtocoloDTO -> setDblIdProtocolo1($objProtocoloDTO -> getDblIdProtocolo());
+				$objRelProtocoloProtocoloDTO->retStrProtocoloFormatadoProtocolo2();
+				$objRelProtocoloProtocoloDTO->setDblIdProtocolo1($objProtocoloDTO->getDblIdProtocolo());
 				$arrEstadosRelacaoProtocolo = array();
 	
 				array_push($arrEstadosRelacaoProtocolo, RelProtocoloProtocoloRN::$TA_PROCEDIMENTO_SOBRESTADO);
 				array_push($arrEstadosRelacaoProtocolo, RelProtocoloProtocoloRN::$TA_PROCEDIMENTO_RELACIONADO);
 				array_push($arrEstadosRelacaoProtocolo, RelProtocoloProtocoloRN::$TA_PROCEDIMENTO_ANEXADO);
-				$objRelProtocoloProtocoloDTO -> setStrStaAssociacao($arrEstadosRelacaoProtocolo, InfraDTO::$OPER_IN);
-				$arrRelProtocoloProtocoloDTO = $objRelProtocoloProtocoloRN -> listarRN0187($objRelProtocoloProtocoloDTO);
+				$objRelProtocoloProtocoloDTO->setStrStaAssociacao($arrEstadosRelacaoProtocolo, InfraDTO::$OPER_IN);
+				$arrRelProtocoloProtocoloDTO = $objRelProtocoloProtocoloRN->listarRN0187($objRelProtocoloProtocoloDTO);
 	
 				$objRelProtocoloProtocoloDTO = new RelProtocoloProtocoloDTO();
 				$objRelProtocoloProtocoloRN = new RelProtocoloProtocoloRN();
-				$objRelProtocoloProtocoloDTO -> retStrProtocoloFormatadoProtocolo1();
-				$objRelProtocoloProtocoloDTO -> setDblIdProtocolo2($objProtocoloDTO -> getDblIdProtocolo());
+				$objRelProtocoloProtocoloDTO->retStrProtocoloFormatadoProtocolo1();
+				$objRelProtocoloProtocoloDTO->setDblIdProtocolo2($objProtocoloDTO->getDblIdProtocolo());
 				$arrEstadosRelacaoProtocolo = array();
 	
 				array_push($arrEstadosRelacaoProtocolo, RelProtocoloProtocoloRN::$TA_PROCEDIMENTO_SOBRESTADO);
 				array_push($arrEstadosRelacaoProtocolo, RelProtocoloProtocoloRN::$TA_PROCEDIMENTO_RELACIONADO);
 				array_push($arrEstadosRelacaoProtocolo, RelProtocoloProtocoloRN::$TA_PROCEDIMENTO_ANEXADO);
-				$objRelProtocoloProtocoloDTO -> setStrStaAssociacao($arrEstadosRelacaoProtocolo, InfraDTO::$OPER_IN);
-				$arrRelProtocoloProtocoloDTO2 = $objRelProtocoloProtocoloRN -> listarRN0187($objRelProtocoloProtocoloDTO);
+				$objRelProtocoloProtocoloDTO->setStrStaAssociacao($arrEstadosRelacaoProtocolo, InfraDTO::$OPER_IN);
+				$arrRelProtocoloProtocoloDTO2 = $objRelProtocoloProtocoloRN->listarRN0187($objRelProtocoloProtocoloDTO);
 				
 				for ($numProtocolo = 0; $numProtocolo < count($arrRelProtocoloProtocoloDTO2); $numProtocolo++) {
-					$arrRelProtocoloProtocoloDTO2[$numProtocolo] -> setStrProtocoloFormatadoProtocolo2($arrRelProtocoloProtocoloDTO2[$numProtocolo] -> getStrProtocoloFormatadoProtocolo1());
+					$arrRelProtocoloProtocoloDTO2[$numProtocolo]->setStrProtocoloFormatadoProtocolo2($arrRelProtocoloProtocoloDTO2[$numProtocolo]->getStrProtocoloFormatadoProtocolo1());
 					array_push($arrRelProtocoloProtocoloDTO, $arrRelProtocoloProtocoloDTO2[$numProtocolo]);
 				}
 				unset($arrObjRelProtocoloAssuntoDTO);
 				
 				if (count($arrRelProtocoloProtocoloDTO) > 0) {
-					$protocolosRelacionados = $dom -> createElement("ListaProtocolosRelacionados");
+					$protocolosRelacionados = $dom->createElement("ListaProtocolosRelacionados");
 					$arrCodigoProtocoloRelacionado = array();
 					for ($k = 0; $k < count($arrRelProtocoloProtocoloDTO); $k++) {
 	
 						$protocoloRelacionadoDTO = $arrRelProtocoloProtocoloDTO[$k];
-						$codProtocoloRelacionado = InfraUtil::retirarFormatacao($protocoloRelacionadoDTO -> getStrProtocoloFormatadoProtocolo2());
+						$codProtocoloRelacionado = InfraUtil::retirarFormatacao($protocoloRelacionadoDTO->getStrProtocoloFormatadoProtocolo2());
 						if (strlen($codProtocoloRelacionado) == 13 || strlen($codProtocoloRelacionado) == 14 || strlen($codProtocoloRelacionado) == 15 || strlen($codProtocoloRelacionado) == 17 || strlen($codProtocoloRelacionado) == 21) {
-							$protocoloRelacionado = $dom -> createElement("ProtocoloRelacionado", InfraUtil::retirarFormatacao($protocoloRelacionadoDTO -> getStrProtocoloFormatadoProtocolo2()));
-							$protocolosRelacionados -> appendChild($protocoloRelacionado);
+							$protocoloRelacionado = $dom->createElement("ProtocoloRelacionado", InfraUtil::retirarFormatacao($protocoloRelacionadoDTO->getStrProtocoloFormatadoProtocolo2()));
+							$protocolosRelacionados->appendChild($protocoloRelacionado);
 							array_push($arrCodigoProtocoloRelacionado, $codProtocoloRelacionado);
 						}
 	
 					}
 					if (count($arrCodigoProtocoloRelacionado) > 0) {
 	
-						$documento -> appendChild($protocolosRelacionados);
+						$documento->appendChild($protocolosRelacionados);
 					}
 				}
 				unset($arrObjRelProtocoloAssuntoDTO);
 				if (count($arrObjParticipanteDTO) > 0) {
 	
-					$interessados = $dom -> createElement("ListaInteressados");
+					$interessados = $dom->createElement("ListaInteressados");
 	
 					foreach ($arrObjParticipanteDTO as $key => $objInteressadoDTO) {
-						$strNomeInteressado = $this->gerarNomeInteressadoComCpfEscondido($objInteressadoDTO -> getStrNomeContato());
-						$interessado = $dom -> createElement("Interessado");
-						$nomeInteressado = $dom -> createElement("NomeInteressado", InfraString::formatarXML(substr($strNomeInteressado, 0, 150)));
-						$interessado -> appendChild($nomeInteressado);
-						$interessados -> appendChild($interessado);
+						$strNomeInteressado = $this->gerarNomeInteressadoComCpfEscondido($objInteressadoDTO->getStrNomeContato());
+						$interessado = $dom->createElement("Interessado");
+						$nomeInteressado = $dom->createElement("NomeInteressado", InfraString::formatarXML(substr($strNomeInteressado, 0, 150)));
+						$interessado->appendChild($nomeInteressado);
+						$interessados->appendChild($interessado);
 					}
-					$documento -> appendChild($interessados);
+					$documento->appendChild($interessados);
 				}
 	
 				unset($arrObjParticipanteDTO);
 	
-				$historico = $dom -> createElement("Historico");
+				$historico = $dom->createElement("Historico");
 	
 				$objProtocoloIntegradoMonitoramentoProcessosDTO = new ProtocoloIntegradoMonitoramentoProcessosDTO();
-				$objProtocoloIntegradoMonitoramentoProcessosDTO -> setNumIdPacote($protocoloMonitorado['id_pacote']);
+				$objProtocoloIntegradoMonitoramentoProcessosDTO->setNumIdPacote($protocoloMonitorado['id_pacote']);
 				
-				$arrAtividades = $this -> listarAtividadesPublicacao($objProtocoloIntegradoMonitoramentoProcessosDTO);
+				$arrAtividades = $this->listarAtividadesPublicacao($objProtocoloIntegradoMonitoramentoProcessosDTO);
 				
 				for ($j = 0; $j < count($arrAtividades); $j++) {
 	
-					$numAtividade = $arrAtividades[$j] -> getNumIdAtividade();
+					$numAtividade = $arrAtividades[$j]->getNumIdAtividade();
 	
-					$strMensagem = $arrAtividades[$j] -> getStrMensagemPublicacao();
+					$strMensagem = $arrAtividades[$j]->getStrMensagemPublicacao();
 	
 					$objProtocoloIntegradoRN = new ProtocoloIntegradoRN();
-					$strNomeOperacao = $objProtocoloIntegradoRN -> transformarMensagemOperacao($numAtividade, $strMensagem);
+					$strNomeOperacao = $objProtocoloIntegradoRN->transformarMensagemOperacao($numAtividade, $strMensagem);
 	
-					$itemHistorico = $dom -> createElement("ItemHistorico");
+					$itemHistorico = $dom->createElement("ItemHistorico");
 				
-					$dataHoraOperacaoConvertida =  str_replace('/', '-', $arrAtividades[$j] -> getDthDataAbertura());
-					$dataHoraOperacao = $dom -> createElement("DataHoraOperacao", date('c', strtotime($dataHoraOperacaoConvertida)));
+					$dataHoraOperacaoConvertida =  str_replace('/', '-', $arrAtividades[$j]->getDthDataAbertura());
+					$dataHoraOperacao = $dom->createElement("DataHoraOperacao", date('c', strtotime($dataHoraOperacaoConvertida)));
 					$unidadeOperacao = '';
 	
-					if ($arrAtividades[$j] -> getNumIdUnidade() != null) {
+					if ($arrAtividades[$j]->getNumIdUnidade() != null) {
 	
-						$idUnidadeOperacao = $arrAtividades[$j] -> getNumIdUnidade();
+						$idUnidadeOperacao = $arrAtividades[$j]->getNumIdUnidade();
 	
 						if (in_array($idUnidadeOperacao, $unidadesOperacaoId)) {
 	
@@ -928,28 +885,28 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 						} else {
 							$objUnidadeDTO = new UnidadeDTO();
 	
-							$objUnidadeDTO -> retNumIdUnidade();
-							$objUnidadeDTO -> retStrSigla();
-							$objUnidadeDTO -> retStrSiglaOrgao();
-							$objUnidadeDTO -> retStrDescricaoOrgao();
-							$objUnidadeDTO -> retStrDescricao();
+							$objUnidadeDTO->retNumIdUnidade();
+							$objUnidadeDTO->retStrSigla();
+							$objUnidadeDTO->retStrSiglaOrgao();
+							$objUnidadeDTO->retStrDescricaoOrgao();
+							$objUnidadeDTO->retStrDescricao();
 	
-							$objUnidadeDTO -> setNumIdUnidade($idUnidadeOperacao);
-							$objUnidadeDTO -> setBolExclusaoLogica(false);
+							$objUnidadeDTO->setNumIdUnidade($idUnidadeOperacao);
+							$objUnidadeDTO->setBolExclusaoLogica(false);
 	
 							$objUnidadeRN = new UnidadeRN();
 	
-							$objUnidadeDTO = $objUnidadeRN -> consultarRN0125($objUnidadeDTO);
+							$objUnidadeDTO = $objUnidadeRN->consultarRN0125($objUnidadeDTO);
 	
 							if ($objUnidadeDTO != null) {
 	
-								$strHierarquiaUnidade = $this -> obterHierarquiaUnidade($objUnidadeDTO, $arrUnidadesSip);
+								$strHierarquiaUnidade = $this->obterHierarquiaUnidade($objUnidadeDTO, $arrUnidadesSip);
 								if (strlen(trim($strHierarquiaUnidade)) == 0) {
 	
-									$strHierarquiaUnidade = $objUnidadeDTO -> getStrDescricao();
+									$strHierarquiaUnidade = $objUnidadeDTO->getStrDescricao();
 								}
-								$unidadeOperacao = substr($strHierarquiaUnidade . '/' . $objUnidadeDTO -> getStrDescricaoOrgao(), 0, 297);
-								if (strlen($strHierarquiaUnidade . '/' . $objUnidadeDTO -> getStrDescricaoOrgao()) > 297){
+								$unidadeOperacao = substr($strHierarquiaUnidade . '/' . $objUnidadeDTO->getStrDescricaoOrgao(), 0, 297);
+								if (strlen($strHierarquiaUnidade . '/' . $objUnidadeDTO->getStrDescricaoOrgao()) > 297) {
 										
 									$unidadeOperacao .= '...';
 								}	
@@ -958,51 +915,51 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 							}
 						}
 					}
-					$unidadeOperacao = $dom -> createElement("UnidadeOperacao", InfraString::formatarXML($unidadeOperacao));
-					$operacao = $dom -> createElement("Operacao", InfraString::formatarXML($strNomeOperacao));
+					$unidadeOperacao = $dom->createElement("UnidadeOperacao", InfraString::formatarXML($unidadeOperacao));
+					$operacao = $dom->createElement("Operacao", InfraString::formatarXML($strNomeOperacao));
 	
-					$itemHistorico -> appendChild($dataHoraOperacao);
-					$itemHistorico -> appendChild($unidadeOperacao);
-					$itemHistorico -> appendChild($operacao);
-					$historico -> appendChild($itemHistorico);
+					$itemHistorico->appendChild($dataHoraOperacao);
+					$itemHistorico->appendChild($unidadeOperacao);
+					$itemHistorico->appendChild($operacao);
+					$historico->appendChild($itemHistorico);
 	
 				}
 	
 				unset($arrAtividades);
 	
-				$documento -> appendChild($historico);
-				$root -> appendChild($documento);
-				$dom -> appendChild($root);
+				$documento->appendChild($historico);
+				$root->appendChild($documento);
+				$dom->appendChild($root);
 	
-				$metadados = $dom -> saveXML();
+				$metadados = $dom->saveXML();
 	
 				$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-				$objPacoteDTO -> setNumIdProtocoloIntegradoPacoteEnvio($protocoloMonitorado['id_pacote']);
-				$objPacoteDTO -> setStrStaIntegracao($protocoloMonitorado['sta_integracao']);
+				$objPacoteDTO->setNumIdProtocoloIntegradoPacoteEnvio($protocoloMonitorado['id_pacote']);
+				$objPacoteDTO->setStrStaIntegracao($protocoloMonitorado['sta_integracao']);
 	
 				$domDocumento = new DOMDocument("1.0", "UTF-8");
-				$domDocumento -> preserveWhiteSpace = false;
-				$domDocumento -> formatOutput = true;
-				$node = $domDocumento -> importNode($documento, true);
-				$domDocumento -> appendChild($node);
-				$xmlArquivoMetadado = $domDocumento -> saveXML();
+				$domDocumento->preserveWhiteSpace = false;
+				$domDocumento->formatOutput = true;
+				$node = $domDocumento->importNode($documento, true);
+				$domDocumento->appendChild($node);
+				$xmlArquivoMetadado = $domDocumento->saveXML();
 				
 				for($control = 0; $control < 32; $control++) {
 				    $xmlArquivoMetadado = str_replace(chr($control), "", $xmlArquivoMetadado);	
 				}
 				
-				$objPacoteDTO -> setStrArquivoMetadados($xmlArquivoMetadado);
-				$objPacoteDTO -> setNumTentativasEnvio($protocoloMonitorado['num_tentativas']);
+				$objPacoteDTO->setStrArquivoMetadados($xmlArquivoMetadado);
+				$objPacoteDTO->setNumTentativasEnvio($protocoloMonitorado['num_tentativas']);
 				if ($protocoloMonitorado['dth_metadados'] == NULL) {
 	
-					$objPacoteDTO -> setDthDataMetadados(date('d/m/Y H:i:s'));
+					$objPacoteDTO->setDthDataMetadados(date('d/m/Y H:i:s'));
 				}
-				$retornoAtualizacao = $objPacoteRN -> alterar($objPacoteDTO);
-				if($retornoAtualizacao==-1){
+				$retornoAtualizacao = $objPacoteRN->alterar($objPacoteDTO);
+				if($retornoAtualizacao==-1) {
 					continue;
 					
 				}
-				if($arrObjPacotesEnviados==null){
+				if($arrObjPacotesEnviados==null) {
 						$arrObjPacotesEnviados = array();
 				}
 				array_push($arrObjPacotesEnviados, $objPacoteDTO);
@@ -1016,18 +973,18 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 						$arrObjEnviarListaDocumentosPI[2] = $arrObjProtocoloEnviados;
 						$arrObjEnviarListaDocumentosPI[3] = $strInicioPublicacao;		
 						$arrObjEnviarListaDocumentosPI[4] = $conexaoCliente;				
-						$this -> enviarListaDocumentosPI($arrObjEnviarListaDocumentosPI);
+						$this->enviarListaDocumentosPI($arrObjEnviarListaDocumentosPI);
 						
 					
 					}
-					catch(Exception $e){
+					catch(Exception $e) {
 						error_log($e);
 					}
 					$dom = new DOMDocument("1.0", "UTF-8");
-					$dom -> preserveWhiteSpace = false;
-					$dom -> formatOutput = true;
+					$dom->preserveWhiteSpace = false;
+					$dom->formatOutput = true;
 	
-					$root = $dom -> createElement("ListaDocumentos");
+					$root = $dom->createElement("ListaDocumentos");
 					unset($arrObjPacotesEnviados);
 					$arrObjPacotesEnviados = array();
 					$arrObjProtocoloEnviados = array();
@@ -1038,9 +995,9 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				
 			}
 			if ($quantidadeDocumentos < $quantidadeMaximaDocumentos) {
-				$documentos = $dom -> getElementsByTagName("Documento");
+				$documentos = $dom->getElementsByTagName("Documento");
 				
-				if ($documentos -> length > 0) {
+				if ($documentos->length > 0) {
 					try{
 						$arrObjEnviarListaDocumentosPI = array();
 						$arrObjEnviarListaDocumentosPI[0] = $dom;
@@ -1048,48 +1005,48 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 						$arrObjEnviarListaDocumentosPI[2] = $arrObjProtocoloEnviados;
 						$arrObjEnviarListaDocumentosPI[3] = $strInicioPublicacao;
 						$arrObjEnviarListaDocumentosPI[4] = $conexaoCliente;
-						$this -> enviarListaDocumentosPI($arrObjEnviarListaDocumentosPI);
+						$this->enviarListaDocumentosPI($arrObjEnviarListaDocumentosPI);
 					}
-					catch(Exception $e){
+					catch(Exception $e) {
 						error_log($e);
 					}
 					unset($arrObjPacotesEnviados);
 				}
 			}
-			if (count($arrObjProcessosMonitorados)<$quantidadeMaximaDocumentos){
+			if (count($arrObjProcessosMonitorados)<$quantidadeMaximaDocumentos) {
 				break;
 			}
-			if ($numTotal>ProtocoloIntegradoParametrosRN::$NUM_MAX_ANDAMENTOS_POR_VEZ){
+			if ($numTotal>ProtocoloIntegradoParametrosRN::$NUM_MAX_ANDAMENTOS_POR_VEZ) {
 				break;
 			}
 		}
 
 	}
+	
 	private function gerarNomeInteressadoComCpfEscondido($strNomeInteressado) {
 		
-		if (preg_match("/[0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2}/", $strNomeInteressado, $matches)){
+		if (preg_match("/[0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2}/", $strNomeInteressado, $matches)) {
 			$strCpf = $matches[0];
 			$bolCpfValido = $this->validarCPF($strCpf);
-			if ($bolCpfValido==true){
+			if ($bolCpfValido==true) {
 				$strCpf = "***".substr($strCpf, 3, strlen($strCpf)-5);
-				if (substr($strCpf, -1, 1)=="-"){
+				if (substr($strCpf, -1, 1)=="-") {
 					$strCpf = substr($strCpf, 0, strlen($strCpf)-2)."*-**";
-				}
-				else{
+				} else {
 					$strCpf = substr($strCpf, 0, strlen($strCpf)-1)."***";
 				}
 			}
 							
 			$strNomeInteressado = str_replace($matches[0],$strCpf,$strNomeInteressado);
 		}
-		return $strNomeInteressado;
-						
+		
+		return $strNomeInteressado;				
 	}
 
 	private function validarCPF($cpf = null) {
  
     	// Verifica se um número foi informado
-    	if(empty($cpf)) {
+    	if (empty($cpf)) {
         	return false;
     	}
  
@@ -1097,22 +1054,16 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
     	$cpf = ereg_replace('[^0-9]', '', $cpf);
     	$cpf = str_pad($cpf, 11, '0', STR_PAD_LEFT);
      
-    	// Verifica se o numero de digitos informados é igual a 11 
+    	// Verifica se o numero de digitos informados é igual a 11
     	if (strlen($cpf) != 11) {
         	return false;
-    	}
-    	// Verifica se nenhuma das sequências invalidas abaixo 
-    	// foi digitada. Caso afirmativo, retorna falso
-    	else if ($cpf == '00000000000' || $cpf == '11111111111' || $cpf == '22222222222' || $cpf == '33333333333' || $cpf == '44444444444' || $cpf == '55555555555' || 
+    	} else if ($cpf == '00000000000' || $cpf == '11111111111' || $cpf == '22222222222' || $cpf == '33333333333' || $cpf == '44444444444' || $cpf == '55555555555' || 
         			$cpf == '66666666666' || $cpf == '77777777777' || $cpf == '88888888888' || $cpf == '99999999999') {
+        	// Retorna false caso o CPF seja igual à uma das sequencia invalidas
         	return false;
-     	// Calcula os digitos verificadores para verificar se o
-     	// CPF é válido
-     	}
-     	else {   
-         
+     	} else {
+     	    // Verifica se o CPF é válido
         	for ($t = 9; $t < 11; $t++) {
-             
             	for ($d = 0, $c = 0; $c < $t; $c++) {
                 	$d += $cpf{$c} * (($t + 1) - $c);
             	}
@@ -1121,54 +1072,52 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
                 	return false;
             	}
         	}
- 
         	return true;
     	}
 	}
 
 	public function atualizaPacote($objPacoteDTO, $objProtocoloDTO, $resultado, $strInicioPublicacao) {
+	    
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
 		$erroXML = new DOMDocument("1.0", "UTF-8");
-		$erroXML -> preserveWhiteSpace = false;
-		$erroXML -> formatOutput = true;
+		$erroXML->preserveWhiteSpace = false;
+		$erroXML->formatOutput = true;
 		
-		if($objPacoteDTO!=null){
-			$strStatusStaIntegracao = $objPacoteDTO -> getStrStaIntegracao();
-			$resultadoDocumento = $erroXML -> createElement("ResultadoDocumento");
+		if($objPacoteDTO!=null) {
+			$strStatusStaIntegracao = $objPacoteDTO->getStrStaIntegracao();
+			$resultadoDocumento = $erroXML->createElement("ResultadoDocumento");
 			if ($resultado == 'Ok!') {
-	
-				$objPacoteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO);
-				$objPacoteDTO -> setNumTentativasEnvio($objPacoteDTO -> getNumTentativasEnvio() + 1);
+				$objPacoteDTO->setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO);
+				$objPacoteDTO->setNumTentativasEnvio($objPacoteDTO->getNumTentativasEnvio() + 1);
 			} else if (stripos($resultado, 'NF00') !== false) {
-	
-				$objPacoteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL);
-	
-				$objPacoteDTO -> setNumTentativasEnvio($objPacoteDTO -> getNumTentativasEnvio() + 1);
-				$protocoloDocumento = $erroXML -> createElement("Protocolo", $objProtocoloDTO -> getStrProtocoloFormatadoPesquisa());
-				$respostaDocumento = $erroXML -> createElement("Resultado", utf8_decode($resultado));
-				$resultadoDocumento -> appendChild($protocoloDocumento);
-				$resultadoDocumento -> appendChild($respostaDocumento);
-				$erroXML -> appendChild($resultadoDocumento);
-				$objPacoteDTO -> setStrArquivoErro($erroXML -> saveXML());
+				$objPacoteDTO->setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL);
+				$objPacoteDTO->setNumTentativasEnvio($objPacoteDTO->getNumTentativasEnvio() + 1);
+				$protocoloDocumento = $erroXML->createElement("Protocolo", $objProtocoloDTO->getStrProtocoloFormatadoPesquisa());
+				$respostaDocumento = $erroXML->createElement("Resultado", utf8_decode($resultado));
+				$resultadoDocumento->appendChild($protocoloDocumento);
+				$resultadoDocumento->appendChild($respostaDocumento);
+				$erroXML->appendChild($resultadoDocumento);
+				$objPacoteDTO->setStrArquivoErro($erroXML->saveXML());
 	
 			} else {
-	
-				$objPacoteDTO -> setNumTentativasEnvio($objPacoteDTO -> getNumTentativasEnvio() + 1);
-				$objPacoteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA);
-				$protocoloDocumento = $erroXML -> createElement("Protocolo", $objProtocoloDTO -> getStrProtocoloFormatadoPesquisa());
-				$respostaDocumento = $erroXML -> createElement("Resultado", utf8_decode($resultado));
-				$resultadoDocumento -> appendChild($protocoloDocumento);
-				$resultadoDocumento -> appendChild($respostaDocumento);
-				$erroXML -> appendChild($resultadoDocumento);
-				$objPacoteDTO -> setStrArquivoErro($erroXML -> saveXML());
+				$objPacoteDTO->setNumTentativasEnvio($objPacoteDTO->getNumTentativasEnvio() + 1);
+				$objPacoteDTO->setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA);
+				$protocoloDocumento = $erroXML->createElement("Protocolo", $objProtocoloDTO->getStrProtocoloFormatadoPesquisa());
+				$respostaDocumento = $erroXML->createElement("Resultado", utf8_decode($resultado));
+				$resultadoDocumento->appendChild($protocoloDocumento);
+				$resultadoDocumento->appendChild($respostaDocumento);
+				$erroXML->appendChild($resultadoDocumento);
+				$objPacoteDTO->setStrArquivoErro($erroXML->saveXML());
 	
 			}
-			$objPacoteDTO -> setDthDataSituacao(date('d/m/Y H:i:s'));
-			$objPacoteDTO -> setDthDataAgendamentoExecutado($strInicioPublicacao);
-			if ($strStatusStaIntegracao=='I'){
-				$objPacoteDTO -> setDthDataMetadados(date('d/m/Y H:i:s'));
+			
+			$objPacoteDTO->setDthDataSituacao(date('d/m/Y H:i:s'));
+			$objPacoteDTO->setDthDataAgendamentoExecutado($strInicioPublicacao);
+			
+			if ($strStatusStaIntegracao=='I') {
+				$objPacoteDTO->setDthDataMetadados(date('d/m/Y H:i:s'));
 			}
-			$objPacoteRN -> alterar($objPacoteDTO);
+			$objPacoteRN->alterar($objPacoteDTO);
 					
 		}
 		
@@ -1176,12 +1125,12 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 	private function obterHierarquiaUnidade(UnidadeDTO $objUnidadeDTO, $arrUnidadesSip) {
 
-		if (isset($arrUnidadesSip[$objUnidadeDTO -> getNumIdUnidade()])) {
-
-			$arrUnidadesSuperiores = $arrUnidadesSip[$objUnidadeDTO -> getNumIdUnidade()][UnidadeRN::$POS_UNIDADE_UNIDADES_SUPERIORES];
-			$arrUnidadesSuperiores[] = $objUnidadeDTO -> getNumIdUnidade();
+		if (isset($arrUnidadesSip[$objUnidadeDTO->getNumIdUnidade()])) {
+			$arrUnidadesSuperiores = $arrUnidadesSip[$objUnidadeDTO->getNumIdUnidade()][UnidadeRN::$POS_UNIDADE_UNIDADES_SUPERIORES];
+			$arrUnidadesSuperiores[] = $objUnidadeDTO->getNumIdUnidade();
 			$it = 0;
 			$arrUnidadesSuperiores = array_reverse($arrUnidadesSuperiores);
+			
 			foreach ($arrUnidadesSuperiores as $numIdUnidadeSuperior) {
 				if ($strHierarquiaUnidade != '') {
 					$strHierarquiaUnidade .= '/';
@@ -1194,8 +1143,8 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				}
 				$it++;
 			}
-
 		}
+		
 		return $strHierarquiaUnidade;
 	}
 
@@ -1206,65 +1155,54 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		$arrObjProtocolosEnviados = $arrObjEnviarListaDocumentosPI[2];
 		$strInicioPublicacao = $arrObjEnviarListaDocumentosPI[3];
 		$conexaoCliente = $arrObjEnviarListaDocumentosPI[4];
-		
-
-		$ret = $conexaoCliente -> enviarListaDocumentosServidor($xml);
+        
+		$ret = $conexaoCliente->enviarListaDocumentosServidor($xml);
 		$iterador = 0;
 		if ($ret instanceof SoapFault) {
-
 			$retorno = new stdClass();
-			$retorno -> ResultadoDocumento = array();
+			$retorno->ResultadoDocumento = array();
 
 			for ($i = 0; $i < count($arrObjProtocolosEnviados); $i++) {
-
 				$resultado = new stdClass();
-				$resultado -> Resultado = 'SF001 - ' . $ret -> getMessage();
-				array_push($retorno -> ResultadoDocumento, $resultado);
-
+				$resultado->Resultado = 'SF001 - ' . $ret->getMessage();
+				array_push($retorno->ResultadoDocumento, $resultado);
 			}
 
 			$ret = $retorno;
 		}
 
-		if (is_array($ret -> ResultadoDocumento)) {
-			
+		if (is_array($ret->ResultadoDocumento)) {
 			foreach ($ret->ResultadoDocumento as $key => $value) {
-
 				$objPacoteDTO = $arrObjPacotesEnviados[$iterador];
 				$objProtocoloDTO = $arrObjProtocolosEnviados[$iterador];
-				$this -> atualizaPacote($objPacoteDTO, $objProtocoloDTO, $value -> Resultado, $strInicioPublicacao);
+				$this->atualizaPacote($objPacoteDTO, $objProtocoloDTO, $value->Resultado, $strInicioPublicacao);
 				$iterador++;
 			}
-
 		} else {
-
 			$objPacoteDTO = $arrObjPacotesEnviados[0];
 			$objProtocoloDTO = $arrObjProtocolosEnviados[0];
-			$this -> atualizaPacote($objPacoteDTO, $objProtocoloDTO, $ret -> ResultadoDocumento -> Resultado, $strInicioPublicacao);
+			$this->atualizaPacote($objPacoteDTO, $objProtocoloDTO, $ret->ResultadoDocumento->Resultado, $strInicioPublicacao);
 		}
 
 	}
 
-	public function notificarPacotesSemEnvio(){
+	public function notificarPacotesSemEnvio() {
 				
 		$objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
-		$objProtocoloIntegradoParametrosDTO -> retTodos();
+		$objProtocoloIntegradoParametrosDTO->retTodos();
 		$objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
-		$objRetornoParametrosDTO = $objProtocoloIntegradoParametrosRN -> consultar($objProtocoloIntegradoParametrosDTO);
+		$objRetornoParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
 
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
-		
 		$protocoloIntegradoPacoteEnvioDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-		
 		$protocoloIntegradoPacoteEnvioDTO->retTodos();
 		
-		$protocoloIntegradoPacoteEnvioDTO -> setNumMaxRegistrosRetorno(1);
-		$protocoloIntegradoPacoteEnvioDTO -> setOrd('DataSituacao', InfraDTO::$TIPO_ORDENACAO_DESC);
+		$protocoloIntegradoPacoteEnvioDTO->setNumMaxRegistrosRetorno(1);
+		$protocoloIntegradoPacoteEnvioDTO->setOrd('DataSituacao', InfraDTO::$TIPO_ORDENACAO_DESC);
 
 		$arrPacote = $objPacoteRN->listar($protocoloIntegradoPacoteEnvioDTO);
-		if (count($arrPacote)>0){
+		if (count($arrPacote)>0) {
 			$objPacoteIntegradoPacoteEnvio = $arrPacote[0];
-			
 			$protocoloIntegradoRN = new ProtocoloIntegradoRN();
 			
 			$infraAgendamentoTarefaDTO = new InfraAgendamentoTarefaDTO();
@@ -1282,9 +1220,9 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			$diffSegundos = $numAgora - $numMaxDthSituacao->getTimestamp();
 			$diffDias = intval($diffSegundos/(60*60*24));
 			
-			if ($diffDias>=$numDias){
+			if ($diffDias>=$numDias) {
 				$objInfraParametro = new InfraParametro(BancoSEI::getInstance());
-				$strEmailSistema = $objInfraParametro -> getValor('SEI_EMAIL_SISTEMA');
+				$strEmailSistema = $objInfraParametro->getValor('SEI_EMAIL_SISTEMA');
 		
 				$strMensagem = 'Prezado Administrador de Integração, <br />';
 				$strMensagem .= 'Há '.$diffDias.' dias não há envio de informações ao Protocolo Integrado. Favor verificar ';
@@ -1294,7 +1232,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				$strMensagem .= 'Sistema Eletrônico de Informações.';
 				
 				$strAssunto = '[Plugin SEI-PI] Há '.$diffDias.' dias não há envio de informações ao Protocolo Integrado.';
-				InfraMail::enviarConfigurado(ConfiguracaoSEI::getInstance(), $strEmailSistema, $objRetornoParametrosDTO -> getStrEmailAdministrador(), null, null, $strAssunto, $strMensagem, 'text/html');
+				InfraMail::enviarConfigurado(ConfiguracaoSEI::getInstance(), $strEmailSistema, $objRetornoParametrosDTO->getStrEmailAdministrador(), null, null, $strAssunto, $strMensagem, 'text/html');
 			}
 		}
 	}
@@ -1303,57 +1241,53 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 	public function notificarProcessosComFalha() {
 
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
-
 		$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-		$objPacoteDTO -> setNumMaxRegistrosRetorno(1);
-		$objPacoteDTO -> retTodos();
-		$objPacoteDTO -> setOrd('DataAgendamentoExecutado', InfraDTO::$TIPO_ORDENACAO_DESC);
-		$arrPacotes = $objPacoteRN -> listar($objPacoteDTO);
+		$objPacoteDTO->setNumMaxRegistrosRetorno(1);
+		$objPacoteDTO->retTodos();
+		$objPacoteDTO->setOrd('DataAgendamentoExecutado', InfraDTO::$TIPO_ORDENACAO_DESC);
+		$arrPacotes = $objPacoteRN->listar($objPacoteDTO);
 		$dataUltimoEnvio = null;
-		if (count($arrPacotes)>0){
+		if (count($arrPacotes)>0) {
 			$pacote = $arrPacotes[0];
-			$dataUltimoEnvio = $pacote -> getDthDataAgendamentoExecutado();
+			$dataUltimoEnvio = $pacote->getDthDataAgendamentoExecutado();
 		}
 		
-		if ($dataUltimoEnvio!=null){
+		if ($dataUltimoEnvio!=null) {
+			$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+			$objPacoteDTO->setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA);
+			$objPacoteDTO->setDthDataAgendamentoExecutado($dataUltimoEnvio);
+			$objPacoteDTO->retTodos();
+			$arrPacotesFalhaInfra = $objPacoteRN->listar($objPacoteDTO);
 			
 			$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-			$objPacoteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA);
-			$objPacoteDTO -> setDthDataAgendamentoExecutado($dataUltimoEnvio);
-			$objPacoteDTO -> retTodos();
-			$arrPacotesFalhaInfra = $objPacoteRN -> listar($objPacoteDTO);
-			
-			$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-			$objPacoteDTO -> setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL);
-			$objPacoteDTO -> setDthDataAgendamentoExecutado($dataUltimoEnvio);
-			$objPacoteDTO -> retTodos();
-			$arrPacotesErroNegocial = $objPacoteRN -> listar($objPacoteDTO);
+			$objPacoteDTO->setStrStaIntegracao(ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL);
+			$objPacoteDTO->setDthDataAgendamentoExecutado($dataUltimoEnvio);
+			$objPacoteDTO->retTodos();
+			$arrPacotesErroNegocial = $objPacoteRN->listar($objPacoteDTO);
 			
 			$objInfraParametro = new InfraParametro(BancoSEI::getInstance());
 	
 			if (count($arrPacotesErroNegocial) > 0 || count($arrPacotesFalhaInfra) > 0) {
-	
-				$strEmailSistema = $objInfraParametro -> getValor('SEI_EMAIL_SISTEMA');
+				$strEmailSistema = $objInfraParametro->getValor('SEI_EMAIL_SISTEMA');
 	
 				$objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
-				$objProtocoloIntegradoParametrosDTO -> retTodos();
+				$objProtocoloIntegradoParametrosDTO->retTodos();
 	
 				$objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
-				$objRetorno = $objProtocoloIntegradoParametrosRN -> consultar($objProtocoloIntegradoParametrosDTO);
+				$objRetorno = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
 	
-				InfraDebug::getInstance() -> gravar('Buscando Configuração de Publicação no Protocolo Integrado');
-				$objRetornoParametrosDTO = $objProtocoloIntegradoParametrosRN -> consultar($objProtocoloIntegradoParametrosDTO);
+				InfraDebug::getInstance()->gravar('Buscando Configuração de Publicação no Protocolo Integrado');
+				$objRetornoParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
 	
-				$strMensagem = 'Prezado Administrador de Integração,<br>Alguns processos não puderam ser enviados ao protocolo integrado no último ciclo de integração realizado pelo SEI em ' . $objRetornoParametrosDTO -> getDthDataUltimoProcessamento() . ' <br /> <br />';
+				$strMensagem = 'Prezado Administrador de Integração,<br>Alguns processos não puderam ser enviados ao protocolo integrado no último ciclo de integração realizado pelo SEI em ' . $objRetornoParametrosDTO->getDthDataUltimoProcessamento() . ' <br /> <br />';
 				$strMensagem .= '<' . count($arrPacotesFalhaInfra) . '>' . 'Processos não enviados por erro de infraestrutura <br />';
 				$strMensagem .= '<' . count($arrPacotesErroNegocial) . '>' . 'Processos não enviados por erro negocial <br /> <br />';
 				$strMensagem .= 'Favor observar a tabela de monitoramento do SEI para maiores detalhes.  <br />';
 				$strMensagem .= 'Obrigado. <br /> <br />';
 				$strMensagem .= 'Sistema Eletrônico de Informações';
 				$strAssunto = '[Plugin SEI-PI] Processos não integrados no último ciclo ';
-				InfraMail::enviarConfigurado(ConfiguracaoSEI::getInstance(), $strEmailSistema, $objRetornoParametrosDTO -> getStrEmailAdministrador(), null, null, $strAssunto, $strMensagem, 'text/html');
-			}
-			else{
+				InfraMail::enviarConfigurado(ConfiguracaoSEI::getInstance(), $strEmailSistema, $objRetornoParametrosDTO->getStrEmailAdministrador(), null, null, $strAssunto, $strMensagem, 'text/html');
+			} else {
 				//error_log("sem envio");
 			}
 		}
@@ -1361,29 +1295,29 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 	}
 
 	protected function listarAgendamentoTarefaConectado(InfraAgendamentoTarefaDTO $infraAgendamentoTarefaDTO) {
+	    
 	    try {
-
 	      $objAgendamentoBD = new InfraAgendamentoTarefaBD($this->getObjInfraIBanco());
 	      $ret = $objAgendamentoBD->listar($infraAgendamentoTarefaDTO);
 	  	
 		  return $ret;
-	  
-	    }catch(Exception $e){
+	    } catch (Exception $e) {
 	      throw new InfraException('Erro listando Tarefas.',$e);
 	    }
+	    
     }
 
 	protected function listarUnidadesConectado(UnidadeDTO $unidadeDTO) {
+	    
 	    try {
-	    	
 	      $objUnidadeBD = new UnidadeBD($this->getObjInfraIBanco());
 	      $ret = $objUnidadeBD->listar($unidadeDTO);
 	  	
 		  return $ret;
-	  
-	    }catch(Exception $e){
+	    } catch(Exception $e) {
 	      throw new InfraException('Erro listando Unidades.',$e);
 	    }
+	    
     }
 
 }

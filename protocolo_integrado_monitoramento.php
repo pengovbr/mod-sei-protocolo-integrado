@@ -1,37 +1,30 @@
-<?
+<?php
+
 ini_set('max_execution_time','0');
 ini_set('memory_limit','-1');
 ini_set('output_buffering','On');
 
 try {
-  require_once dirname(__FILE__).'/../../SEI.php';
-
+    
+  require_once dirname(__FILE__).'/../../../SEI.php';
+  
   session_start();
+  SessaoSEI::getInstance()->validarLink();
+  SessaoSEI::getInstance()->validarPermissao($_GET['acao']);
 
   //////////////////////////////////////////////////////////////////////////////
   //InfraDebug::getInstance()->setBolLigado(false);
   //InfraDebug::getInstance()->setBolDebugInfra(true);
   //InfraDebug::getInstance()->limpar();
   //////////////////////////////////////////////////////////////////////////////
-
-  SessaoSEI::getInstance()->validarLink();
-
   
-  SessaoSEI::getInstance()->validarPermissao($_GET['acao']);
- 	 
   $filtro = $_REQUEST;
-
- 
-
   $dtaPeriodoDe = $_REQUEST['filtroTxtPeriodoDe'];
   $dtaPeriodoA = $_REQUEST['filtroTxtPeriodoA'];
-  if(!isset($_REQUEST['filtroTxtPeriodoGeracaoDe'])){
-
+  if (!isset($_REQUEST['filtroTxtPeriodoGeracaoDe'])) {
       $dtaPeriodoGeracaoDe = date("d/m/Y", time() - 60 * 60 * 24*3);
       $filtro['filtroTxtPeriodoGeracaoDe'] = $dtaPeriodoGeracaoDe;
-
-  }else{
-
+  } else {
        $dtaPeriodoGeracaoDe = $_REQUEST['filtroTxtPeriodoGeracaoDe'];
   }
   
@@ -40,21 +33,19 @@ try {
   $filtroStaIntegracao = $_REQUEST['filtroSelSitucaoIntegracao'];
   $filtroUnidadeGeradora = $_REQUEST['filtroSelUnidade'];
   $filtroIncluirUnidadesFilhas = $_REQUEST['filtroIncluirUnidadesFilhas'];
-  if ($filtroIncluirUnidadesFilhas=='on'){
+  if ($filtroIncluirUnidadesFilhas=='on') {
   	$filtroIncluirUnidadesFilhas="checked='checked'";
-  }
-  else{
+  } else {
   	$filtroIncluirUnidadesFilhas="";
   }
   
-  if (isset($_POST['sbmPesquisar']) || isset($_POST['hdnInfraPaginaAtual'])==false || $_POST['hdnInfraPaginaAtual']==''){
+  if (isset($_POST['sbmPesquisar']) || isset($_POST['hdnInfraPaginaAtual'])==false || $_POST['hdnInfraPaginaAtual']=='') {
 	  $_POST['hdnInfraPaginaAtual'] = '0';
   }
  
   switch($_GET['acao']){
   	
   	case 'protocolo_integrado_forcar_reenvio':
-		
 		$arrStrItensSelecionados = explode(',',$_REQUEST['hdnForcarReenvioItensSelecionados']);
 		$arrStrItensSelecionados = array_unique($arrStrItensSelecionados);
 		$objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
@@ -65,9 +56,7 @@ try {
 		$filtro = array();
 		$filtro['pacotes'] = array();
 		
-		for($i = 0;$i < count($arrStrItensSelecionados); $i++){
-			
-			
+		for ($i = 0;$i < count($arrStrItensSelecionados); $i++) {
 			array_push($filtro['pacotes'],$arrStrItensSelecionados[$i]);
 			PaginaSEI::getInstance()->adicionarMensagem('Operação realizada com sucesso.');
 		}	
@@ -76,39 +65,30 @@ try {
 		$arrParam[1] = $filtro;
 
 		$objProtocoloIntegradoMonitoramentoProcessosRN->publicarProcessosMonitorados($arrParam);
-    $parametros = '';
-   
-   
-    if(isset($_REQUEST['filtroCodProtocolo']) && $_REQUEST['filtroCodProtocolo']!=''){
-
-        $parametros .= '&filtroCodProtocolo='.$_REQUEST['filtroCodProtocolo'];
-    }
-    if(isset($_REQUEST['filtroSelSitucaoIntegracao']) && $_REQUEST['filtroSelSitucaoIntegracao']!=''){
-
-        $parametros .= '&filtroSelSitucaoIntegracao='.$_REQUEST['filtroSelSitucaoIntegracao'];
-    }
-    if(isset($_REQUEST['filtroSelUnidade']) && $_REQUEST['filtroSelUnidade']!='' ){
-
-        $parametros .= '&filtroSelUnidade='.$_REQUEST['filtroSelUnidade'];
-    }
-    if(isset($_REQUEST['filtroIncluirUnidadesFilhas']) && $_REQUEST['filtroIncluirUnidadesFilhas']!=''){
-
-        $parametros .= '&filtroIncluirUnidadesFilhas='.$_REQUEST['filtroIncluirUnidadesFilhas'];
-    }
-    if(isset($_REQUEST['filtroTxtPeriodoGeracaoDe']) && $_REQUEST['filtroTxtPeriodoGeracaoDe']!=''){
-
-        $parametros .= '&filtroTxtPeriodoGeracaoDe='.$_REQUEST['filtroTxtPeriodoGeracaoDe'];
-    }
-    if(isset($_REQUEST['filtroTxtPeriodoGeracaoA']) && $_REQUEST['filtroTxtPeriodoGeracaoA']!='' ){
-
-        $parametros .= '&filtroTxtPeriodoGeracaoA='.$_REQUEST['filtroTxtPeriodoGeracaoA'];
-    }
-    if(isset($_REQUEST['numRegistosPaginaSuperior'])  && $_REQUEST['numRegistosPaginaSuperior']!=''){
-
-        $parametros .= '&numRegistosPaginaSuperior='.$_REQUEST['numRegistosPaginaSuperior'];
-    }
-     
-	
+        $parametros = '';
+        
+        if(isset($_REQUEST['filtroCodProtocolo']) && $_REQUEST['filtroCodProtocolo']!='') {
+            $parametros .= '&filtroCodProtocolo='.$_REQUEST['filtroCodProtocolo'];
+        }
+        if(isset($_REQUEST['filtroSelSitucaoIntegracao']) && $_REQUEST['filtroSelSitucaoIntegracao']!='') {
+            $parametros .= '&filtroSelSitucaoIntegracao='.$_REQUEST['filtroSelSitucaoIntegracao'];
+        }
+        if(isset($_REQUEST['filtroSelUnidade']) && $_REQUEST['filtroSelUnidade']!='' ) {
+            $parametros .= '&filtroSelUnidade='.$_REQUEST['filtroSelUnidade'];
+        }
+        if(isset($_REQUEST['filtroIncluirUnidadesFilhas']) && $_REQUEST['filtroIncluirUnidadesFilhas']!='') {
+            $parametros .= '&filtroIncluirUnidadesFilhas='.$_REQUEST['filtroIncluirUnidadesFilhas'];
+        }
+        if(isset($_REQUEST['filtroTxtPeriodoGeracaoDe']) && $_REQUEST['filtroTxtPeriodoGeracaoDe']!='') {
+            $parametros .= '&filtroTxtPeriodoGeracaoDe='.$_REQUEST['filtroTxtPeriodoGeracaoDe'];
+        }
+        if(isset($_REQUEST['filtroTxtPeriodoGeracaoA']) && $_REQUEST['filtroTxtPeriodoGeracaoA']!='' ) {
+            $parametros .= '&filtroTxtPeriodoGeracaoA='.$_REQUEST['filtroTxtPeriodoGeracaoA'];
+        }
+        if(isset($_REQUEST['numRegistosPaginaSuperior'])  && $_REQUEST['numRegistosPaginaSuperior']!='') {
+            $parametros .= '&numRegistosPaginaSuperior='.$_REQUEST['numRegistosPaginaSuperior'];
+        }
+        
 		header('Location: '.SessaoSEI::getInstance()->assinarLink('controlador.php?acao='.$_GET['acao_origem'].$parametros));
     	die;
 		  
@@ -118,72 +98,70 @@ try {
               
     default:
       throw new InfraException("Ação '".$_GET['acao']."' não reconhecida.");
+      
   }
-   $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
+    $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
 
-  if(isset($_REQUEST['numRegistosPaginaSuperior']) && $_REQUEST['numRegistosPaginaSuperior']!='' ){
-
-         $filtro['filtroNumQuantidadeRegistrosPorPagina'] = $_REQUEST['numRegistosPaginaSuperior'];
-  }
+    if(isset($_REQUEST['numRegistosPaginaSuperior']) && $_REQUEST['numRegistosPaginaSuperior']!='' ){
+        $filtro['filtroNumQuantidadeRegistrosPorPagina'] = $_REQUEST['numRegistosPaginaSuperior'];
+    }
   
-  $filtro['paginacao'] = true;
-  $arrObjPacotesMonitoradosDTO = $objProtocoloIntegradoMonitoramentoProcessosRN->listarProcessosMonitorados($filtro);
- 
-  $strItensSelSituacoesIntegracoes = $objProtocoloIntegradoMonitoramentoProcessosRN->getSituacoesIntegracao();
-  
-  $strItensSelUnidades = $objProtocoloIntegradoMonitoramentoProcessosRN->getUnidadesGeradoras();
+    $filtro['paginacao'] = true;
+    $arrObjPacotesMonitoradosDTO = $objProtocoloIntegradoMonitoramentoProcessosRN->listarProcessosMonitorados($filtro);
+    
+    $strItensSelSituacoesIntegracoes = $objProtocoloIntegradoMonitoramentoProcessosRN->getSituacoesIntegracao();
+    
+    $strItensSelUnidades = $objProtocoloIntegradoMonitoramentoProcessosRN->getUnidadesGeradoras();
   	
-   $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
-   $objProtocoloIntegradoParametrosDTO->retNumIdProtocoloIntegradoParametros();
-   $objProtocoloIntegradoParametrosDTO->retNumQuantidadeTentativas();
-   $objProtocoloIntegradoParametrosDTO->retDthDataUltimoProcessamento();
-   $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
+    $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
+    $objProtocoloIntegradoParametrosDTO->retNumIdProtocoloIntegradoParametros();
+    $objProtocoloIntegradoParametrosDTO->retNumQuantidadeTentativas();
+    $objProtocoloIntegradoParametrosDTO->retDthDataUltimoProcessamento();
+    $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
   
-  $objParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);	
-  $arrComandos = array();
- 
-  $bolAcaoForcarReenvio = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_forcar_reenvio');
+    $objParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);	
+    $arrComandos = array();
+    
+    $bolAcaoForcarReenvio = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_forcar_reenvio');
+    
+    $numRegistros = count($arrObjPacotesMonitoradosDTO);
+    $objPacoteEnvioDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+    $objPacoteEnvioDTO -> retNumIdProtocolo();
+    $objPacoteEnvioDTO -> retStrStaIntegracao();
+    $objPacoteEnvioDTO -> retDthDataSituacao();
+    $objPacoteEnvioDTO -> retDthDataMetadados();
+    $objPacoteEnvioDTO -> retNumTentativasEnvio();
+    $objPacoteEnvioDTO -> retStrProtocoloFormatado();
+    $objPacoteEnvioDTO -> retNumIdProtocoloIntegradoPacoteEnvio();
   
-  $numRegistros = count($arrObjPacotesMonitoradosDTO);
-  $objPacoteEnvioDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-  $objPacoteEnvioDTO -> retNumIdProtocolo();
-  $objPacoteEnvioDTO -> retStrStaIntegracao();
-  $objPacoteEnvioDTO -> retDthDataSituacao();
-  $objPacoteEnvioDTO -> retDthDataMetadados();
-  $objPacoteEnvioDTO -> retNumTentativasEnvio();
-  $objPacoteEnvioDTO -> retStrProtocoloFormatado();
-  $objPacoteEnvioDTO -> retNumIdProtocoloIntegradoPacoteEnvio();
-  
-  if ($numRegistros > 0){
-		
-	$bolCheck = false;
-	
-    if ($_GET['acao']=='protocolo_integrado_monitoramento'){
-      $bolAcaoReativar = false;
-      $bolAcaoConsultar = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_monitoramento');
-      $bolAcaoAlterar = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_monitoramento');
-      $bolAcaoImprimir = false;
-      //$bolAcaoGerarPlanilha = false;
-      $bolAcaoExcluir = false;
-      $bolAcaoDesativar = false;
-      $bolCheck = true;
-	  $bolColunaArquivo = SessaoInfra::getInstance()->verificarPermissao('protocolo_integrado_acesso_arquivo_metadados');
-    }else{
-      $bolAcaoReativar = false;
-      $bolAcaoConsultar = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_monitoramento');
-      $bolAcaoAlterar = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_monitoramento');
-      $bolAcaoImprimir = true;
-     
-    }
+    if ($numRegistros > 0) {
+        $bolCheck = false;
+        if ($_GET['acao']=='protocolo_integrado_monitoramento') {
+            $bolAcaoReativar = false;
+            $bolAcaoConsultar = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_monitoramento');
+            $bolAcaoAlterar = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_monitoramento');
+            $bolAcaoImprimir = false;
+            //$bolAcaoGerarPlanilha = false;
+            $bolAcaoExcluir = false;
+            $bolAcaoDesativar = false;
+            $bolCheck = true;
+            $bolColunaArquivo = SessaoInfra::getInstance()->verificarPermissao('protocolo_integrado_acesso_arquivo_metadados');
+        } else {
+            $bolAcaoReativar = false;
+            $bolAcaoConsultar = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_monitoramento');
+            $bolAcaoAlterar = SessaoSEI::getInstance()->verificarPermissao('protocolo_integrado_monitoramento');
+            $bolAcaoImprimir = true;
+        }
 
-    if ($bolAcaoExcluir){
-      $bolCheck = true;
-      $arrComandos[] = '<button type="button" accesskey="E" id="btnExcluir" value="Excluir" onclick="acaoExclusaoMultipla();" class="infraButton"><span class="infraTeclaAtalho">E</span>xcluir</button>';
-      $strLinkExcluir = SessaoSEI::getInstance()->assinarLink('controlador.php?acao=tarefa_excluir&acao_origem='.$_GET['acao']);
-    }
-    $strResultado = '';
-	  $strSumarioTabela = 'Tabela de Processos.';
-    $strCaptionTabela = 'Pacotes';
+        if ($bolAcaoExcluir) {
+            $bolCheck = true;
+            $arrComandos[] = '<button type="button" accesskey="E" id="btnExcluir" value="Excluir" onclick="acaoExclusaoMultipla();" class="infraButton"><span class="infraTeclaAtalho">E</span>xcluir</button>';
+            $strLinkExcluir = SessaoSEI::getInstance()->assinarLink('controlador.php?acao=tarefa_excluir&acao_origem='.$_GET['acao']);
+        }
+        
+        $strResultado = '';
+        $strSumarioTabela = 'Tabela de Processos.';
+        $strCaptionTabela = 'Pacotes';
 	 
     
 
@@ -289,6 +267,7 @@ try {
 	
     }
     $strResultado .= '</table>';
+    
   }
    
   if ($bolAcaoForcarReenvio && $maxPacotesReenvio>0){

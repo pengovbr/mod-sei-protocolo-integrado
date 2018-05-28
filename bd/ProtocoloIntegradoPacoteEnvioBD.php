@@ -1,63 +1,64 @@
-<?
+<?php
 
-require_once dirname(__FILE__).'/../../../SEI.php';
+require_once dirname ( __FILE__ ) . '/../../../../SEI.php';
 
 class ProtocoloIntegradoPacoteEnvioBD extends InfraBD {
-
-  public function __construct(InfraIBanco $objInfraIBanco){
-  	 parent::__construct($objInfraIBanco);
-  }
-  /* 
-  ** FunÃ§Ã£o retorna dados de uma coluna da tabela de pacotes que Ã© passada por parÃ¢metro
-  *  
-  */
-  public function recuperarColunaTabelaPacote($coluna){
-
-  		$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-  		$sql = 'select '.$coluna.' from '.$objPacoteDTO->getStrNomeTabela();
-  		$rs = $this->getObjInfraIBanco()->consultarSql($sql);
-  		$arrPacotesDTO = array();
-  		foreach($rs as $item){
-
-  			$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-  			$objPacoteDTO->setNumIdProtocoloIntegradoPacoteEnvio($item[0]);
-  			array_push($arrPacotesDTO,$objPacoteDTO);
-  		}
-  		return $arrPacotesDTO;
-  }
-  /*
-  *  FunÃ§Ã£o utilizada para recuperar nome da chave primÃ¡ria no Sql Server na tabela de pacotes
-  *	   
-  **/
-  public function recuperarChavePrimaria(){
-
-  		 $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-  		 $chavePrimaria = ""; 
-  		 if (BancoSEI::getInstance() instanceof InfraSqlServer){
-
-  		 		 $sql = "SELECT constraint_name FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME ='".$objPacoteDTO->getStrNomeTabela()."' and constraint_type ='PRIMARY KEY'";
-  		 		 $rs = $this->getObjInfraIBanco()->consultarSql($sql);
-  		 		 //var_dump($rs);
-  		 		 foreach($rs as $item){
-
-  		 		 	if($item[0] != null){
-
-  		 		 		$chavePrimaria = $item[0];
-  		 		 	}
-
-  		 		 }
-  		 		 
-				return $chavePrimaria;
-  		 }
-
-		
-  }
-  /**
-  ** FunÃ§Ã£o Criada para recuperar o nome chaves estrangeiras em base Mysql da tabela de pacote
-  ** Dependendo da versÃ£o a rodar o script de atualizaÃ§Ã£o para 1.1.3,a foreign key terÃ¡ nomes diferentes.
-  ** 
-  **/
-  public function recuperarChavesEstrangeirasv112(){
+    
+    public function __construct(InfraIBanco $objInfraIBanco) {
+        parent::__construct($objInfraIBanco);
+    }
+    
+    /*
+     * * Função retorna dados de uma coluna da tabela de pacotes que é passada por parâmetro
+     *
+     */
+    public function recuperarColunaTabelaPacote($coluna) {
+        
+        $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+        $sql = 'select ' . $coluna . ' from ' . $objPacoteDTO->getStrNomeTabela();
+        $rs = $this->getObjInfraIBanco()->consultarSql($sql);
+        
+        $arrPacotesDTO = array();
+        foreach ($rs as $item) {
+            $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+            $objPacoteDTO->setNumIdProtocoloIntegradoPacoteEnvio($item[0]);
+            array_push($arrPacotesDTO, $objPacoteDTO);
+        }
+        
+        return $arrPacotesDTO;
+        
+    }
+    
+    /*
+     * Função utilizada para recuperar nome da chave primÃ¡ria no Sql Server na tabela de pacotes
+     *
+     */
+    public function recuperarChavePrimaria() {
+        
+        $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+        $chavePrimaria = "";
+        if (BancoSEI::getInstance() instanceof InfraSqlServer) {
+            $sql = "SELECT constraint_name FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME ='" . $objPacoteDTO->getStrNomeTabela() . "' and constraint_type ='PRIMARY KEY'";
+            $rs = $this->getObjInfraIBanco()->consultarSql( $sql );
+            
+            // var_dump($rs);
+            foreach ($rs as $item) {
+                if ($item [0] != null) {
+                    $chavePrimaria = $item[0];
+                }
+            }
+            
+            return $chavePrimaria;
+        }
+        
+    }
+    
+    /**
+      ** Função Criada para recuperar o nome chaves estrangeiras em base Mysql da tabela de pacote
+      ** Dependendo da versão a rodar o script de atualização para 1.1.3,a foreign key terá nomes diferentes.
+      ** 
+      **/
+      public function recuperarChavesEstrangeirasv112(){
 
        $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
        $chaveEstrangeira = ""; 
@@ -71,7 +72,8 @@ class ProtocoloIntegradoPacoteEnvioBD extends InfraBD {
 
        }
 
-  }
-
+    }
+    
 }
+
 ?>

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * TRIBUNAL REGIONAL FEDERAL DA 4ª REGIÃO
 *
@@ -9,16 +9,15 @@
 * Versão no CVS: $Id$
 */
 
-require_once dirname(__FILE__).'/../../../SEI.php';
+require_once dirname(__FILE__).'/../../../../SEI.php';
 
 class ProtocoloIntegradoRN extends InfraRN {
   
-  
-  				
   public function __construct(){
     parent::__construct();
    
   }
+  
   public function montaTarefasPadraoPublicacao(){
   		 $tarefasPadraoPublicacao = array(
   										TarefaRN::$TI_GERACAO_PROCEDIMENTO,TarefaRN::$TI_RELACIONAR_PROCEDIMENTO,TarefaRN::$TI_REMOCAO_RELACIONAMENTO_PROCEDIMENTO,TarefaRN::$TI_SOBRESTAMENTO,
@@ -32,9 +31,11 @@ class ProtocoloIntegradoRN extends InfraRN {
 									    );
   		return $tarefasPadraoPublicacao;
   }
+  
   protected function inicializarObjInfraIBanco(){
     return BancoSEI::getInstance();
   }
+  
   protected function listarConectado(ProtocoloIntegradoDTO $objProtocoloDTO) {
     try {
   

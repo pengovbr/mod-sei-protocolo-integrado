@@ -1,12 +1,13 @@
 <?
 
-require_once dirname(__FILE__).'/../../../../sip/Sip.php';
+require_once dirname(__FILE__).'/../../../../../../sip/web/Sip.php';
+    
 
 
 class ProtocoloIntegradoVersaoSipRN extends InfraRN {
 
 	private $numSeg = 0;
-	private $versaoAtualDesteModulo = '1.1.5';
+	private $versaoAtualDesteModulo = '2.0.0';
 	private $nomeParametroModulo = 'PI_VERSAO';
 	
 	public function __construct(){
@@ -65,8 +66,17 @@ class ProtocoloIntegradoVersaoSipRN extends InfraRN {
 		die;
 	}
 
-	/* Contem atualizaçoes da versao 0.0.1 do modulo */
-	protected function instalarv115(){
+	private function instalarv200(){
+
+		$this->instalarv115();
+		//Como não houve mudanças de banco no SIP desde a versão 1.1.5,apenas cria parâmetro PI_VERSAO com valor 2.0.0
+		BancoSip::getInstance()->executarSql('insert into infra_parametro (valor, nome ) VALUES( \''. $this->versaoAtualDesteModulo .'\',  \''. $this->nomeParametroModulo .'\' )' );
+		$this->logar('ATUALIZAÇÔES DO MÓDULO PROTOCOLO INTEGRADO NA BASE DO SIP REALIZADAS COM SUCESSO');
+		 
+
+	}
+
+	private function instalarv115(){
 		 
 		$objSistemaRN = new SistemaRN();
 		$objPerfilRN = new PerfilRN();
@@ -110,7 +120,7 @@ class ProtocoloIntegradoVersaoSipRN extends InfraRN {
 		}
 		 
 		$numIdMenuSei = $objMenuDTO->getNumIdMenu();
-		 
+		
 		$objItemMenuDTO = new ItemMenuDTO();
 		$objItemMenuDTO->retNumIdItemMenu();
 		$objItemMenuDTO->setNumIdSistema($numIdSistemaSei);
@@ -208,68 +218,56 @@ class ProtocoloIntegradoVersaoSipRN extends InfraRN {
 
 		try{
 
-	  //$this->inicializar('INICIANDO ATUALIZACAO DE VERSAO SIP '.SIP_VERSAO.' (VERSAO SEI 2.6.0)');
-	  //checando versao do framework
-			$numVersaoInfraRequerida = '1.208';
-			if (VERSAO_INFRA != $numVersaoInfraRequerida){
-				$this->finalizar('VERSAO DO FRAMEWORK PHP INCOMPATIVEL (VERSAO ATUAL '.VERSAO_INFRA.', VERSAO REQUERIDA '.$numVersaoInfraRequerida.')',true);
-			}
-
 			//checando BDs suportados
 			if (!(BancoSip::getInstance() instanceof InfraMySql) &&
 					!(BancoSip::getInstance() instanceof InfraSqlServer) &&
 					!(BancoSip::getInstance() instanceof InfraOracle)){
 						$this->finalizar('BANCO DE DADOS NAO SUPORTADO: '.get_parent_class(BancoSip::getInstance()),true);
-	  }
+	  		}
 
-	  //checando permissoes na base de dados
-	  $objInfraMetaBD = new InfraMetaBD(BancoSip::getInstance());
-	   
-	  if (count($objInfraMetaBD->obterTabelas('sip_teste'))==0){
-	  	BancoSip::getInstance()->executarSql('CREATE TABLE sip_teste (id '.$objInfraMetaBD->tipoNumero().' null)');
-	  }
-	   
-	  BancoSip::getInstance()->executarSql('DROP TABLE sip_teste');
-	   
-	  //checando qual versao instalar
-	  $objInfraParametro = new InfraParametro(BancoSip::getInstance());
+		  //checando permissoes na base de dados
+		  $objInfraMetaBD = new InfraMetaBD(BancoSip::getInstance());
+		   
+		  /*if (count($objInfraMetaBD->obterTabelas('sip_teste'))==0){
+		  	BancoSip::getInstance()->executarSql('CREATE TABLE sip_teste (id '.$objInfraMetaBD->tipoNumero().' null)');
+		  }
+		   
+		  BancoSip::getInstance()->executarSql('DROP TABLE sip_teste');*/
+		   
+		  //checando qual versao instalar
+		  $objInfraParametro = new InfraParametro(BancoSip::getInstance());
 
-	  $strVersaoModuloPI = $objInfraParametro->getValor($this->nomeParametroModulo, false);
-	   
-	  if (InfraString::isBolVazia($strVersaoModuloPI)){
-	    
-	    $numMaxIdRecurso = $this->getMaxIdRecurso();
-	   	$numMaxIdItemMenu = $this->getMaxIdItemMenu();
-	    
-	    $this->atualizaSequenciaTabela('recurso',$numMaxIdRecurso);
-	    $this->atualizaSequenciaTabela('item_menu',$numMaxIdItemMenu);
-	  	$this->instalarv115();
-	  	
-	  	//adicionando parametro para controlar versao do modulo
-	  	BancoSip::getInstance()->executarSql('insert into infra_parametro (valor, nome ) VALUES( \''. $this->versaoAtualDesteModulo .'\',  \''. $this->nomeParametroModulo .'\' )' );
-	  	$this->logar('ATUALIZAÇÔES DO MÓDULO PROTOCOLO INTEGRADO NA BASE DO SIP REALIZADAS COM SUCESSO');
-	  	$this->finalizar('Versão '.$this->versaoAtualDesteModulo.' instalada com sucesso',false);
-	  	
+		  $strVersaoModuloPI = $objInfraParametro->getValor($this->nomeParametroModulo, false);
+		   
+		  if (InfraString::isBolVazia($strVersaoModuloPI)){
+		    
+		    $this->instalarv200();
+		  	 	
 
-	  }else if($strVersaoModuloPI==$this->versaoAtualDesteModulo){
+		  }else if($strVersaoModuloPI=='1.1.5') {
 
-	  		$this->finalizar('Versão '.$this->versaoAtualDesteModulo.' já instalada',true);
+		  		BancoSip::getInstance()->executarSql('update infra_parametro set valor=\''.$this->versaoAtualDesteModulo.'\' where nome=\''.$this->nomeParametroModulo.'\'');
+				$this->logar('ATUALIZAÇÔES DO MÓDULO PROTOCOLO INTEGRADO NA BASE DO SIP REALIZADAS COM SUCESSO');
+		  }else if($strVersaoModuloPI==$this->versaoAtualDesteModulo){
 
-	  }else{
+		  	$this->finalizar('Erro instalando/atualizando Módulo Protocolo Integrado no SIP.Versão '.$strVersaoModuloPI.' já instalada',false);
+		  }else{
 
-	  	    $this->finalizar('Versão '.$this->versaoAtualDesteModulo.' do módulo inválida',true);
-	  }
-	  //BancoSip::getInstance()->executarSql('update infra_parametro set valor=\''.SIP_VERSAO.'\' where nome=\'SIP_VERSAO\'');
-	  //$this->logar("SIP - FIM");
-	  
+		  	$this->finalizar('Erro instalando/atualizando Módulo Protocolo Integrado no SIP.Versão do módulo'.$this->versaoAtualDesteModulo.' inválida',false);
+		
+		  	
+		  }
+		  //BancoSip::getInstance()->executarSql('update infra_parametro set valor=\''.SIP_VERSAO.'\' where nome=\'SIP_VERSAO\'');
+		  //$this->logar("SIP - FIM");
+		  //$this->finalizar('Versão '.$strVersaoModuloPI.' já instalada',false);
 
 		} catch(Exception $e){
-			 
-			InfraDebug::getInstance()->setBolLigado(false);
-			InfraDebug::getInstance()->setBolDebugInfra(false);
-			InfraDebug::getInstance()->setBolEcho(false);
-			throw new InfraException('Erro atualizando versão.', $e);
-			 
+				 
+				InfraDebug::getInstance()->setBolLigado(false);
+				InfraDebug::getInstance()->setBolDebugInfra(false);
+				InfraDebug::getInstance()->setBolEcho(false);
+				throw new InfraException('Erro atualizando versão.', $e);
+				 
 		}
 
 	}
@@ -311,28 +309,6 @@ class ProtocoloIntegradoVersaoSipRN extends InfraRN {
        return $numMaxIdItemMenu;
 
 	}
-	private function atualizaSequenciaTabela($strNomeTabela,$numMaxIdTabela){
-
-
-		  $objInfraSequencia = new InfraSequencia(BancoSEI::getInstance());
-          $objInfraSequenciaBD = new InfraSequenciaBD(BancoSip::getInstance());
-          $objInfraSequenciaDTO = new InfraSequenciaDTO();
-          $objInfraSequenciaDTO->setStrNome($strNomeTabela);
-          $objInfraSequenciaDTO->retDblNumAtual();
-          $objInfraSequencia = $objInfraSequenciaBD->consultar($objInfraSequenciaDTO);
-          $numProximoValorSequencia = $objInfraSequencia->getDblNumAtual();
-
-          if($numProximoValorSequencia<$numMaxIdTabela){
-
-                
-                $objInfraSequenciaDTO = new InfraSequenciaDTO();
-          
-                $objInfraSequenciaDTO->setDblNumAtual($numMaxIdTabela);
-                $objInfraSequenciaDTO->setStrNome($strNomeTabela);
-                $objInfraSequenciaBD->alterar($objInfraSequenciaDTO);
-
-          }
-	}
 
 	private function adicionarRecursoPerfil($numIdSistema, $numIdPerfil, $strNome, $strCaminho = null){
 
@@ -346,8 +322,9 @@ class ProtocoloIntegradoVersaoSipRN extends InfraRN {
 
 	 if ($objRecursoDTO==null){
 
+	 	$objInfraSequencia = new InfraSequencia(BancoSip::getInstance());
 	 	$objRecursoDTO = new RecursoDTO();
-	 	$objRecursoDTO->setNumIdRecurso(null);
+	 	$objRecursoDTO->setNumIdRecurso($objInfraSequencia->obterProximaSequencia('recurso'));
 	 	$objRecursoDTO->setNumIdSistema($numIdSistema);
 	 	$objRecursoDTO->setStrNome($strNome);
 	 	$objRecursoDTO->setStrDescricao(null);
@@ -489,14 +466,14 @@ class ProtocoloIntegradoVersaoSipRN extends InfraRN {
 
 			$objItemMenuDTO->setStrRotulo($strRotulo);
 		}
-
 		$objItemMenuRN = new ItemMenuRN();
 		$objItemMenuDTO = $objItemMenuRN->consultar($objItemMenuDTO);
 
 		if ($objItemMenuDTO==null){
 
+			$objInfraSequencia = new InfraSequencia(BancoSip::getInstance());
 			$objItemMenuDTO = new ItemMenuDTO();
-			$objItemMenuDTO->setNumIdItemMenu(null);
+			$objItemMenuDTO->setNumIdItemMenu($objInfraSequencia->obterProximaSequencia('item_menu'));
 			$objItemMenuDTO->setNumIdMenu($numIdMenu);
 
 			if ($numIdItemMenuPai==null){
