@@ -39,8 +39,6 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 	        $this->context = stream_context_create(
                 array(
                     'ssl' => array(
-                        //'local_cert' => $this->certificado,
-                        'cafile' => dirname(__FILE__) . '/' . $this->certificado,
                         'verify_peer' => false,
                         'verify_peer_name' => false,
                         'allow_self_signed' => true
@@ -66,9 +64,8 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 		curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; //Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
 		curl_setopt($ch, CURLOPT_URL, $this->url);
 
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,1 );
-		curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__).'/'.$this->certificado);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false );
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 		$retorno = curl_exec($ch);
 		$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
