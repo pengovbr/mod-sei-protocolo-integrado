@@ -18,19 +18,11 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 	 private $senha;
 	 private $url;
 	 private $listaDocumentosFormatada;
-	 private $certificado;
+	 private $certificado; //deprecated nao usar mais
 
 	 public function __construct($url,$login,$senha,$opcoes) {
 
 		try {
-
-			if (strpos($url,'homologa.protocolointegrado.gov.br') !== FALSE ) {
-				$this->certificado = "certificado_homologacao.cer";
-			} else if (strpos($url,'protocolointegrado.gov.br')!== FALSE) {
-				$this->certificado = "certificado_producao.cer";
-			} else {
-				$this->certificado = "certificado.cer";
-			}
 
 			$this->login = $login;
 			$this->senha = $senha;

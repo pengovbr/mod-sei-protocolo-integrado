@@ -1207,15 +1207,19 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			
 			$infraAgendamentoTarefaDTO = new InfraAgendamentoTarefaDTO();
 			$infraAgendamentoTarefaDTO->retTodos();
+      $infraAgendamentoTarefaDTO->setBolExclusaoLogica(false);
 			$infraAgendamentoTarefaDTO->setStrComando('ProtocoloIntegradoAgendamentoRN::notificarNovosPacotesNaoSendoGerados');
-			
+
 			$arrAgendamentoTarefas = $this->listarAgendamentoTarefa($infraAgendamentoTarefaDTO);
 			
 			$objTarefaNotificarNovosPacotesNaoSendoGerados = $arrAgendamentoTarefas[0];
 			$numDias = $objTarefaNotificarNovosPacotesNaoSendoGerados->getStrParametro();
-	
-			$numMaxDthSituacao = DateTime::createFromFormat("d/m/Y G:i:s", $objPacoteIntegradoPacoteEnvio->getDthDataSituacao());
-	
+
+      $d = $objPacoteIntegradoPacoteEnvio->getDthDataSituacao();
+      if(is_null($d)) $d = strtotime("2000-01-01 00:00:00");
+
+			$numMaxDthSituacao = DateTime::createFromFormat("d/m/Y G:i:s", $d);
+
 			$numAgora = time();
 			$diffSegundos = $numAgora - $numMaxDthSituacao->getTimestamp();
 			$diffDias = intval($diffSegundos/(60*60*24));
