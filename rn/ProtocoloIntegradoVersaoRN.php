@@ -13,7 +13,7 @@ require_once dirname(__FILE__).'/../../../../../../sip/web/BancoSip.php';
 class ProtocoloIntegradoVersaoRN extends InfraRN {
 
     private $numSeg = 0;
-    private $versaoAtualDesteModulo = '2.0.0';
+    private $versaoAtualDesteModulo = '2.1.2';
     private $nomeParametroModulo = 'PI_VERSAO';
     private $historicoVersoes = array('1.1.1','1.1.2','1.1.3','1.1.4','1.1.5','2.0.0');
 
