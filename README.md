@@ -5,7 +5,9 @@
 ### Compatibilidade do Módulo x Versões do SEI
 
 SEI 4.x - Módulo na versão 3.x - *a ser liberado em breve*
+
 SEI 3.x - Módulo na versão 2.x
+
 SEI 2.x - Módulo na versão 1.x
 
 
