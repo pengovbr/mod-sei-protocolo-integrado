@@ -59,6 +59,7 @@ mkdir -p /opt/sei/web/modulos/mp
  6. copie para dentro dessa pasta mp o código fonte do módulo
  
  7. a árvore vai ficar assim:
+ 
  ![Árvore de Diretório do PI](https://github.com/spbgovbr/mod-sei-protocolo-integrado/raw/master/docs/images/manualinstalacao_01.png)
  
  8. agora ajuste o array de módulos do SEI para ele reconhecer o módulo. Atenção esse caminho é importante, um ajuste errado aqui tira o SEI inteiro do ar. Esse ajuste é muito simples, apenas tome cuidado com os parênteses e formatação php do arquivo para não quebrar. 
