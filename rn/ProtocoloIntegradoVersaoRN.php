@@ -120,6 +120,9 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
                     //Versão com suporte ao SEI 3.0
                     $instalacao = $this->instalarv200($strVersaoPreviaModuloProtocoloIntegrado);
                     break;
+                case '2.1.2':
+                    $instalacao = $this->instalarv212($strVersaoPreviaModuloProtocoloIntegrado);
+                    break;
                 default:
                     $instalacao["operacoes"] = null;
                     $instalacao["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão do módulo".$strVersaoPreviaModuloProtocoloIntegrado." inválida";
@@ -155,6 +158,25 @@ class ProtocoloIntegradoVersaoRN extends InfraRN {
                     
         }
     
+    }
+  
+    private function instalarv212($strVersaoPreviaModuloProtocoloIntegrado) {
+        // Versão 2.1.2 não gerou modificações no banco
+        $resultado = array();
+        if(trim($strVersaoPreviaModuloProtocoloIntegrado)==trim($this->versaoAtualDesteModulo)){
+            $resultado["erro"] = "Erro instalando/atualizando Módulo Protocolo Integrado no SEI. Versão ".$strVersaoPreviaModuloProtocoloIntegrado." já instalada";
+            return $resultado;
+        }else if($strVersaoPreviaModuloProtocoloIntegrado=='2.0.0'){
+
+            BancoSEI::getInstance()->executarSql('update infra_parametro set valor=\''.$this->versaoAtualDesteModulo.'\' where nome=\'PI_VERSAO\'');
+            
+        }else{
+
+            $this->instalarv115($strVersaoPreviaModuloProtocoloIntegrado);
+        }
+
+        // Configurar SIP
+        //$this->configurarSIP();
     }
   
     private function instalarv200($strVersaoPreviaModuloProtocoloIntegrado) {

@@ -760,6 +760,13 @@
       "targets": [],
       "value": ""
     }, {
+      "id": "bbdfac1c-571b-4f7d-b502-3a12c3cda493",
+      "comment": "",
+      "command": "waitForElementEditable",
+      "target": "id=selCargoFuncao",
+      "targets": [],
+      "value": "30000"
+    }, {
       "id": "19f30307-0be1-451e-842f-0d0a7692f4e9",
       "comment": "",
       "command": "click",
@@ -779,7 +786,7 @@
       "command": "select",
       "target": "id=selCargoFuncao",
       "targets": [],
-      "value": "label=Fiscal de Contrato - Administrativo"
+      "value": "label=Corregedor"
     }, {
       "id": "0d00ea93-d78a-4de5-83cd-3d6e93720a06",
       "comment": "",
