@@ -249,7 +249,7 @@ class ProtocoloIntegradoVersaoSipRN extends InfraRN {
 				$this->logar('ATUALIZAÇÔES DO MÓDULO PROTOCOLO INTEGRADO NA BASE DO SIP REALIZADAS COM SUCESSO');
 		  }else if($strVersaoModuloPI==$this->versaoAtualDesteModulo){
 
-		  	$this->finalizar('Erro instalando/atualizando Módulo Protocolo Integrado no SIP.Versão '.$strVersaoModuloPI.' já instalada',false);
+		  	$this->finalizar('As atualizacoes do SIP ja se encontram na ultima versao. Pode continuar com a execucao do script de atualizacao do SEI, caso ja nao tenha rodado o mesmo.',false);
 		  }else{
 
 		  	$this->finalizar('Erro instalando/atualizando Módulo Protocolo Integrado no SIP.Versão do módulo'.$this->versaoAtualDesteModulo.' inválida',false);
