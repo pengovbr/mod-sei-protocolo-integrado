@@ -14,7 +14,7 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
     }
     
     public function getVersao() {
-        return '2.1.2';
+        return '2.1.3';
     }
     
     public function getInstituicao() {
