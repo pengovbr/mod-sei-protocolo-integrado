@@ -42,13 +42,18 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
                 $restricaoMaxAtividade = "AND a.id_atividade<".$maxIdAtividade . " ";
             }
 
-            $sql = "select " . $topSQLServer. " a.* FROM  atividade a " . self::$SQL_HINT_TABLE . " ".
+            $sql = "select distinct " . $topSQLServer. " a.* FROM  atividade a " . self::$SQL_HINT_TABLE . " ".
  			     "INNER JOIN protocolo p " . self::$SQL_HINT_TABLE . " on a.id_protocolo=p.id_protocolo ".
  			     "INNER JOIN md_pi_mensagem pi " . self::$SQL_HINT_TABLE . " on a.id_tarefa = pi.id_tarefa ".
-			     "WHERE NOT EXISTS (select id_protocolo from md_pi_pacote_envio mppe " . self::$SQL_HINT_TABLE . " where mppe.id_protocolo=p.id_protocolo) ".$restricaoMaxAtividade.
+                 "INNER JOIN rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on p.id_protocolo = rpp.id_protocolo_1 ".
+			     "INNER JOIN protocolo p2 " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo ".
+				 "INNER JOIN documento d " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento ".
+			     "WHERE ".
+				 "d.sin_bloqueado='S' AND ".
+				 "NOT EXISTS (select id_protocolo from md_pi_pacote_envio mppe " . self::$SQL_HINT_TABLE . " where mppe.id_protocolo=p.id_protocolo) ".$restricaoMaxAtividade.
 			     "AND sin_publicar = 'S' ".
-			     "AND (sta_protocolo = 'P' AND  (sta_nivel_acesso_global = 0 or (sta_nivel_acesso_global=1 and exists (select * from md_pi_parametros " . self::$SQL_HINT_TABLE . " where sin_publicacao_restritos='S'))) ) ".
-			     "AND exists (select * from documento d " . self::$SQL_HINT_TABLE . " inner join protocolo p2 " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento inner join rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo where rpp.id_protocolo_1 = p.id_protocolo and d.sin_bloqueado='S' )";
+			     "AND (p.sta_protocolo = 'P' AND  (p.sta_nivel_acesso_global = 0 or (p.sta_nivel_acesso_global=1 and ".
+                 "exists (select * from md_pi_parametros " . self::$SQL_HINT_TABLE . " where sin_publicacao_restritos='S'))) ) ";
 			    
             if ($numUnidadeTeste!=null) {
                 $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
@@ -112,13 +117,19 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
                 $topSQLServer = "top ".($limit - count($atividadesProcessosIneditos));
             }
             
-            $restricaoAtividade = "a.id_atividade > " . $this->maxIdAtividadeMonitorada;
-            $sql = "select " . $topSQLServer. " a.* FROM  atividade a " . self::$SQL_HINT_TABLE . " ".
+            $restricaoAtividade = "a.id_atividade > " . $this->maxIdAtividadeMonitorada . " AND a.id_atividade<= " . $this->maxIdAtividadeMonitorada . " + 50000 AND ";
+            $sql = "select distinct " . $topSQLServer. " a.* FROM  atividade a " . self::$SQL_HINT_TABLE . " ".
             	     "INNER JOIN protocolo p " . self::$SQL_HINT_TABLE . " on a.id_protocolo=p.id_protocolo ".
             	     "INNER JOIN md_pi_mensagem pi " . self::$SQL_HINT_TABLE . " on a.id_tarefa = pi.id_tarefa ".
-            	     "WHERE ".$restricaoAtividade." AND (sta_protocolo = 'P' AND  (sta_nivel_acesso_global = 0 or (sta_nivel_acesso_global=1 and exists (select * from md_pi_parametros " . self::$SQL_HINT_TABLE . " where sin_publicacao_restritos='S'))) ) ".
-            	     "AND sin_publicar = 'S' ".
-            	     "AND exists (select * from documento d " . self::$SQL_HINT_TABLE . " inner join protocolo p2 " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento inner join rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo where rpp.id_protocolo_1 = p.id_protocolo and d.sin_bloqueado='S' )";
+					 "INNER JOIN rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on p.id_protocolo = rpp.id_protocolo_1 ".
+                     "INNER JOIN protocolo p2 " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo ".
+                     "INNER JOIN documento d " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento ".
+                     "WHERE ".
+					 "d.sin_bloqueado='S' AND ".
+					 $restricaoAtividade.
+                     " AND (p.sta_protocolo = 'P' AND  (p.sta_nivel_acesso_global = 0 or (p.sta_nivel_acesso_global=1 and ".
+					 "exists (select * from md_pi_parametros " . self::$SQL_HINT_TABLE . " where sin_publicacao_restritos='S'))) ) ".
+                     "AND sin_publicar = 'S' ";
             	     // "AND not exists(select * from md_pi_monitora_processos pimp where pimp.id_atividade=a.id_atividade)";
             	 
             if ($numUnidadeTeste!=null) {
