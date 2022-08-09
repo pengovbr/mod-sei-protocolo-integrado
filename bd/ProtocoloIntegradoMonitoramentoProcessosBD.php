@@ -127,7 +127,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
                      "WHERE ".
 					 "d.sin_bloqueado='S' AND ".
 					 $restricaoAtividade.
-                     " AND (p.sta_protocolo = 'P' AND  (p.sta_nivel_acesso_global = 0 or (p.sta_nivel_acesso_global=1 and ".
+                     "(p.sta_protocolo = 'P' AND  (p.sta_nivel_acesso_global = 0 or (p.sta_nivel_acesso_global=1 and ".
 					 "exists (select * from md_pi_parametros " . self::$SQL_HINT_TABLE . " where sin_publicacao_restritos='S'))) ) ".
                      "AND sin_publicar = 'S' ";
             	     // "AND not exists(select * from md_pi_monitora_processos pimp where pimp.id_atividade=a.id_atividade)";
