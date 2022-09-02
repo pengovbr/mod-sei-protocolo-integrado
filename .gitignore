@@ -1,1 +1,14 @@
+dist/
+html/
+vendor/
+
+.vscode
+
+.modulo.env
+.env
+*.cache
+*.log
+*.out
+*.swp
+
 tests/SeleniumIDE/exportedPython/__pycache__
