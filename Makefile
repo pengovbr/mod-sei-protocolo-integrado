@@ -1,7 +1,7 @@
-.PHONY: .env help clean build all install restart down destroy up config
+.PHONY: .env help clean build all install restart down destroy up up-background up-foreground config check-super-isalive
 
-include .env
-include .modulo.env
+-include .env
+-include .modulo.env
 
 # Parâmetros de configuração
 base = mysql
@@ -24,12 +24,15 @@ CMD_INSTALACAO_SIP = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PASSWORD)\n'
 CMD_INSTALACAO_RECURSOS_SEI = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PASSWORD)\n' | php atualizar_recursos_sei.php
 CMD_INSTALACAO_SEI_MODULO = echo -ne '$(SEI_DATABASE_USER)\n$(SEI_DATABASE_PASSWORD)\n' | php sei_atualizar_versao_modulo_protocolo_integrado.php
 CMD_INSTALACAO_SIP_MODULO = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PASSWORD)\n' | php sip_atualizar_versao_modulo_protocolo_integrado.php
-RED=\033[0;31m
-NC=\033[0m
-YELLOW=\033[1;33m
 
-MENSAGEM_AVISO_MODULO = $(RED)[ATENÇÃO]:$(NC)$(YELLOW) Necessário configurar a chave de configuração do módulo no arquivo de configuração do SEI (ConfiguracaoSEI.php) $(NC)\n               $(YELLOW)'Modulos' => array('ProtocoloIntegradoIntegracao' => 'protocolo-integrado') $(NC)
-MENSAGEM_AVISO_ENV = $(RED)[ATENÇÃO]:$(NC)$(YELLOW) Configurar parâmetros de autenticação do ambiente de testes do Protocolo Integrado no arquivo .modulo.env $(NC)
+CMD_CURL_SUPER_LOGIN = curl -s -L $(SEI_HOST)/sei | grep -q "<input.*txtUsuario.*>"
+SUCCESS=\033[0;32m
+ERROR=\033[0;31m
+WARNING=\033[1;33m
+NC=\033[0m
+
+MENSAGEM_AVISO_MODULO = $(ERROR)[ATENÇÃO]:$(NC)$(YELLOW) Necessário configurar a chave de configuração do módulo no arquivo de configuração do SEI (ConfiguracaoSEI.php) $(NC)\n               $(YELLOW)'Modulos' => array('ProtocoloIntegradoIntegracao' => 'protocolo-integrado') $(NC)
+MENSAGEM_AVISO_ENV = $(ERROR)[ATENÇÃO]:$(NC)$(YELLOW) Configurar parâmetros de autenticação do ambiente de testes do Protocolo Integrado no arquivo .modulo.env $(NC)
 
 all: clean build
 
@@ -61,6 +64,20 @@ clean:  ## Limpa o diretório contendo arquivos temporários de construção do 
 .modulo.env:
 	cp -n envs/modulo.env .modulo.env
 
+check-super-isalive: ## Target de apoio. Acessa o Super e verifica se esta respondendo a tela de login
+	@echo ""
+	@echo "$(WARNING)Aguardando inicialização do ambiente de desenvolvimento...$(NC)"
+	@for i in `seq 1 10`; do \
+	    echo "Tentativa $$i/10";  \
+		if $(CMD_CURL_SUPER_LOGIN); then \
+				echo 'Página de login carregada!' ; \
+				break ; \
+		fi; \
+		sleep 5; \
+	done; \
+	if ! $(CMD_CURL_SUPER_LOGIN); then echo '$(ERROR)Ambiente de desenvolvimento não pôde ser carregado corretamente.$(NC)'; exit 1 ; fi;
+
+
 install: ## Instala e atualiza as tabelas do módulo na base de dados do sistema
 	docker-compose exec -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SEI_MODULO)"; true
 	docker-compose exec -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SIP_MODULO)"; true 
@@ -77,9 +94,20 @@ update: ## Atualiza banco de dados através dos scripts de atualização do sist
 	docker-compose run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_SIP)"; true
 	docker-compose run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
 
-up: .modulo.env  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
+
+up: up-backgound  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
+
+
+up-backgound: .env .modulo.env  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
 	@if [ ! -f ".env" ]; then cp envs/$(base).env .env; fi
 	docker-compose up -d
+	make check-super-isalive
+	@echo "$(SUCCESS)Ambiente de desenvolvimento iniciado com sucesso: $(SEI_HOST)/sei$(NC)"
+
+
+up-foreground: .env  ## Inicia ambiente de desenvolvimento local (docker) em primeiro plano no endereço http://localhost:8000
+	docker-compose up
+
 
 config:  ## Configura o ambiente para outro banco de dados (mysql|sqlserver|oracle). Ex: make config base=oracle 
 	@cp -f envs/$(base).env .env

@@ -58,10 +58,6 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
                 // Publicar informações sobre processos restritos
                 // Indica ao sistema se ele deverá publicar os dados de trâmites de processos restritos (valores possíveis: true ou false)
                 "PublicarProcessosRestritos" => true,
-
-                // Email do administrador da integração
-                // Contato para questões relacionadas à integração do SEI com o Protocolo Integrado.
-                "EmailAdministrador" => "",
             )
         );
     }

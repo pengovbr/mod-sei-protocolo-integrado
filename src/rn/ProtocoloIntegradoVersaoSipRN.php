@@ -1,7 +1,7 @@
 <?
 
-// require_once dirname(__FILE__).'/../../../../../../sip/web/Sip.php';
-require_once dirname(__FILE__).'/../../web/Sip.php'; 
+require_once dirname(__FILE__).'/../../../../../../sip/web/Sip.php';
+//require_once dirname(__FILE__).'/../../web/Sip.php'; 
 
 
 class ProtocoloIntegradoVersaoSipRN extends InfraRN {

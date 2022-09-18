@@ -1171,6 +1171,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			if ($diffDias>=$numDias) {
 				$objInfraParametro = new InfraParametro(BancoSEI::getInstance());
 				$strEmailSistema = $objInfraParametro->getValor('SEI_EMAIL_SISTEMA');
+				$strEmailAdministrador = $objInfraParametro->getValor('SEI_EMAIL_ADMINISTRADOR');
 		
 				$strMensagem = 'Prezado Administrador de Integração, <br />';
 				$strMensagem .= 'Há '.$diffDias.' dias não há envio de informações ao Protocolo Integrado. Favor verificar ';
@@ -1180,7 +1181,6 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				$strMensagem .= 'Sistema Eletrônico de Informações.';
 				
 				$strAssunto = '[Plugin SEI-PI] Há '.$diffDias.' dias não há envio de informações ao Protocolo Integrado.';
-				$strEmailAdministrador = $objConfiguracaoModProtocoloIntegrado->getValor("ProtocoloIntegrado", "EmailAdministrador");
 				InfraMail::enviarConfigurado(ConfiguracaoSEI::getInstance(), $strEmailSistema, $strEmailAdministrador, null, null, $strAssunto, $strMensagem, 'text/html');
 			}
 		}
@@ -1216,11 +1216,9 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			
 			$objInfraParametro = new InfraParametro(BancoSEI::getInstance());
 	
-			if (count($arrPacotesErroNegocial) > 0 || count($arrPacotesFalhaInfra) > 0) {
-				$objConfiguracaoModProtocoloIntegrado = ConfiguracaoModProtocoloIntegrado::getInstance();
-		
+			if (count($arrPacotesErroNegocial) > 0 || count($arrPacotesFalhaInfra) > 0) {		
 				$strEmailSistema = $objInfraParametro->getValor('SEI_EMAIL_SISTEMA');
-				$strEmailAdministrador = $objConfiguracaoModProtocoloIntegrado->getValor("ProtocoloIntegrado", "EmailAdministrador");
+				$strEmailAdministrador = $objInfraParametro->getValor('SEI_EMAIL_ADMINISTRADOR');
 		
 				InfraDebug::getInstance()->gravar('Buscando Configuração de Publicação no Protocolo Integrado');
 				$objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();

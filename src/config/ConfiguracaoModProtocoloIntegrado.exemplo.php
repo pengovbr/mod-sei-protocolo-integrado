@@ -19,10 +19,7 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
      */
     public static function getInstance()
     {
-		if (ConfiguracaoModProtocoloIntegrado::$inst
-        // Publicar informações sobre processos restritos
-        "PublicarProcessosRestritos" => true,
-ance == null) {
+		if (ConfiguracaoModProtocoloIntegrado::$instance == null) {
 			ConfiguracaoModProtocoloIntegrado::$instance = new ConfiguracaoModProtocoloIntegrado();
 		}
 		return ConfiguracaoModProtocoloIntegrado::$instance;
@@ -59,11 +56,7 @@ ance == null) {
                 "QuantidadeAndamentosEnvio" => 100000,
 
                 // Publicar informações sobre processos restritos
-                "PublicarProcessosRestritos" => false,
-                
-                // Email do administrador da integração
-                // Contato para questões relacionadas à integração do SEI com o Protocolo Integrado.
-                "EmailAdministrador" => "",
+                "PublicarProcessosRestritos" => false
             )
         );
     }

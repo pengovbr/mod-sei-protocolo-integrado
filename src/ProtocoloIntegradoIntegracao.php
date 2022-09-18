@@ -1,5 +1,8 @@
 <?php
 
+// ATENÇÃO: Identificação da versão do módulo mod-sei-protocolo-integrado. 
+// Este deve estar sempre sincronizado com a constante VERSAO_MODULO_PI no arquivo sip_atualizar_versao_modulo_protocolo_integrado.php
+define("VERSAO_MODULO_PI", "3.0.0");
 
 class ProtocoloIntegradoIntegracao extends SeiIntegracao {
       
@@ -8,7 +11,7 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
     }
     
     public function getVersao() {
-        return '3.0.0';
+        return VERSAO_MODULO_PI;
     }
     
     public function getInstituicao() {
@@ -32,9 +35,9 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
                 require_once 'protocolo_integrado_mensagens_cadastro.php';
                 return true;
             
-            // case  'protocolo_integrado_configurar_parametros':
-            //     require_once 'protocolo_integrado_configurar_parametros.php';
-            //     return true;
+            case 'protocolo_integrado_configurar_parametros':
+                require_once 'protocolo_integrado_configurar_parametros.php';
+                return true;
             
             case 'protocolo_integrado_monitoramento':
             case'protocolo_integrado_forcar_reenvio':
