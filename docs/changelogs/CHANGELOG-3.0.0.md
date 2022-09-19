@@ -12,8 +12,7 @@ As melhorias entregues em cada uma das versões são cumulativas, ou seja, cont�
 | Versão SEI/SUPER | Versão módulo mod-wssei                       |
 | ---              | ---                                           |
 | 3.1.x            | mod-sei-protocolo-integrado 2.1.3 ou superior |
-| 4.0.x            | mod-sei-protocolo-integrado 3.0.0  ou superior|
-    
+| 4.0.x            | mod-sei-protocolo-integrado 3.0.0 ou superior |
 
 Para maiores informações sobre os procedimentos de instalação ou atualização, acesse os seguintes documentos localizados no pacote de distribuição mod-sei-protocolo-integrado-VERSAO.zip:
 > Atenção: É impreterível seguir rigorosamente o disposto no README.md do Módulo para instalação ou atualização com sucesso.
@@ -26,10 +25,14 @@ Para maiores informações sobre os procedimentos de instalação ou atualizaç�
 Todas as atualizações podem incluir itens referentes à segurança, requisito em permanente monitoramento e evolução, motivo pelo qual a atualização com a maior brevidade possível é sempre recomendada.
 
 
-#### Modificação dos procedimentos de atualização do módulo
+#### Modificação dos procedimentos de configuração
+
+Os parâmetros de configuração do módulo de integração do Protocolo Integrado foram movidos para o arquivo próprio para este propósito, localizado em [PASTA DE INSTALAÇÃO DO sei]/config/mod-protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php. Esta alteração implica a reconfiguração dos parâmetros de conexão ao Protocolo Integrado anteriormente definidos através da funcionalidade *SEI > Administração > Protocolo Integrado > Parâmetros*. 
+
+
+#### Modificação dos procedimentos de atualização
 
 Atualizado procedimentos de instalação e atualização do módulo para serem compatíveis com os demais módulos do Processo Eletrônico Nacional e à nova estrutura do SEI 4.0 e SUPER.GOV.BR
-
 
 #### Adaptação do script de atualização para modelo SEI 4 (#160)
 
@@ -38,7 +41,7 @@ Modificado script de atualização de banco de dados para o módulo para ser com
 
 ### Atualização de Versão
 
-Para obter informações detalhadas sobre cada um dos passos de atualização, vide arquivo **ATUALIZACAO.md**.
+**ATENÇÂO**: A partir da versão **mod-sei-protocolo-integrado 3.0.0**, houve quebra de compatibilidade com as versões anteriores, o que gera a necessidade de refazer todos os passos da instalação e configuração descritos no [Manual de Instalação do Módulo](../INSTALACAO.md).   
 
 #### Instruções
 

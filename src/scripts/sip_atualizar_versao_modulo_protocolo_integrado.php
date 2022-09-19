@@ -150,8 +150,9 @@ try {
 			// Remoção de menu de consiguração do módulo devido a transição das configurações técnicas para o arquivo de configuração ConfiguracaoModProtocoloIntegrado.php
 			$numIdSistemaSei = ScriptSip::obterIdSistema('SEI');
 			$numIdMenuSei = ScriptSip::obterIdMenu($numIdSistemaSei, 'Principal');
-			$numIdItemMenuSeiAdministracao = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Administração');
-			ScriptSip::removerItemMenu($numIdSistemaSei, $numIdMenuSei, $numIdItemMenuSeiAdministracao);
+			$numIdItemMenuPai = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Protocolo Integrado');
+			$numIdItemMenu = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Parâmetros', $numIdItemMenuPai);
+			ScriptSip::removerItemMenu($numIdSistemaSei, $numIdMenuSei, $numIdItemMenu);
 		}
 	}
 

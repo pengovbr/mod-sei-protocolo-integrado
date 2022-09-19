@@ -1,8 +1,7 @@
 dist/
 html/
 vendor/
-
-.vscode
+.vscode/
 
 .modulo.env
 .env

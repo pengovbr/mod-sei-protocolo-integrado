@@ -1,6 +1,5 @@
 <?php
 	
-// require_once dirname(__FILE__).'/../../../../SEI.php';
 require_once DIR_SEI_WEB.'/SEI.php';
 
 class ProtocoloIntegradoAgendamentoRN extends InfraRN {
@@ -16,10 +15,8 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
 	public function publicarProtocoloIntegrado() {
         
 	    try {
-  
-            ini_set('max_execution_time','0');
-            ini_set('memory_limit','-1');
-            
+            LimiteSEI::getInstance()->configurarNivel3();
+
             InfraDebug::getInstance()->setBolLigado(true);
             InfraDebug::getInstance()->setBolDebugInfra(false);
             InfraDebug::getInstance()->setBolEcho(false);
@@ -59,8 +56,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         
         try {
         
-            ini_set('max_execution_time','0');
-            ini_set('memory_limit','-1');
+            LimiteSEI::getInstance()->configurarNivel3();
             
             InfraDebug::getInstance()->setBolLigado(true);
             InfraDebug::getInstance()->setBolDebugInfra(false);
@@ -92,9 +88,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
     public function notificarProcessosComFalhaPublicacaoProtocoloIntegrado() {
     
         try {
-        
-            ini_set('max_execution_time','0');
-            ini_set('memory_limit','-1');
+            LimiteSEI::getInstance()->configurarNivel3();
             
             InfraDebug::getInstance()->setBolLigado(true);
             InfraDebug::getInstance()->setBolDebugInfra(false);
@@ -122,10 +116,8 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
             
             InfraDebug::getInstance()->limpar();
             throw new InfraException('Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.',$e);
-        }
-        
-    }
-  
+        }   
+    } 
 }
  
 ?>

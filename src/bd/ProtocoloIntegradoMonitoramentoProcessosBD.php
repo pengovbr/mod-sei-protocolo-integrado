@@ -20,8 +20,10 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
     }
    
     public function consultarNovasOperacoesProcessosNaoEnviados($maxIdAtividade, $limit, $numUnidadeTeste=null){
-  		
         try {
+
+            $objConfiguracaoMod = ConfiguracaoModProtocoloIntegrado::getInstance();
+            $bolPublicarProcessosRestritos = $objConfiguracaoMod->getValor("ProtocoloIntegrado", "PublicarProcessosRestritos", true, false);
 
             $topSQLServer = "";
             $restricaoMaxAtividade = "";
@@ -33,12 +35,15 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
                 $restricaoMaxAtividade = "AND a.id_atividade<".$maxIdAtividade . " ";
             }
 
+            // Defini filtro de nível de sigilo baseado na parametrização do sistema
+            $strCondicaoNivelAcesso = $bolPublicarProcessosRestritos ? "sta_nivel_acesso_global = 0 or sta_nivel_acesso_global = 1" : "sta_nivel_acesso_global = 0";
+
             $sql = "select " . $topSQLServer. " a.* FROM  atividade a " . self::$SQL_HINT_TABLE . " ".
  			     "INNER JOIN protocolo p " . self::$SQL_HINT_TABLE . " on a.id_protocolo=p.id_protocolo ".
  			     "INNER JOIN md_pi_mensagem pi " . self::$SQL_HINT_TABLE . " on a.id_tarefa = pi.id_tarefa ".
 			     "WHERE NOT EXISTS (select id_protocolo from md_pi_pacote_envio mppe " . self::$SQL_HINT_TABLE . " where mppe.id_protocolo=p.id_protocolo) ".$restricaoMaxAtividade.
 			     "AND sin_publicar = 'S' ".
-			     "AND (sta_protocolo = 'P' AND  (sta_nivel_acesso_global = 0 or (sta_nivel_acesso_global=1 and exists (select * from md_pi_parametros " . self::$SQL_HINT_TABLE . " where sin_publicacao_restritos='S'))) ) ".
+			     "AND (sta_protocolo = 'P' AND $strCondicaoNivelAcesso) ".
 			     "AND exists (select * from documento d " . self::$SQL_HINT_TABLE . " inner join protocolo p2 " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento inner join rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo where rpp.id_protocolo_1 = p.id_protocolo and d.sin_bloqueado='S' )";
 			    
             if ($numUnidadeTeste!=null) {
@@ -114,7 +119,6 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
             	     "INNER JOIN protocolo p " . self::$SQL_HINT_TABLE . " on a.id_protocolo=p.id_protocolo ".
             	     "INNER JOIN md_pi_mensagem pi " . self::$SQL_HINT_TABLE . " on a.id_tarefa = pi.id_tarefa ".
             	     "WHERE ".$restricaoAtividade." AND (sta_protocolo = 'P' AND  (sta_nivel_acesso_global in ($strNiveisAcesso) ) ) ".
-                     //"WHERE ".$restricaoAtividade." AND (sta_protocolo = 'P' AND  (sta_nivel_acesso_global = 0 or (sta_nivel_acesso_global=1 and exists (select * from md_pi_parametros " . self::$SQL_HINT_TABLE . " where sin_publicacao_restritos='S'))) ) ".
             	     "AND sin_publicar = 'S' ".
             	     "AND exists (select * from documento d " . self::$SQL_HINT_TABLE . " inner join protocolo p2 " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento inner join rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo where rpp.id_protocolo_1 = p.id_protocolo and d.sin_bloqueado='S' )";
             	     // "AND not exists(select * from md_pi_monitora_processos pimp where pimp.id_atividade=a.id_atividade)";

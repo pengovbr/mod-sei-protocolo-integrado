@@ -38,13 +38,13 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
                 // Os endereços disponíveis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
                 //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
                 //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
-                "WebService" => "https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl",
+                "WebService" => getenv('PROTOCOLO_INTEGRADO_WEBSERVICE'),
 
                 // Login do usuário a ser utilizado na autenticação com o Webservice
-                "UsuarioWebService" => "***REMOVED***",
+                "UsuarioWebService" => getenv('PROTOCOLO_INTEGRADO_LOGIN'),
 
                 // Senha do usuáio a ser utilizado na autenticação com o Webservice
-                "SenhaWebService" => "***REMOVED***",
+                "SenhaWebService" => getenv('PROTOCOLO_INTEGRADO_SENHA'),
 
                 // Número de Tentativas para Reenvio dos Metadados
                 // Quando o envio de processos para o Protocolo Integrado for malsucedido, o módulo tentará reenviá-los respeitando 

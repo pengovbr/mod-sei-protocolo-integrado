@@ -1,4 +1,4 @@
-.PHONY: .env help clean build all install restart down destroy up up-background up-foreground config check-super-isalive
+.PHONY: .env all help clean dist install restart down destroy up up-background up-foreground config check-super-isalive
 
 -include .env
 -include .modulo.env
@@ -9,7 +9,7 @@ base = mysql
 MODULO_NOME = protocolo-integrado
 MODULO_PASTAS_CONFIG = mod-$(MODULO_NOME)
 MODULO_PASTA_NOME = $(notdir $(shell pwd))
-VERSAO_MODULO := $(shell grep 'const VERSAO_MODULO' ./src/ProtocoloIntegradoIntegracao.php | cut -d'"' -f2)
+VERSAO_MODULO := $(shell grep 'define."VERSAO_MODULO_PI"' src/ProtocoloIntegradoIntegracao.php | cut -d'"' -f4)
 SEI_SCRIPTS_DIR = dist/sei/scripts/$(MODULO_PASTAS_CONFIG)
 SEI_CONFIG_DIR = dist/sei/config/$(MODULO_PASTAS_CONFIG)
 SEI_MODULO_DIR = dist/sei/web/modulos/$(MODULO_NOME)
@@ -36,23 +36,22 @@ MENSAGEM_AVISO_ENV = $(ERROR)[ATENÇÃO]:$(NC)$(YELLOW) Configurar parâmetros d
 
 all: clean build
 
-build: 
+dist: 
 	@mkdir -p $(SEI_SCRIPTS_DIR)
 	@mkdir -p $(SEI_CONFIG_DIR)
 	@mkdir -p $(SEI_MODULO_DIR)
 	@mkdir -p $(SIP_SCRIPTS_DIR)
 	@cp -Rf src/* $(SEI_MODULO_DIR)/
-	@cp docs/INSTALL.md dist/INSTALACAO.md
-	@cp docs/UPGRADE.md dist/ATUALIZACAO.md
-	@cp docs/modelo_plano_integracao.doc dist/Modelo_PlanodeIntegracao_LOGINUNICO.doc
+	@cp docs/INSTALACAO.md dist/INSTALACAO.md
+	@cp docs/Manual_de_Uso.pdf dist/Manual_de_Uso.pdf
 	@cp docs/changelogs/CHANGELOG-$(VERSAO_MODULO).md dist/NOTAS_VERSAO.md
-	@mv $(SEI_MODULO_DIR)/scripts/sei_atualizar_versao_modulo_loginunico.php $(SEI_SCRIPTS_DIR)/
-	@mv $(SEI_MODULO_DIR)/scripts/sip_atualizar_versao_modulo_loginunico.php $(SIP_SCRIPTS_DIR)/
-	@mv $(SEI_MODULO_DIR)/config/ConfiguracaoModLoginUnico.exemplo.php $(SEI_CONFIG_DIR)/
+	@mv $(SEI_MODULO_DIR)/scripts/sei_atualizar_versao_modulo_protocolo_integrado.php $(SEI_SCRIPTS_DIR)/
+	@mv $(SEI_MODULO_DIR)/scripts/sip_atualizar_versao_modulo_protocolo_integrado.php $(SIP_SCRIPTS_DIR)/
+	@mv $(SEI_MODULO_DIR)/config/ConfiguracaoModProtocoloIntegrado.exemplo.php $(SEI_CONFIG_DIR)/
 	@rm -rf $(SEI_MODULO_DIR)/config
 	@rm -rf $(SEI_MODULO_DIR)/scripts
-	@cd dist/ && zip -r $(MODULO_COMPACTADO) INSTALACAO.md ATUALIZACAO.md NOTAS_VERSAO.md Modelo_PlanodeIntegracao_LOGINUNICO.doc sei/ sip/	
-	@rm -rf dist/sei dist/sip dist/INSTALACAO.md dist/ATUALIZACAO.md
+	@cd dist/ && zip -r $(MODULO_COMPACTADO) Manual_de_Uso.pdf INSTALACAO.md  NOTAS_VERSAO.md sei/ sip/	
+	@rm -rf dist/sei dist/sip dist/INSTALACAO.md dist/Manual_de_Uso.pdf
 	@echo "Construção do pacote de distribuição finalizada com sucesso"
 
 

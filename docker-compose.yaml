@@ -37,6 +37,8 @@ services:
     image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
     container_name: httpd
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     env_file:
       - .modulo.env
     ports:
