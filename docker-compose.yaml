@@ -6,36 +6,28 @@ services:
 
   smtp:
     image: processoeletronico/vagrant_sei4_mailcatcher:${ENVIRONMENT_VERSION}
-    container_name: smtp
     ports:
       - "1080:1080"
 
   memcached:
     image: processoeletronico/vagrant_sei4_memcached:${ENVIRONMENT_VERSION}
-    container_name: memcached
     ports:
       - "11211:11211"
 
   database:
     image: ${DATABASE_IMAGE}:${ENVIRONMENT_VERSION}
-    container_name: ${DATABASE_HOST}
-    environment:
-      MYSQL_ROOT_PASSWORD: P@ssword
     volumes:
-      - ${DATABASE_HOST}:${DATABASE_DATA_DIR}
-      - /var/sei/backup/${DATABASE_HOST}:/backup
+      - ${DATABASE_TYPE}:${DATABASE_DATA_DIR}
     ports:
       - ${DATABASE_PORT}:${DATABASE_PORT}
 
   solr:
     image: processoeletronico/vagrant_sei4_solr:${ENVIRONMENT_VERSION}
-    container_name: solr
     ports:
       - "8983:8983"
 
   httpd:
     image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
-    container_name: httpd
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -84,6 +76,6 @@ services:
       - jod:jod
 
 volumes:
-  mysql:
-  oracle:
-  sqlserver:
+  MySql:
+  Oracle:
+  SqlServer:
