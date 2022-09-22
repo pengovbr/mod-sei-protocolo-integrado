@@ -1,4 +1,4 @@
-# NOTAS DE VERSÃO MOD-SEI-PROTOCOLO-INTEGRADO (versão 3.0.0)
+## Novidades da versão 3.0.0
 
 Este documento descreve as principais mudanças aplicadas nesta versão do módulo de integração do SEI com o Protocolo Integrado do Governo Federal.
 
