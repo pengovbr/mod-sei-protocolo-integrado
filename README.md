@@ -2,6 +2,9 @@
 
 ## Orientações Iniciais
 
+Para maiores informações sobre o Protocolo Integrado e como aderir ao projeto, acesse a página [Protocolo Integrado](https://www.gov.br/economia/pt-br/assuntos/processo-eletronico-nacional/conteudo/protocolo-integrado-1) para maiores informações. 
+
+
 ### Compatibilidade do Módulo x Versões do SEI
 
 SEI 4.x - Módulo na versão 3.x - *a ser liberado em breve*
