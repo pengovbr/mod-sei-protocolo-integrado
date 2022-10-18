@@ -15,11 +15,6 @@ SEI 2.x - Módulo na versão 1.x
 
 Para uma instalação rápida basta seguir a seção abaixo: **Instalação Rápida**
 
-### Manual de Instalação Antigo:
-[Baixar aqui](docs/Manual_de_Instalacao_2.0.1.pdf)
-
-Esse manual está deprecado. Ele foi atualizado até a versão 2.0.1 do módulo. Portanto caso haja alguma divergência com as novas versões vale o que está escrito aqui nesse README na seção **Instalação Rápida**. Use-o apenas como um complemento as orientações de instalação
-
 ### Manual de Uso
 [Baixar aqui](docs/Manual_de_Uso.pdf)
 
