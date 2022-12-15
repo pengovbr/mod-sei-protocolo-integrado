@@ -62,7 +62,7 @@ Necessário realizar o _download_ do pacote de distribuição do módulo **mod-s
 Após realizar a descompactação do arquivo .zip, será criada uma nova pasta contendo a seguinte estrutura:
 
 ```
-/**mod-sei-pen**-VERSAO 
+/**mod-sei-protocolo-integrado**-VERSAO 
     /sei              # Arquivos do módulo posicionados corretamente dentro da estrutura do SEI
     /sip              # Arquivos do módulo posicionados corretamente dentro da estrutura do SIP
     INSTALACAO.md     # Instruções de instalação do **mod-sei-protocolo-integrado**
