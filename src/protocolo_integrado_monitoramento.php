@@ -59,7 +59,7 @@ try {
 
       for ($i = 0; $i < count($arrStrItensSelecionados); $i++) {
         array_push($filtro['pacotes'], $arrStrItensSelecionados[$i]);
-        PaginaSEI::getInstance()->adicionarMensagem('Operaï¿½ï¿½o realizada com sucesso.');
+        PaginaSEI::getInstance()->adicionarMensagem('Operação realizada com sucesso.');
       }
       $arrParam = array();
       $arrParam[0] = $objRetornoProtocoloIntegradoParametros;
@@ -94,11 +94,11 @@ try {
       die;
 
     case 'md_pi_monitoramento':
-      $strTitulo = 'Monitoramento de Integraï¿½ï¿½o';
+      $strTitulo = 'Monitoramento de Integração';
       break;
 
     default:
-      throw new InfraException("Aï¿½ï¿½o '" . $_GET['acao'] . "' nï¿½o reconhecida.");
+      throw new InfraException("Ação '" . $_GET['acao'] . "' nï¿½o reconhecida.");
   }
   $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
 
@@ -174,10 +174,10 @@ try {
 
 
     $strResultado .= '<th class="infraTh">' . PaginaSEI::getInstance()->getThOrdenacao($objPacoteEnvioDTO, 'Processo', 'ProtocoloFormatado', $arrObjPacotesMonitoradosDTO) . '</th>' . "\n";
-    $strResultado .= '<th class="infraTh">Situaï¿½ï¿½o</th>' . "\n";
-    $strResultado .= '<th class="infraTh">' . PaginaSEI::getInstance()->getThOrdenacao($objPacoteEnvioDTO, 'Data da Situaï¿½ï¿½o', 'DataSituacao', $arrObjPacotesMonitoradosDTO) . '</th>' . "\n";
+    $strResultado .= '<th class="infraTh">Situação</th>' . "\n";
+    $strResultado .= '<th class="infraTh">' . PaginaSEI::getInstance()->getThOrdenacao($objPacoteEnvioDTO, 'Data da Situação', 'DataSituacao', $arrObjPacotesMonitoradosDTO) . '</th>' . "\n";
     if ($bolColunaArquivo) {
-      $strResultado .= '<th class="infraTh">Aï¿½ï¿½es</th>' . "\n";
+      $strResultado .= '<th class="infraTh">Ações</th>' . "\n";
     }
     $strResultado .= '</tr>' . "\n";
     $numRegistrosRecebidos = 0;
@@ -222,7 +222,7 @@ try {
       switch (trim($pacote['sta_integracao'])) {
 
         case ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Nï¿½o Integrado </td>';
+          $strResultado .= '<td width="10%" style="font-size:1em"> Não Integrado </td>';
           break;
         case ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO:
           $strResultado .= '<td width="10%" style="font-size:1em"> Integrado </td>';
@@ -265,7 +265,7 @@ try {
   }
 
   if ($bolAcaoForcarReenvio && $maxPacotesReenvio > 0) {
-    $arrComandos[] = '<input type="button" onclick="forcarReenvio()" name="btnForcar" id="btnForcar" value="Forï¿½ar Reenvio" class="infraButton" />';
+    $arrComandos[] = '<input type="button" onclick="forcarReenvio()" name="btnForcar" id="btnForcar" value="Forçar Reenvio" class="infraButton" />';
     $strLinkForcarReenvio = SessaoSEI::getInstance()->assinarLink('controlador.php?acao=md_pi_forcar_reenvio&acao_origem=' . $_GET['acao']);
   }
 
@@ -308,7 +308,7 @@ PaginaSEI::getInstance()->abrirJavaScript();
     if (document.getElementById("divInfraAreaPaginacaoSuperior") != null && document.getElementById("selInfraPaginacaoSuperior") != null) {
 
       var label = document.createElement("Label");
-      label.innerHTML = "Pï¿½gina";
+      label.innerHTML = "Página";
       label.id = "lblInfraPaginacaoSuperior";
       label.style = 'padding:5px';
       document.getElementById("divInfraAreaPaginacaoSuperior").insertBefore(label, document.getElementById("selInfraPaginacaoSuperior"));
@@ -316,7 +316,7 @@ PaginaSEI::getInstance()->abrirJavaScript();
     if (document.getElementById("divInfraAreaPaginacaoInferior") != null && document.getElementById("selInfraPaginacaoInferior") != null) {
 
       var label = document.createElement("Label");
-      label.innerHTML = "Pï¿½gina";
+      label.innerHTML = "Página";
       label.style = 'padding:5px';
       label.id = "lblInfraPaginacaoInferior";
       document.getElementById("divInfraAreaPaginacaoInferior").insertBefore(label, document.getElementById("selInfraPaginacaoInferior"));
@@ -369,7 +369,7 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
 
   <div id="divfiltroCodProtocolo" class="infraAreaDados d-flex flex-column flex-md-row mb-2" style="">
     <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-      <label id="filtroCodProtocoloLabel" for="filtroCodProtocolo" accesskey="" class="infraLabelOpcional">Nï¿½ Processo:</label>
+      <label id="filtroCodProtocoloLabel" for="filtroCodProtocolo" accesskey="" class="infraLabelOpcional">Nº Processo:</label>
     </div>
     <div class="col-7 col-md-4 pl-0 pl-md-1 pt-1 media">
       <input type="text" id="filtroCodProtocolo" name="filtroCodProtocolo" maxlength="50" class="infraText w-100 w-md-75" onkeypress="return infraLimitarTexto(this,event,50);" value="<?= PaginaSEI::tratarHTML($filtro['filtroCodProtocolo']) ?>" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
@@ -379,7 +379,7 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
 
   <div id="divSituacaoPesquisa" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
     <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-      <label id="lblSituacaoPesquisa" for="selSituacaoPesquisa" accesskey="" class="infraLabelOpcional">Situaï¿½ï¿½o:</label>
+      <label id="lblSituacaoPesquisa" for="selSituacaoPesquisa" accesskey="" class="infraLabelOpcional">Situação:</label>
     </div>
     <div class="col-7 col-md-4 pl-0 pl-md-1 pt-1 media">
       <select id="selSituacaoPesquisa" name="selSituacaoPesquisa" class="infraSelect w-100 w-md-75" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>">
@@ -412,7 +412,7 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
 
   <div id="divPeriodoGeracaoDe" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
     <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-      <label id="lblPeriodoGeracaoDe" for="txtPeriodoGeracaoDe" class="infraLabelOpcional">Data de geraï¿½ï¿½o do processo:</label>
+      <label id="lblPeriodoGeracaoDe" for="txtPeriodoGeracaoDe" class="infraLabelOpcional">Data de geração do processo:</label>
     </div>
 
     <div class="d-flex flex-column flex-md-row col-12 col-md-7 pl-0 pl-md-1 media">
@@ -449,7 +449,7 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
   if ($numRegistros > 0) {
   ?>
     <div style="float:right;padding:0 1.5em">
-      <label style="">Quantidade de registros por pï¿½gina</label>
+      <label style="">Quantidade de registros por página</label>
       <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' value="<?= $_REQUEST['numRegistosPaginaSuperior'] ?>" onkeyup='replicaValorNumeroRegistrosPorPagina(this)' id='numRegistosPaginaSuperior' name='numRegistosPaginaSuperior'>
       <input size="10" value="OK" class="infraButton" style="vertical-align:top" type="submit">
     </div>
@@ -465,7 +465,7 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
   if ($numRegistros > 0) {
   ?>
     <div style="float:right;padding:0 1.5em">
-      <label style="">Quantidade de registros por pï¿½gina</label>
+      <label style="">Quantidade de registros por página</label>
       <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' id='numRegistosPaginaInferior' value="<?= $_REQUEST['numRegistosPaginaSuperior'] ?>" name='numRegistosPaginaInferior' onkeyup='replicaValorNumeroRegistrosPorPagina(this)'>
       <input size="10" value="OK" class="infraButton" style="vertical-align:top" type="submit">
     </div>
