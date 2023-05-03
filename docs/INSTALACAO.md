@@ -6,7 +6,7 @@ Este documento apresenta o manual para a instalação do Módulo do Protocolo In
 
 **ATENÇÃO: Caso o módulo já se encontre instalado em uma versão anterior, siga as instruções detalhadas de atualização no documento MIGRACAO.md presente no arquivo de distribuição do módulo (mod-sei-protocolo-integrado-VERSAO.zip)**
 
-O Protocolo Integrado é um sistema instituído pela Portaria Interministerial nº 2.320, de 30 de dezembro de 2014, de adesão obrigatória para os órgãos do Governo Federal, que objetiva servir ao cidadão como ferramenta de consulta sobre as tramitações de documentos e processos atuados no âmbito da Administração Pública Federal. Maiores informações sobre o projeto deste sistema podem ser acessadas através do endereço: https://www.comprasgovernamentais.gov.br/index.php/pen/processo-eletronico-nacional-2
+O Protocolo Integrado é um sistema instituído pela Portaria Interministerial nº 2.320, de 30 de dezembro de 2014, de adesão obrigatória para os órgãos do Governo Federal, que objetiva servir ao cidadão como ferramenta de consulta sobre as tramitações de documentos e processos atuados no âmbito da Administração Pública Federal. Maiores informações sobre o projeto deste sistema podem ser acessadas através do endereço: https://gov.br/pen
 
 O módulo do Protocolo Integrado adiciona novas funcionalidade para permitir o envio dos metadados de processos do SEI/SUPER para o Protocolo Integrado. O envio destes metadados é realizado de modo bastante simples, além de ser transparente para aquelas pessoas utilizam o sistema.
 
