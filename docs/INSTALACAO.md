@@ -147,7 +147,7 @@ Altere o arquivo de configuração específico do módulo em **<DIRETÓRIO RAIZ 
 * **WebService**
 Endereço do Web Service principal de integração com o Protocolo Integrado
 Os endereços disponÃ­veis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
-   - Homologação: https://protocolointegrado.pre.producao.economia.gov.br/ProtocoloWS/integradorService?wsdl
+   - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
 
 
