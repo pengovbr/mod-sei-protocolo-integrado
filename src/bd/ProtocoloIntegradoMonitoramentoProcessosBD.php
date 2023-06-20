@@ -255,7 +255,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
             $objProtocoloIntegradoMonitoramentoProcessosDTO->setNumIdTarefa($item['id_tarefa']);
             $objProtocoloIntegradoMonitoramentoProcessosDTO->setNumIdProtocolo($item['id_protocolo']);
             $objProtocoloIntegradoMonitoramentoProcessosDTO->setStrMensagemPublicacao($item['mensagem_publicacao']);
-            $objProtocoloIntegradoMonitoramentoProcessosDTO->setDthDataAbertura($item['dth_abertura']);
+            $objProtocoloIntegradoMonitoramentoProcessosDTO->setDthDataAbertura($this->getObjInfraIBanco()->formatarLeituraDth($item['dth_abertura']));
             $objProtocoloIntegradoMonitoramentoProcessosDTO->setNumIdUnidade($item['id_unidade']);
             array_push($arrProtocoloIntegradoMonitoramentoProcessosDTO,$objProtocoloIntegradoMonitoramentoProcessosDTO);
         }
