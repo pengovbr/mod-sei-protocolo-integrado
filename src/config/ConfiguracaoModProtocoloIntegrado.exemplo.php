@@ -9,7 +9,7 @@
 
 class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
 
-	private static $instance = null;
+  private static $instance = null;
 
     /**
      * Obtém instância única (singleton) dos dados de configuração do módulo de integração
@@ -17,47 +17,47 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
      *
      * @return ConfiguracaoModProtocoloIntegrado
      */
-    public static function getInstance()
+  public static function getInstance()
     {
-		if (ConfiguracaoModProtocoloIntegrado::$instance == null) {
-			ConfiguracaoModProtocoloIntegrado::$instance = new ConfiguracaoModProtocoloIntegrado();
-		}
-		return ConfiguracaoModProtocoloIntegrado::$instance;
-	}
+    if (ConfiguracaoModProtocoloIntegrado::$instance == null) {
+        ConfiguracaoModProtocoloIntegrado::$instance = new ConfiguracaoModProtocoloIntegrado();
+    }
+      return ConfiguracaoModProtocoloIntegrado::$instance;
+  }
 
     /**
      * Definição dos parâmetroúde configuração do módulo
      *
      * @return array
      */
-    public function getArrConfiguracoes()
+  public function getArrConfiguracoes()
     {
-        return array(
-            "ProtocoloIntegrado" => array(
-                // Endereço do Web Service principal de integração com o Protocolo Integrado
-                // Os endereços disponÃ­veis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
-                //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
-                //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
-                "WebService" => "",
+      return array(
+          "ProtocoloIntegrado" => array(
+              // Endereço do Web Service principal de integração com o Protocolo Integrado
+              // Os endereços disponÃ­veis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
+              //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
+              //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
+              "WebService" => "",
 
-                // Login do usuário a ser utilizado na autenticação com o Webservice
-                "UsuarioWebService" => "",
+              // Login do usuário a ser utilizado na autenticação com o Webservice
+              "UsuarioWebService" => "",
 
-                // Senha do usuário a ser utilizado na autenticação com o Webservice
-                "SenhaWebService" => "",
+              // Senha do usuário a ser utilizado na autenticação com o Webservice
+              "SenhaWebService" => "",
 
-                // Número de Tentativas para Reenvio dos Metadados
-                // Quando o envio de processos para o Protocolo Integrado for malsucedido, o módulo tentará reenviá-los respeitando 
-                // a quantidade de vezes especificada abaixo. 
-                "TentativasReenvio" => 15,
+              // Número de Tentativas para Reenvio dos Metadados
+              // Quando o envio de processos para o Protocolo Integrado for malsucedido, o módulo tentará reenviá-los respeitando 
+              // a quantidade de vezes especificada abaixo. 
+              "TentativasReenvio" => 15,
 
-                // Número máximo de andamentos a enviar por vez
-                // Quando o agendamento for executado, este parâmetro utilizado como número máximo de andamentos de processos a ser enviado.
-                "QuantidadeAndamentosEnvio" => 100000,
+              // Número máximo de andamentos a enviar por vez
+              // Quando o agendamento for executado, este parâmetro utilizado como número máximo de andamentos de processos a ser enviado.
+              "QuantidadeAndamentosEnvio" => 100000,
 
-                // Publicar informações sobre processos restritos
-                "PublicarProcessosRestritos" => false
-            )
-        );
-    }
+              // Publicar informações sobre processos restritos
+              "PublicarProcessosRestritos" => false
+          )
+      );
+  }
 }

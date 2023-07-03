@@ -91,14 +91,14 @@ try {
       }
 
       header('Location: ' . SessaoSEI::getInstance()->assinarLink('controlador.php?acao=' . $_GET['acao_origem'] . $parametros));
-      die;
+        die;
 
     case 'md_pi_monitoramento':
       $strTitulo = 'Monitoramento de Integração';
-      break;
+        break;
 
     default:
-      throw new InfraException("Ação '" . $_GET['acao'] . "' nï¿½o reconhecida.");
+        throw new InfraException("Ação '" . $_GET['acao'] . "' nï¿½o reconhecida.");
   }
   $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
 
@@ -214,7 +214,8 @@ try {
       $maxPacotesReenvio++;
       $indicePacoteComFalha++;
 
-      if ($pacote['dth_metadados'] == '') $pacote['dth_metadados'] = '-';
+      if ($pacote['dth_metadados'] == '') { $pacote['dth_metadados'] = '-';
+      }
       $strResultado .= '<td width="7%" align="center" style="font-size:1em"> ' . $pacote['dth_metadados'] . ' </td>';
 
       $strResultado .= '<td width="10%" align="center" style="font-size:.9em"><a onclick="abrirProcesso(\'' . PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=procedimento_trabalhar&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_procedimento=' . $pacote['protocolo']->getDblIdProtocolo())) . '\');" tabindex="' . PaginaSEI::getInstance()->getProxTabTabela() . '">' . $pacote['protocolo']->getStrProtocoloFormatado() . '</a></td>';
@@ -223,23 +224,24 @@ try {
 
         case ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO:
           $strResultado .= '<td width="10%" style="font-size:1em"> Não Integrado </td>';
-          break;
+            break;
         case ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO:
           $strResultado .= '<td width="10%" style="font-size:1em"> Integrado </td>';
-          break;
+            break;
         case ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA:
           $strResultado .= '<td width="10%" style="font-size:1em"> Falha Infra </td>';
-          break;
+            break;
         case ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL:
           $strResultado .= '<td width="10%" style="font-size:1em"> Erro Negocial </td>';
-          break;
+            break;
 
         default:
           $strResultado .= '<td width="10%" style="font-size:1em"> - </td>';
-          break;
+            break;
       }
 
-      if ($pacote['dth_situacao'] == '') $pacote['dth_situacao'] = '-';
+      if ($pacote['dth_situacao'] == '') { $pacote['dth_situacao'] = '-';
+      }
       $strResultado .= '<td width="7%" align="center" style="font-size:1em">' . $pacote['dth_situacao'] . '</td>';
 
       if ($bolColunaArquivo) {
@@ -447,13 +449,13 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
   
   <?
   if ($numRegistros > 0) {
-  ?>
+    ?>
     <div style="float:right;padding:0 1.5em">
       <label style="">Quantidade de registros por página</label>
       <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' value="<?= $_REQUEST['numRegistosPaginaSuperior'] ?>" onkeyup='replicaValorNumeroRegistrosPorPagina(this)' id='numRegistosPaginaSuperior' name='numRegistosPaginaSuperior'>
       <input size="10" value="OK" class="infraButton" style="vertical-align:top" type="submit">
     </div>
-  <?
+    <?
   }
   ?>
 
@@ -463,13 +465,13 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
   ?>
   <?
   if ($numRegistros > 0) {
-  ?>
+    ?>
     <div style="float:right;padding:0 1.5em">
       <label style="">Quantidade de registros por página</label>
       <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' id='numRegistosPaginaInferior' value="<?= $_REQUEST['numRegistosPaginaSuperior'] ?>" name='numRegistosPaginaInferior' onkeyup='replicaValorNumeroRegistrosPorPagina(this)'>
       <input size="10" value="OK" class="infraButton" style="vertical-align:top" type="submit">
     </div>
-  <?
+    <?
   }
   ?>
   <?

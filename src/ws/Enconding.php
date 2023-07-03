@@ -40,29 +40,29 @@ class Encoding {
   const WITHOUT_ICONV = "";
   
   function convert_xml_entities($string) {
-	    return strtr(
-	        $string, 
-	        array(
-	            "<" => "&lt;",
-	            ">" => "&gt;",
-	            '"' => "&quot;",
-	            "'" => "&apos;",
-	            "&" => "&amp;",
-	        )
-	    );
-	}
+        return strtr(
+            $string, 
+            array(
+                "<" => "&lt;",
+                ">" => "&gt;",
+                '"' => "&quot;",
+                "'" => "&apos;",
+                "&" => "&amp;",
+            )
+        );
+  }
   function deconvert_xml_entities($string) {
-	    return strtr(
-	        $string, 
-	        array(
-	            "&lt;" => "<",
-	            "&gt;" => ">",
-	            '&quot;' => '"',
-	            "&apos;" => "'",
-	            "&amp;" => "&",
-	        )
-	    );
-	}
+        return strtr(
+            $string, 
+            array(
+                "&lt;" => "<",
+                "&gt;" => ">",
+                '&quot;' => '"',
+                "&apos;" => "'",
+                "&amp;" => "&",
+            )
+        );
+  }
   protected static $win1252ToUtf8 = array(
         128 => "\xe2\x82\xac",
         130 => "\xe2\x80\x9a",
@@ -92,7 +92,7 @@ class Encoding {
         158 => "\xc5\xbe",
         159 => "\xc5\xb8"
   );
-    protected static $brokenUtf8ToUtf8 = array(
+  protected static $brokenUtf8ToUtf8 = array(
         "\xc2\x80" => "\xe2\x82\xac",
         "\xc2\x82" => "\xe2\x80\x9a",
         "\xc2\x83" => "\xc6\x92",
@@ -193,53 +193,53 @@ class Encoding {
     $buf = "";
     for($i = 0; $i < $max; $i++){
         $c1 = $text{$i};
-        if($c1>="\xc0"){ //Should be converted to UTF8, if it's not UTF8 already
-          $c2 = $i+1 >= $max? "\x00" : $text{$i+1};
-          $c3 = $i+2 >= $max? "\x00" : $text{$i+2};
-          $c4 = $i+3 >= $max? "\x00" : $text{$i+3};
-            if($c1 >= "\xc0" & $c1 <= "\xdf"){ //looks like 2 bytes UTF8
-                if($c2 >= "\x80" && $c2 <= "\xbf"){ //yeah, almost sure it's UTF8 already
-                    $buf .= $c1 . $c2;
-                    $i++;
-                } else { //not valid UTF8.  Convert it.
-                    $cc1 = (chr(ord($c1) / 64) | "\xc0");
-                    $cc2 = ($c1 & "\x3f") | "\x80";
-                    $buf .= $cc1 . $cc2;
-                }
-            } elseif($c1 >= "\xe0" & $c1 <= "\xef"){ //looks like 3 bytes UTF8
-                if($c2 >= "\x80" && $c2 <= "\xbf" && $c3 >= "\x80" && $c3 <= "\xbf"){ //yeah, almost sure it's UTF8 already
-                    $buf .= $c1 . $c2 . $c3;
-                    $i = $i + 2;
-                } else { //not valid UTF8.  Convert it.
-                    $cc1 = (chr(ord($c1) / 64) | "\xc0");
-                    $cc2 = ($c1 & "\x3f") | "\x80";
-                    $buf .= $cc1 . $cc2;
-                }
-            } elseif($c1 >= "\xf0" & $c1 <= "\xf7"){ //looks like 4 bytes UTF8
-                if($c2 >= "\x80" && $c2 <= "\xbf" && $c3 >= "\x80" && $c3 <= "\xbf" && $c4 >= "\x80" && $c4 <= "\xbf"){ //yeah, almost sure it's UTF8 already
-                    $buf .= $c1 . $c2 . $c3 . $c4;
-                    $i = $i + 3;
-                } else { //not valid UTF8.  Convert it.
-                    $cc1 = (chr(ord($c1) / 64) | "\xc0");
-                    $cc2 = ($c1 & "\x3f") | "\x80";
-                    $buf .= $cc1 . $cc2;
-                }
-            } else { //doesn't look like UTF8, but should be converted
-                    $cc1 = (chr(ord($c1) / 64) | "\xc0");
-                    $cc2 = (($c1 & "\x3f") | "\x80");
-                    $buf .= $cc1 . $cc2;
-            }
-        } elseif(($c1 & "\xc0") == "\x80"){ // needs conversion
-              if(isset(self::$win1252ToUtf8[ord($c1)])) { //found in Windows-1252 special cases
-                  $buf .= self::$win1252ToUtf8[ord($c1)];
-              } else {
+      if($c1>="\xc0"){ //Should be converted to UTF8, if it's not UTF8 already
+        $c2 = $i+1 >= $max? "\x00" : $text{$i+1};
+        $c3 = $i+2 >= $max? "\x00" : $text{$i+2};
+        $c4 = $i+3 >= $max? "\x00" : $text{$i+3};
+        if($c1 >= "\xc0" & $c1 <= "\xdf"){ //looks like 2 bytes UTF8
+          if($c2 >= "\x80" && $c2 <= "\xbf"){ //yeah, almost sure it's UTF8 already
+            $buf .= $c1 . $c2;
+            $i++;
+          } else { //not valid UTF8.  Convert it.
+              $cc1 = (chr(ord($c1) / 64) | "\xc0");
+              $cc2 = ($c1 & "\x3f") | "\x80";
+              $buf .= $cc1 . $cc2;
+          }
+        } elseif($c1 >= "\xe0" & $c1 <= "\xef"){ //looks like 3 bytes UTF8
+          if($c2 >= "\x80" && $c2 <= "\xbf" && $c3 >= "\x80" && $c3 <= "\xbf"){ //yeah, almost sure it's UTF8 already
+              $buf .= $c1 . $c2 . $c3;
+              $i = $i + 2;
+          } else { //not valid UTF8.  Convert it.
+              $cc1 = (chr(ord($c1) / 64) | "\xc0");
+              $cc2 = ($c1 & "\x3f") | "\x80";
+              $buf .= $cc1 . $cc2;
+          }
+        } elseif($c1 >= "\xf0" & $c1 <= "\xf7"){ //looks like 4 bytes UTF8
+          if($c2 >= "\x80" && $c2 <= "\xbf" && $c3 >= "\x80" && $c3 <= "\xbf" && $c4 >= "\x80" && $c4 <= "\xbf"){ //yeah, almost sure it's UTF8 already
+              $buf .= $c1 . $c2 . $c3 . $c4;
+              $i = $i + 3;
+          } else { //not valid UTF8.  Convert it.
+              $cc1 = (chr(ord($c1) / 64) | "\xc0");
+              $cc2 = ($c1 & "\x3f") | "\x80";
+              $buf .= $cc1 . $cc2;
+          }
+        } else { //doesn't look like UTF8, but should be converted
                 $cc1 = (chr(ord($c1) / 64) | "\xc0");
                 $cc2 = (($c1 & "\x3f") | "\x80");
                 $buf .= $cc1 . $cc2;
-              }
-        } else { // it doesn't need conversion
-            $buf .= $c1;
         }
+      } elseif(($c1 & "\xc0") == "\x80"){ // needs conversion
+        if(isset(self::$win1252ToUtf8[ord($c1)])) { //found in Windows-1252 special cases
+          $buf .= self::$win1252ToUtf8[ord($c1)];
+        } else {
+          $cc1 = (chr(ord($c1) / 64) | "\xc0");
+          $cc2 = (($c1 & "\x3f") | "\x80");
+          $buf .= $cc1 . $cc2;
+        }
+      } else { // it doesn't need conversion
+          $buf .= $c1;
+      }
     }
     return $buf;
   }
@@ -282,15 +282,15 @@ class Encoding {
     // See: http://en.wikipedia.org/wiki/Windows-1252
     return str_replace(array_keys(self::$brokenUtf8ToUtf8), array_values(self::$brokenUtf8ToUtf8), $text);
   }
-  static function removeBOM($str=""){
-    if(substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
+  static function removeBOM($str = ""){
+    if(substr($str, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
       $str=substr($str, 3);
     }
     return $str;
   }
   protected static function strlen($text){
     return (function_exists('mb_strlen') && ((int) ini_get('mbstring.func_overload')) & 2) ?
-           mb_strlen($text,'8bit') : strlen($text);
+           mb_strlen($text, '8bit') : strlen($text);
   }
   public static function normalizeEncoding($encodingLabel)
   {
@@ -315,7 +315,8 @@ class Encoding {
   public static function encode($encodingLabel, $text)
   {
     $encodingLabel = self::normalizeEncoding($encodingLabel);
-    if($encodingLabel == 'ISO-8859-1') return Encoding::toLatin1($text);
+    if($encodingLabel == 'ISO-8859-1') { return Encoding::toLatin1($text);
+    }
     return Encoding::toUTF8($text);
   }
   protected static function utf8_decode($text, $option)

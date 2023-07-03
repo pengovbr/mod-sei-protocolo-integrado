@@ -6,56 +6,56 @@ define("VERSAO_MODULO_PI", "3.0.0");
 
 class ProtocoloIntegradoIntegracao extends SeiIntegracao {
       
-    public function getNome() {
-        return 'Protocolo Integrado';
-    }
+  public function getNome() {
+      return 'Protocolo Integrado';
+  }
     
-    public function getVersao() {
-        return VERSAO_MODULO_PI;
-    }
+  public function getVersao() {
+      return VERSAO_MODULO_PI;
+  }
     
-    public function getInstituicao() {
-        return 'Ministério da Economia - ME';
-    }
+  public function getInstituicao() {
+      return 'Ministério da Economia - ME';
+  }
 
-    public function inicializar($strVersaoSEI)
+  public function inicializar($strVersaoSEI)
     {
-        define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
-        $this->carregarArquivoConfiguracaoModulo(DIR_SEI_CONFIG);
-    }    
+      define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
+      $this->carregarArquivoConfiguracaoModulo(DIR_SEI_CONFIG);
+  }    
 
-    public function processarControlador($strAcao) {        
-        switch($strAcao) {
-            case 'md_pi_configurar_publicacao':
-            case 'md_pi_mensagens_listar':
-                require_once 'protocolo_integrado_mensagens_listar.php';
-                return true;
+  public function processarControlador($strAcao) {        
+    switch($strAcao) {
+      case 'md_pi_configurar_publicacao':
+      case 'md_pi_mensagens_listar':
+        require_once 'protocolo_integrado_mensagens_listar.php';
+          return true;
             
-            case  'md_pi_mensagens_alterar':
-                require_once 'protocolo_integrado_mensagens_cadastro.php';
-                return true;
+      case 'md_pi_mensagens_alterar':
+          require_once 'protocolo_integrado_mensagens_cadastro.php';
+          return true;
             
-            case 'md_pi_monitoramento':
-            case'md_pi_forcar_reenvio':
-                require_once 'protocolo_integrado_monitoramento.php';
-                return true;
+      case 'md_pi_monitoramento':
+      case 'md_pi_forcar_reenvio':
+          require_once 'protocolo_integrado_monitoramento.php';
+          return true;
                 
-            case 'md_pi_visualizar_metadados':
-            case 'md_pi_visualizar_erro_envio_metadados':
-                require_once 'protocolo_integrado_acesso_arquivo_metadados.php';
-                return true;
-        }
-        return false;
-    }    
-
-    private function carregarArquivoConfiguracaoModulo($strDiretorioSeiWeb){
-        try{
-            $strArquivoConfiguracao = $strDiretorioSeiWeb . '/mod-protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';
-            include_once $strArquivoConfiguracao;       
-        } catch(Exception $e){
-            LogSEI::getInstance()->gravar("Arquivo de configuração do módulo Protocolo Integrado não pode ser localizado em " . $strArquivoConfiguracao);
-        }
+      case 'md_pi_visualizar_metadados':
+      case 'md_pi_visualizar_erro_envio_metadados':
+          require_once 'protocolo_integrado_acesso_arquivo_metadados.php';
+          return true;
     }
+      return false;
+  }    
+
+  private function carregarArquivoConfiguracaoModulo($strDiretorioSeiWeb){
+    try{
+        $strArquivoConfiguracao = $strDiretorioSeiWeb . '/mod-protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';
+        include_once $strArquivoConfiguracao;       
+    } catch(Exception $e){
+        LogSEI::getInstance()->gravar("Arquivo de configuração do módulo Protocolo Integrado não pode ser localizado em " . $strArquivoConfiguracao);
+    }
+  }
 }
 
 
