@@ -34,6 +34,18 @@ NC=\033[0m
 MENSAGEM_AVISO_MODULO = $(ERROR)[ATENÇÃO]:$(NC)$(YELLOW) Necessário configurar a chave de configuração do módulo no arquivo de configuração do SEI (ConfiguracaoSEI.php) $(NC)\n               $(YELLOW)'Modulos' => array('ProtocoloIntegradoIntegracao' => 'protocolo-integrado') $(NC)
 MENSAGEM_AVISO_ENV = $(ERROR)[ATENÇÃO]:$(NC)$(YELLOW) Configurar parâmetros de autenticação do ambiente de testes do Protocolo Integrado no arquivo .modulo.env $(NC)
 
+ifeq (, $(shell groups |grep docker))
+ CMD_DOCKER_SUDO=sudo
+else
+ CMD_DOCKER_SUDO=
+endif
+
+ifeq (, $(shell which docker-compose))
+ CMD_DOCKER_COMPOSE=$(CMD_DOCKER_SUDO) docker compose
+else
+ CMD_DOCKER_COMPOSE=$(CMD_DOCKER_SUDO) docker-compose
+endif
+
 all: clean build
 
 dist: 
@@ -79,8 +91,8 @@ check-super-isalive: ## Target de apoio. Acessa o Super e verifica se esta respo
 
 
 install: ## Instala e atualiza as tabelas do módulo na base de dados do sistema
-	docker-compose exec -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SEI_MODULO)"; true
-	docker-compose exec -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SIP_MODULO)"; true 
+	$(CMD_DOCKER_COMPOSE) exec -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SEI_MODULO)"; true
+	$(CMD_DOCKER_COMPOSE) exec -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SIP_MODULO)"; true 
 	@echo ""
 	@echo "==================================================================================================="
 	@if ! grep -q ProtocoloIntegradoIntegracao "$(ARQUIVO_CONFIG_SEI)" ; then echo '$(MENSAGEM_AVISO_MODULO)\n'; fi
@@ -90,9 +102,9 @@ install: ## Instala e atualiza as tabelas do módulo na base de dados do sistema
 
 
 update: ## Atualiza banco de dados através dos scripts de atualização do sistema
-	docker-compose run --rm -w /opt/sei/scripts/ httpd bash -c "$(CMD_INSTALACAO_SEI)"; true
-	docker-compose run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_SIP)"; true
-	docker-compose run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
+	$(CMD_DOCKER_COMPOSE) run --rm -w /opt/sei/scripts/ httpd bash -c "$(CMD_INSTALACAO_SEI)"; true
+	$(CMD_DOCKER_COMPOSE) run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_SIP)"; true
+	$(CMD_DOCKER_COMPOSE) run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
 
 
 up: up-backgound  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
@@ -100,13 +112,13 @@ up: up-backgound  ## Inicia ambiente de desenvolvimento local (docker) no endere
 
 up-backgound: .env .modulo.env  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
 	@if [ ! -f ".env" ]; then cp envs/$(base).env .env; fi
-	docker-compose up -d
+	$(CMD_DOCKER_COMPOSE) up -d
 	make check-super-isalive
 	@echo "$(SUCCESS)Ambiente de desenvolvimento iniciado com sucesso: $(SEI_HOST)/sei$(NC)"
 
 
 up-foreground: .env  ## Inicia ambiente de desenvolvimento local (docker) em primeiro plano no endereço http://localhost:8000
-	docker-compose up
+	$(CMD_DOCKER_COMPOSE) up
 
 
 config:  ## Configura o ambiente para outro banco de dados (mysql|sqlserver|oracle). Ex: make config base=oracle 
@@ -114,14 +126,14 @@ config:  ## Configura o ambiente para outro banco de dados (mysql|sqlserver|orac
 	@echo "Ambiente configurado para utilizar a base de dados $(base). (base=[mysql|oracle|sqlserver])"
 
 down:   ## Interrompe execução do ambiente de desenvolvimento local em docker
-	docker-compose down
+	$(CMD_DOCKER_COMPOSE) down
 
 
 restart: down up ## Reinicia execução do ambiente de desenvolvimento local em docker
 
 
 destroy:   ## Destrói ambiente de desenvolvimento local, junto com os dados armazenados em banco de dados
-	docker-compose down --volumes
+	$(CMD_DOCKER_COMPOSE) down --volumes
 
 
 help:
