@@ -7,7 +7,7 @@ Para maiores informações sobre o Protocolo Integrado e como aderir ao projeto,
 
 ### Compatibilidade do Módulo x Versões do SEI
 
-SEI 4.x e SUPER.GOV.BR - Módulo na versão 3.x
+SEI 4.0.x e SUPER.GOV.BR - Módulo na versão 3.x
 
 SEI 3.x - Módulo na versão 2.x
 
