@@ -467,6 +467,7 @@ try {
         '1.1.4' => 'versao_1_1_4',
         '1.1.5' => 'versao_1_1_5',
         '2.0.*' => 'versao_2_0_0',
+        '2.1.*' => 'versao_sem_alteracao_banco',
         '3.0.*' => 'versao_3_0_0',
         '3.0.1' => 'versao_sem_alteracao_banco'
     ));
