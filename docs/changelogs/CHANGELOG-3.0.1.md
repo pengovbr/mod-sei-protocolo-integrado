@@ -9,7 +9,7 @@ As melhorias entregues em cada uma das versões são cumulativas, ou seja, cont�
 * O módulo é compatível com as seguintes versões:
     * SEI: 4.0.x e versões superiores
     
-| Versão SEI/SUPER | Versão módulo mod-wssei                       |
+| Versão SEI/SUPER | Versão módulo mod-sei-protocolo-integrado                       |
 | ---              | ---                                           |
 | 3.1.x            | mod-sei-protocolo-integrado 2.1.3 ou superior |
 | 4.0.x            | mod-sei-protocolo-integrado 3.0.0 ou superior |
@@ -35,6 +35,10 @@ Correção do layout na tela de configuração e de pesquisa.
 #### Compatibilidade com PHP 7.3 (#22)
 
 Corrige bug do 'Call to undefined function ereg_replace()'. 
+
+#### Erro ao tentar instalar versão mais recente do módulo do Protocolo Integrado (#38)
+
+Corrige erro ao tentar instalar a versão 3.0.1 a partir de uma versão 2.1.x.
 
 
 ### Atualização de Versão
