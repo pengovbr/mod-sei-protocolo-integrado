@@ -98,7 +98,7 @@ try {
         break;
 
     default:
-        throw new InfraException("Ação '" . $_GET['acao'] . "' nï¿½o reconhecida.");
+        throw new InfraException("Ação '" . $_GET['acao'] . "' não reconhecida.");
   }
   $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
 
