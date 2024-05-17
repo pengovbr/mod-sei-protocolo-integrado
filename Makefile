@@ -4,6 +4,9 @@
 -include .modulo.env
 
 # Parâmetros de configuração
+
+# Opções possíveis para spe (sistema de proc eletronico): sei4, sei41, super
+sistema = super
 base = mysql
 
 MODULO_NOME = protocolo-integrado
@@ -142,6 +145,5 @@ help:
  
 
 tests-functional: check-super-isalive	
-	@echo "Vamos iniciar a execucao dos testes..."
-	@echo cd tests/SeleniumIDE/exportedPython
-	@pytest -x -l --tb=short
+	@echo "Vamos iniciar a execucao do teste."	
+	@pytest tests/SeleniumIDE/$(sistema)

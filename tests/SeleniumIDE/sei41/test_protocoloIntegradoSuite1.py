@@ -15,6 +15,7 @@ class TestProtocoloIntegradoSuite1():
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
     self.vars = {}
+    self.driver.set_window_size(1600, 900)
   
   def teardown_method(self, method):
     self.driver.quit()
@@ -32,7 +33,7 @@ class TestProtocoloIntegradoSuite1():
     self.driver.find_element(By.ID, "txtUsuario").send_keys("teste")
     self.driver.find_element(By.ID, "pwdSenha").click()
     self.driver.find_element(By.ID, "pwdSenha").send_keys("teste")
-    self.driver.find_element(By.ID, "Acessar").click()
+    self.driver.find_element(By.ID, "sbmAcessar").click()
     self.driver.find_element(By.ID, "txtInfraPesquisarMenu").click()
     self.driver.find_element(By.ID, "txtInfraPesquisarMenu").send_keys("Agendamentos")
     self.driver.find_element(By.XPATH, "(//span[normalize-space()='Agendamentos'])").click()
@@ -59,7 +60,7 @@ class TestProtocoloIntegradoSuite1():
     WebDriverWait(self.driver, 30000).until(expected_conditions.visibility_of_element_located((By.ID, "pwdSenha")))
     self.driver.find_element(By.ID, "pwdSenha").click()
     self.driver.find_element(By.ID, "pwdSenha").send_keys("teste")
-    self.driver.find_element(By.ID, "Acessar").click()    
+    self.driver.find_element(By.ID, "sbmAcessar").click()    
     #Troca para a unidade TESTE_1_2, caso esteja em outra unidade
     html = self.driver.page_source
     soup = BeautifulSoup(html, 'html.parser')    
@@ -87,9 +88,8 @@ class TestProtocoloIntegradoSuite1():
     WebDriverWait(self.driver, 30000).until(expected_conditions.visibility_of_element_located((By.XPATH, "//*[@id='divArvoreAcoes']/a[1]/img[@title='Incluir Documento']")))
     #Inclui algum documento no processo
     self.driver.find_element(By.XPATH, "//*[@id='divArvoreAcoes']/a[1]/img[@title='Incluir Documento']").click()
-    self.driver.switch_to.default_content()
-    self.driver.switch_to.frame(1)
-    self.driver.find_element(By.LINK_TEXT, "Despacho").click()
+    self.driver.switch_to.frame(0)
+    self.driver.find_element(By.XPATH, "//a[normalize-space()='Despacho']").click()
     self.driver.find_element(By.ID, "txtDescricao").click()
     self.driver.find_element(By.ID, "txtDescricao").send_keys("Despacho")
     self.driver.find_element(By.CSS_SELECTOR, "#divOptPublico .infraRadioLabel").click()
@@ -134,6 +134,8 @@ class TestProtocoloIntegradoSuite1():
     time.sleep(2)
     WebDriverWait(self.driver, 30000).until(expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, "#divArvoreAcoes img[title='Enviar Processo']")))
     self.driver.find_element(By.CSS_SELECTOR, "#divArvoreAcoes img[title='Enviar Processo']").click()
+    time.sleep(2)
+    self.driver.switch_to.frame(0)
     self.driver.find_element(By.ID, "txtUnidade").click()
     self.driver.find_element(By.ID, "txtUnidade").send_keys("TESTE")
     WebDriverWait(self.driver, 30000).until(expected_conditions.visibility_of_element_located((By.XPATH, "//a[contains(.,\'TESTE - Unidade de Teste 1\')]")))
@@ -159,7 +161,7 @@ class TestProtocoloIntegradoSuite1():
     self.driver.find_element(By.ID, "txtUsuario").send_keys("teste")
     self.driver.find_element(By.ID, "pwdSenha").click()
     self.driver.find_element(By.ID, "pwdSenha").send_keys("teste")
-    self.driver.find_element(By.ID, "Acessar").click()
+    self.driver.find_element(By.ID, "sbmAcessar").click()
     self.driver.find_element(By.ID, "txtInfraPesquisarMenu").click()
     self.driver.find_element(By.ID, "txtInfraPesquisarMenu").send_keys("Agendamentos")
     self.driver.find_element(By.XPATH, "(//span[normalize-space()='Agendamentos'])").click()
