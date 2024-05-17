@@ -25,7 +25,7 @@ CMD_INSTALACAO_RECURSOS_SEI = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PAS
 CMD_INSTALACAO_SEI_MODULO = echo -ne '$(SEI_DATABASE_USER)\n$(SEI_DATABASE_PASSWORD)\n' | php sei_atualizar_versao_modulo_protocolo_integrado.php
 CMD_INSTALACAO_SIP_MODULO = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PASSWORD)\n' | php sip_atualizar_versao_modulo_protocolo_integrado.php
 
-CMD_CURL_SUPER_LOGIN = curl -s -L $(SEI_HOST)/sei | grep -q "<input.*txtUsuario.*>"
+CMD_CURL_SUPER_LOGIN = curl -s -L $(SEI_HOST)/sei | grep -q "input.*txtUsuario.*"
 SUCCESS=\033[0;32m
 ERROR=\033[0;31m
 WARNING=\033[1;33m
@@ -139,3 +139,9 @@ destroy:   ## Destrói ambiente de desenvolvimento local, junto com os dados arm
 help:
 	@echo "Usage: make [target] ... \n"
 	@grep -E '^[a-zA-Z_-]+[[:space:]]*:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+ 
+
+tests-functional: check-super-isalive	
+	@echo "Vamos iniciar a execucao dos testes..."
+	@echo cd tests/SeleniumIDE/exportedPython
+	@pytest -x -l --tb=short

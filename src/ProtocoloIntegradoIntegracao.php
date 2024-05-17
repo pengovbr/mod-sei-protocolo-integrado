@@ -15,7 +15,7 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
   }
     
   public function getInstituicao() {
-      return 'Ministério da Economia - ME';
+      return 'Ministério da Gestão e da Inovação em Serviços Públicos - MGI';
   }
 
   public function inicializar($strVersaoSEI)
