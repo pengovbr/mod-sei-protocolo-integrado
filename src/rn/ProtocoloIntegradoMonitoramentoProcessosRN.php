@@ -203,6 +203,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         $objInfraParametroDTO->setStrNome('ID_UNIDADE_TESTE');
         $objInfraParametroDTO->retTodos();
         $ret = $objParametroBD->listar($objInfraParametroDTO);
+        // processo criados na unidade TESTE não são enviados
       if (count($ret)>0) {
         $objInfra = $ret[0];
         $numUnidadeTeste = $objInfra->getStrValor();
@@ -1015,10 +1016,10 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         // Verifica se o CPF é válido
       for ($t = 9; $t < 11; $t++) {
         for ($d = 0, $c = 0; $c < $t; $c++) {
-          $d += $cpf{$c} * (($t + 1) - $c);
+          $d += $cpf[$c] * (($t + 1) - $c);
         }
           $d = ((10 * $d) % 11) % 10;
-        if ($cpf{$c} != $d) {
+        if ($cpf[$c] != $d) {
             return false;
         }
       }

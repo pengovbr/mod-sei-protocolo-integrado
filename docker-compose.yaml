@@ -22,12 +22,22 @@ services:
       - ${DATABASE_PORT}:${DATABASE_PORT}
 
   solr:
+    # sei 4.0.x e 4.1.x
     image: processoeletronico/vagrant_sei4_solr:${ENVIRONMENT_VERSION}
+    
+    # sei 5.0.x
+    # image: processoeletronico/solr9.4.0:latest
+
     ports:
       - "8983:8983"
 
   httpd:
+    # sei 4.0.x e 4.1.x
     image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
+
+    # sei 5.0.x
+    # image: processoeletronico/sei5-alpine:${ENVIRONMENT_VERSION}
+
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
