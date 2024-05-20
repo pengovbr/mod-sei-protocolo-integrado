@@ -5,7 +5,7 @@
 
 # Parâmetros de configuração
 
-# Opções possíveis para spe (sistema de proc eletronico): sei4, sei41, super
+# Opções possíveis para spe (sistema de proc eletronico): sei4, sei41, super e sei5
 sistema = super
 base = mysql
 

@@ -1,7 +1,7 @@
 <?php
 
-ini_set('soap.wsdl_cache_enabled', 0);
-ini_set('soap.wsdl_cache_ttl', 0);
+// ini_set('soap.wsdl_cache_enabled', 0);
+// ini_set('soap.wsdl_cache_ttl', 0);
 // require_once dirname(__FILE__).'/../../../../SEI.php';
 require_once DIR_SEI_WEB.'/SEI.php';
 require_once dirname(__FILE__).'/Enconding.php';
@@ -20,22 +20,29 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 
     try {
 
-          $this->login = $login;
-          $this->senha = $senha;
-          $this->url  =  preg_replace("/^http:/i", "https:", $url);
-          // Create the stream_context and add it to the options
-          $this->context = stream_context_create(
-              array(
-                  'ssl' => array(
-                      'verify_peer' => false,
-                      'verify_peer_name' => false,
-                      'allow_self_signed' => true
-                  )
-          ));
-          $opcoes = array_merge($opcoes, array('stream_context' => $this->context));
+        $this->login = $login;
+        $this->senha = $senha;
+        $this->url  =  preg_replace("/^http:/i", "https:", $url);
+        // Create the stream_context and add it to the options
+        $this->context = stream_context_create(
+            array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                ),
+        ));
 
-          $this->validarConexaoWebService();
-          parent::SoapClient($url, $opcoes);
+        $opcoes = array_merge(
+            $opcoes, array('stream_context' => $this->context, 
+          'location' => str_replace("?wsdl", "", $url),
+          'login' => $this->login,
+          'password' => $this->senha,
+          'use' => SOAP_LITERAL)
+        );
+
+        $this->validarConexaoWebService();
+        parent::__construct($url, $opcoes);
 
     } catch (Exception $e) {
            throw new InfraException('Erro ao se conectar ao Webservice', $e);
@@ -95,24 +102,18 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 
     // Override doRequest to calculate the authentication hash from the $request.
   function __doRequest($request, $location, $action, $version, $one_way = 0) {
-      // Grab all the text from the request.
-      $codSiorg  = $this->login ;
-      $senha     = $this->senha;
     if ($this->acao=='enviarListaDocumentosServidor') {
         $request = $this->listaDocumentosFormatada;
     }
-
-      // Set the HTTP headers.
-      $autorizacao = "Basic ".base64_encode($codSiorg.':'.$senha);
-      stream_context_set_option($this->context, array('http' => array('header' => 'Authorization:'. $autorizacao)));
-      $response = parent::__doRequest($request, $location, $action, $version, $one_way);
-      return $response;
+    $response = parent::__doRequest($request, $location, $action, $version, $one_way);
+    return $response;
   }
 
   public function getQuantidadeMaximaDocumentosPorRequisicaoServidor(){
 
     try {
-        $numMaxDocumentos = $this->getQuantidadeMaximaDocumentosPorRequisicao();
+        $parametros = new stdClass();
+        $numMaxDocumentos = $this->getQuantidadeMaximaDocumentosPorRequisicao($parametros);
         return $numMaxDocumentos;
     } catch(Exception $e){
       return $e->getMessage();
