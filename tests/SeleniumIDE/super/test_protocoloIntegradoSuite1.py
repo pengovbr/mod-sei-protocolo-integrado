@@ -2,7 +2,6 @@
 import pytest
 import time
 import json
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -62,10 +61,9 @@ class TestProtocoloIntegradoSuite1():
     self.driver.find_element(By.ID, "pwdSenha").click()
     self.driver.find_element(By.ID, "pwdSenha").send_keys("teste")
     self.driver.find_element(By.ID, "Acessar").click()    
-    #Troca para a unidade TESTE_1_2, caso esteja em outra unidade
-    html = self.driver.page_source
-    soup = BeautifulSoup(html, 'html.parser')    
-    unidadeAtual = soup.findAll("a", {"id": "lnkInfraUnidade"})[0].string
+    #Troca para a unidade TESTE_1_2, caso esteja em outra unidade        
+    tagUnidade = self.driver.find_element(By.ID, "lnkInfraUnidade")
+    unidadeAtual = tagUnidade.get_attribute('innerHTML')
     if unidadeAtual != 'TESTE_1_2':
       self.driver.find_element(By.CSS_SELECTOR, ".d-none #lnkInfraUnidade").click()
       self.driver.find_element(By.XPATH, "//td[contains(text(),'TESTE_1_2')]/../td[1]/div/label").click()    
