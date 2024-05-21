@@ -821,8 +821,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
     
             $itemHistorico = $dom->createElement("ItemHistorico");
                 
-            $dataHoraOperacaoConvertida =  str_replace('/', '-', $arrAtividades[$j]->getDthDataAbertura());
-            $dataHoraOperacao = $dom->createElement("DataHoraOperacao", date('c', strtotime($dataHoraOperacaoConvertida)));
+            $dataHoraOperacao = $dom->createElement("DataHoraOperacao", date('c', $arrAtividades[$j]->getDthDataAbertura()->getTimestamp()));
             $unidadeOperacao = '';
     
           if ($arrAtividades[$j]->getNumIdUnidade() != null) {
@@ -1161,12 +1160,12 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
         $d = $objPacoteIntegradoPacoteEnvio->getDthDataSituacao();
       if(is_null($d)) {
-        $d = strtotime("2000-01-01 00:00:00");
-      }
-        $numMaxDthSituacao = DateTime::createFromFormat("d/m/Y G:i:s", $d);
-
+        $d = new DateTime();
+				$d->setDate("2000", "01", "01");
+				$d->setTime(0, 0);
+      }    
         $numAgora = time();
-        $diffSegundos = $numAgora - $numMaxDthSituacao->getTimestamp();
+        $diffSegundos = $numAgora - $d->getTimestamp();
         $diffDias = intval($diffSegundos/(60*60*24));
             
       if ($diffDias>=$numDias) {

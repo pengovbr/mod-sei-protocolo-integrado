@@ -469,7 +469,8 @@ try {
         '2.0.*' => 'versao_2_0_0',
         '2.1.*' => 'versao_sem_alteracao_banco',
         '3.0.*' => 'versao_3_0_0',
-        '3.0.1' => 'versao_sem_alteracao_banco'
+        '3.0.1' => 'versao_sem_alteracao_banco',
+        '3.0.2' => 'versao_sem_alteracao_banco'
     ));
     $VersaoProtocoloIntegradoRN->setStrVersaoInfra('1.595.1');
     $VersaoProtocoloIntegradoRN->setBolMySql(true);
