@@ -33,4 +33,3 @@ Em caso de dúvidas ou problemas, favor entrar em conta pelos canais na Central 
 Para mais informações, contate a equipe responsável por meio dos seguintes canais:
 
 -   [Portal de Atendimento (PEN): Canal de Atendimento](https://portaldeservicos.economia.gov.br/)  - Módulo do Protocolo Integrado
--   Telefone: 0800 978 9005
