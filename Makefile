@@ -147,3 +147,6 @@ help:
 tests-functional: check-super-isalive	
 	@echo "Vamos iniciar a execucao do teste."	
 	@pytest tests/SeleniumIDE/$(sistema)
+
+generate-der: up
+	docker run --network host --rm -v .:/work -w /work ghcr.io/k1low/tbls doc --rm-dist mariadb://$(SEI_DATABASE_USER):$(SEI_DATABASE_PASSWORD)@localhost:3306/sei
