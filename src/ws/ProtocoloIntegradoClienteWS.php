@@ -4,7 +4,7 @@ ini_set('soap.wsdl_cache_enabled',0);
 ini_set('soap.wsdl_cache_ttl',0);
 // require_once dirname(__FILE__).'/../../../../SEI.php';
 require_once DIR_SEI_WEB.'/SEI.php';
-require_once dirname(__FILE__).'/Enconding.php';
+require_once dirname(__FILE__).'/Encoding.php';
 
 class ProtocoloIntegradoClienteWS extends SoapClient {
 
@@ -69,25 +69,25 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 		curl_close($ch);
 
 		if (stripos( $this->url,"?wsdl")===false) {
-			throw new InfraException("Endereço do serviço inválido ou serviço fora do ar.
-							Verifique se este endereço está corretamente informado nos parâmetros de integração ao Protocolo Integrado.",$e);
+			throw new InfraException("Endereï¿½o do serviï¿½o invï¿½lido ou serviï¿½o fora do ar.
+							Verifique se este endereï¿½o estï¿½ corretamente informado nos parï¿½metros de integraï¿½ï¿½o ao Protocolo Integrado.",$e);
 		}
 
 		if ($curl_errno) {
-			$e =  new Exception($header."Requisição CURL resultou no seguinte erro: " . $curl_error . "(Código: " . $curl_errno . ")");
+			$e =  new Exception($header."Requisiï¿½ï¿½o CURL resultou no seguinte erro: " . $curl_error . "(Cï¿½digo: " . $curl_errno . ")");
 			if ($curl_errno == 60) {
-			    throw new InfraException("Certificado inválido ou ausente.",$e);
+			    throw new InfraException("Certificado invï¿½lido ou ausente.",$e);
 			} else {
-				throw new InfraException("Ocorreu um problema ao realizar a conexão ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes", $e);
+				throw new InfraException("Ocorreu um problema ao realizar a conexï¿½o ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes", $e);
 			}
 		} else {
 			if ($httpCode!=200) {
 				if (strlen($header)>0) {
 					$e = new Exception($header);
 				} else {
-					$e = new Exception("503 Service Unavailable.Não foi possível conectar ao servidor");
+					$e = new Exception("503 Service Unavailable.Nï¿½o foi possï¿½vel conectar ao servidor");
 				}
-				throw new InfraException("Ocorreu um problema ao realizar a conexão ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes.", $e);
+				throw new InfraException("Ocorreu um problema ao realizar a conexï¿½o ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes.", $e);
 			}
 		}
 
@@ -128,7 +128,7 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 			$retorno = $this->formatarEnvioListaDocumentosPI($param);
 			return $retorno;
 	  	} catch(Exception $e) {
-	  	  	error_log('Exceção:'.$e->getMessage());
+	  	  	error_log('Exceï¿½ï¿½o:'.$e->getMessage());
 	      	return $e;
 	    }
 
@@ -158,7 +158,7 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 		return $this->__soapCall('EnviarListaDocumentos',array());
 	}
 
-	//Converte elementos(tags) do XML com caracteres especiais (acentos,pontuação,etc.) para formato de enconding aceito pelo PI
+	//Converte elementos(tags) do XML com caracteres especiais (acentos,pontuaï¿½ï¿½o,etc.) para formato de enconding aceito pelo PI
 	private function formatarElementoXML($xml,$elemento){
 		$objetos = $xml->getElementsByTagName($elemento);
 		if ($objetos!=null) {

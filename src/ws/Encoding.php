@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2008 Sebastián Grignoli
+Copyright (c) 2008 Sebastiï¿½n Grignoli
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -26,7 +26,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 /**
- * @author   "Sebastián Grignoli" <grignoli@gmail.com>
+ * @author   "Sebastiï¿½n Grignoli" <grignoli@gmail.com>
  * @package  Encoding
  * @version  2.0
  * @link     https://github.com/neitanod/forceutf8
@@ -160,15 +160,15 @@ class Encoding {
    *
    * It may fail to convert characters to UTF-8 if they fall into one of these scenarios:
    *
-   * 1) when any of these characters:   ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß
+   * 1) when any of these characters:   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    *    are followed by any of these:  ("group B")
-   *                                    ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶•¸¹º»¼½¾¿
-   * For example:   %ABREPRESENT%C9%BB. «REPRESENTÉ»
-   * The "«" (%AB) character will be converted, but the "É" followed by "»" (%C9%BB)
+   *                                    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+   * For example:   %ABREPRESENT%C9%BB. ï¿½REPRESENTÉ»
+   * The "ï¿½" (%AB) character will be converted, but the "ï¿½" followed by "ï¿½" (%C9%BB)
    * is also a valid unicode character, and will be left unchanged.
    *
-   * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
-   * 3) when any of these: ðñòó  are followed by THREE chars from group B.
+   * 2) when any of these: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  are followed by TWO chars from group B,
+   * 3) when any of these: ï¿½ï¿½ï¿½ï¿½  are followed by THREE chars from group B.
    *
    * @name toUTF8
    * @param string $text  Any string.
@@ -328,5 +328,10 @@ class Encoding {
        $o = iconv("UTF-8", "Windows-1252" . ($option == self::ICONV_TRANSLIT ? '//TRANSLIT' : ($option == self::ICONV_IGNORE ? '//IGNORE' : '')), $text);
     }
     return $o;
+  }
+
+  public static function utf8ToIso($text) 
+  {
+    return mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
   }
 }

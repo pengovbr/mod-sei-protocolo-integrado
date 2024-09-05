@@ -1,10 +1,10 @@
 <?
 
 /**
- * Arquivo de configuração do Módulo de Integração do SEI com o Protocolo Integrado do Governo Federal
+ * Arquivo de configuraÃ§Ã£o do MÃ³dulo de IntegraÃ§Ã£o do SEI com o Protocolo Integrado do Governo Federal
  *
- * Seu desenvolvimento seguiu os mesmos padrões de configuração implementado pelo SEI e SIP e este
- * arquivo precisa ser adicionado à pasta de configurações do SEI para seu correto carregamento pelo módulo.
+ * Seu desenvolvimento seguiu os mesmos padrÃµes de configuraÃ§Ã£o implementado pelo SEI e SIP e este
+ * arquivo precisa ser adicionado Ã  pasta de configuraÃ§Ãµes do SEI para seu correto carregamento pelo mÃ³dulo.
  */
 
 class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
@@ -12,7 +12,7 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
 	private static $instance = null;
 
     /**
-     * Obtém instância única (singleton) dos dados de configuração do módulo de integração
+     * ObtÃ©m instÃ¢ncia Ãºnica (singleton) dos dados de configuraÃ§Ã£o do mÃ³dulo de integraÃ§Ã£o
      *
      *
      * @return ConfiguracaoModProtocoloIntegrado
@@ -26,7 +26,7 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
 	}
 
     /**
-     * Definição dos parâmetroúde configuração do módulo
+     * DefiniÃ§Ã£o dos parÃ¢metroÃºde configuraÃ§Ã£o do mÃ³dulo
      *
      * @return array
      */
@@ -34,28 +34,41 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
     {
         return array(
             "ProtocoloIntegrado" => array(
-                // Endereço do Web Service principal de integração com o Protocolo Integrado
-                // Os endereços disponÃ­veis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
-                //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
-                //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
+
+                // EndereÃ§o da nova Api de integraÃ§Ã£o com o Protocolo Integrado
+                // Os endereÃ§os disponÃ­veis sÃ£o os seguintes (verifique se houve atualizaÃ§Ãµes durante o procedimento de instalaÃ§Ã£o):
+                //    - HomologaÃ§Ã£o: https://protocolointegrado.preprod.nuvem.gov.br/ ??
+                //    - ProduÃ§Ã£o: https://protocolointegrado.gov.br/ ??
+                "ApiRest" => "",
+
+                // Login do usuÃ¡rio a ser utilizado na autenticaÃ§Ã£o com a Api Rest
+                "UsuarioApiRest" => "",
+
+                // Senha do usuÃ¡rio a ser utilizado na autenticaÃ§Ã£o com a Api Rest
+                "SenhaApiRest" => "",
+
+                // EndereÃ§o do Web Service principal de integraÃ§Ã£o com o Protocolo Integrado
+                // Os endereÃ§os disponÃ­veis sÃ£o os seguintes (verifique se houve atualizaÃ§Ãµes durante o procedimento de instalaÃ§Ã£o):
+                //    - HomologaÃ§Ã£o: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
+                //    - ProduÃ§Ã£o: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
                 "WebService" => "",
 
-                // Login do usuário a ser utilizado na autenticação com o Webservice
+                // Login do usuÃ¡rio a ser utilizado na autenticaÃ§Ã£o com o Webservice
                 "UsuarioWebService" => "",
 
-                // Senha do usuário a ser utilizado na autenticação com o Webservice
+                // Senha do usuÃ¡rio a ser utilizado na autenticaÃ§Ã£o com o Webservice
                 "SenhaWebService" => "",
 
-                // Número de Tentativas para Reenvio dos Metadados
-                // Quando o envio de processos para o Protocolo Integrado for malsucedido, o módulo tentará reenviá-los respeitando 
+                // NÃºmero de Tentativas para Reenvio dos Metadados
+                // Quando o envio de processos para o Protocolo Integrado for malsucedido, o mÃ³dulo tentarÃ¡ reenviÃ¡-los respeitando 
                 // a quantidade de vezes especificada abaixo. 
                 "TentativasReenvio" => 15,
 
-                // Número máximo de andamentos a enviar por vez
-                // Quando o agendamento for executado, este parâmetro utilizado como número máximo de andamentos de processos a ser enviado.
+                // NÃºmero mÃ¡ximo de andamentos a enviar por vez
+                // Quando o agendamento for executado, este parÃ¢metro utilizado como nÃºmero mÃ¡ximo de andamentos de processos a ser enviado.
                 "QuantidadeAndamentosEnvio" => 100000,
 
-                // Publicar informações sobre processos restritos
+                // Publicar informaÃ§Ãµes sobre processos restritos
                 "PublicarProcessosRestritos" => false
             )
         );
