@@ -105,7 +105,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 	protected function publicarProcessosConectado(ProtocoloIntegradoMonitoramentoProcessosDTO $objProtocoloIntegradoParametrosDTO) {
 		
-	    $tempoInicial = time();
+		$tempoInicial = time();
 		try {
 			SessaoSEI::getInstance()->validarAuditarPermissao('md_pi_monitoramento', __METHOD__, $objProtocoloIntegradoParametrosDTO);
 
@@ -650,10 +650,13 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			$arrObjProcessosMonitorados = $this->listarProcessosPublicacao($filtro);
 			
 			if (count($arrObjProcessosMonitorados)==0) {
+				InfraDebug::getInstance()->gravar('Sem processos para publicar no PI');
 				break;
 			}
 			$numTotal = $numTotal+count($arrObjProcessosMonitorados);
 			
+			InfraDebug::getInstance()->gravar($numTotal . ' processos a publicar no PI');
+
 			$contador = 0;
 
 			foreach ($arrObjProcessosMonitorados as $pacote => $protocoloMonitorado) {
