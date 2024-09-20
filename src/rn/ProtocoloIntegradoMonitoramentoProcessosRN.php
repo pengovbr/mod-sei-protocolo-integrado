@@ -1077,28 +1077,28 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		$iterador = 0;
 		if ($ret instanceof SoapFault) {
 			$retorno = new stdClass();
-			$retorno->ResultadoDocumento = array();
+			$retorno->resultadoDocumento = array();
 
 			for ($i = 0; $i < count($arrObjProtocolosEnviados); $i++) {
 				$resultado = new stdClass();
-				$resultado->Resultado = 'SF001 - ' . $ret->getMessage();
-				array_push($retorno->ResultadoDocumento, $resultado);
+				$resultado->resultado = 'SF001 - ' . $ret->getMessage();
+				array_push($retorno->resultadoDocumento, $resultado);
 			}
 
 			$ret = $retorno;
 		}
 
-		if (is_array($ret->ResultadoDocumento)) {
-			foreach ($ret->ResultadoDocumento as $key => $value) {
+		if (is_array($ret->resultadoDocumento)) {
+			foreach ($ret->resultadoDocumento as $key => $value) {
 				$objPacoteDTO = $arrObjPacotesEnviados[$iterador];
 				$objProtocoloDTO = $arrObjProtocolosEnviados[$iterador];
-				$this->atualizaPacote($objPacoteDTO, $objProtocoloDTO, $value->Resultado, $strInicioPublicacao);
+				$this->atualizaPacote($objPacoteDTO, $objProtocoloDTO, $value->resultado, $strInicioPublicacao);
 				$iterador++;
 			}
 		} else {
 			$objPacoteDTO = $arrObjPacotesEnviados[0];
 			$objProtocoloDTO = $arrObjProtocolosEnviados[0];
-			$this->atualizaPacote($objPacoteDTO, $objProtocoloDTO, $ret->ResultadoDocumento->Resultado, $strInicioPublicacao);
+			$this->atualizaPacote($objPacoteDTO, $objProtocoloDTO, $ret->resultadoDocumento->resultado, $strInicioPublicacao);
 		}
 
 	}
