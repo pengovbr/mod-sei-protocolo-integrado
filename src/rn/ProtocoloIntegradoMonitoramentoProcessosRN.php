@@ -1075,7 +1075,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         
 		$ret = $conexaoCliente->enviarListaDocumentosServidor($body);
 		$iterador = 0;
-		if ($ret instanceof SoapFault) {
+		if ($ret instanceof InfraException) {
 			$retorno = new stdClass();
 			$retorno->resultadoDocumento = array();
 
