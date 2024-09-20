@@ -26,8 +26,11 @@ try {
             $objPacoteDTO->retStrArquivoMetadados();
             			
             $objRetornoPacote =  $objPacoteRN->consultar($objPacoteDTO);	
-            header("Content-Type: text/xml");
-            print($objRetornoPacote->getStrArquivoMetadados());
+            
+            $array = json_decode($objRetornoPacote->getStrArquivoMetadados(), true);
+            $prettyJson = json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+            echo '<pre>'.$prettyJson.'</pre>';
             die;
             break;
             

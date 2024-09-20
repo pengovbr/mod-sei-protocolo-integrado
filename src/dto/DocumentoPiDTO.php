@@ -11,54 +11,44 @@ class DocumentoPiDTO implements JsonSerializable {
     private $interessados = [];
     private $protocoloRelacionados = [];
     private $protocoloAnteriores = [];
-    private $historicoDocumentos = [];
+    private $historico = [];
 
-    // Getter for 'assunto'
     public function getAssunto() {
         return $this->assunto;
     }
 
-    // Setter for 'assunto'
     public function setAssunto($assunto) {
         $this->assunto = $assunto;
     }
 
-    // Getter for 'protocolo'
     public function getProtocolo() {
         return $this->protocolo;
     }
 
-    // Setter for 'protocolo'
     public function setProtocolo($protocolo) {
         $this->protocolo = $protocolo;
     }
 
-    // Getter for 'especie'
     public function getEspecie() {
         return $this->especie;
     }
 
-    // Setter for 'especie'
     public function setEspecie($especie) {
         $this->especie = $especie;
     }
 
-    // Getter for 'dataHoraProducao'
     public function getDataHoraProducao() {
         return $this->dataHoraProducao;
     }
 
-    // Setter for 'dataHoraProducao'
     public function setDataHoraProducao($dataHoraProducao) {
         $this->dataHoraProducao = $dataHoraProducao;
     }
 
-    // Getter for 'dataHoraProducaoTz'
     public function getDataHoraProducaoTz() {
         return $this->dataHoraProducaoTz;
     }
 
-    // Setter for 'dataHoraProducaoTz'
     public function setDataHoraProducaoTz($dataHoraProducaoTz) {
         $this->dataHoraProducaoTz = $dataHoraProducaoTz;
     }
@@ -87,12 +77,12 @@ class DocumentoPiDTO implements JsonSerializable {
         $this->protocoloAnteriores[] = $protocoloAnterior;
     }
 
-    public function getHistoricoDocumentos() {
-        return $this->historicoDocumentos;
+    public function getHistorico() {
+        return $this->historico;
     }
 
-    public function addHistoricoDocumento($historicoDocumento) {
-        $this->historicoDocumentos[] = $historicoDocumento;
+    public function addHistorico($historico) {
+        $this->historico[] = $historico;
     }
 
     public function jsonSerialize() {
@@ -105,7 +95,7 @@ class DocumentoPiDTO implements JsonSerializable {
             'interessados' => $this->interessados,
             'protocoloRelacionados' => $this->protocoloRelacionados,
             'protocoloAnteriores' => $this->protocoloAnteriores,
-            'historicoDocumentos' => $this->historicoDocumentos
+            'historico' => $this->historico
         ];
     }
 }

@@ -8,7 +8,7 @@ class HistoricoDocumentoPiDTO implements JsonSerializable {
     private $unidade;
     private $operacao;
     private $documento;
-    private $criadoEm;
+    private $dataHoraOperacao;
     private $atualizadoEm;
 
     public function getId() {
@@ -39,12 +39,12 @@ class HistoricoDocumentoPiDTO implements JsonSerializable {
         return $this->documento;
     }
 
-    public function setCriadoEm($criadoEm) {
-        $this->criadoEm = $criadoEm;
+    public function setDataHoraOperacao($dataHoraOperacao) {
+        $this->dataHoraOperacao = $dataHoraOperacao;
     }
 
-    public function getCriadoEm() {
-        return $this->criadoEm;
+    public function getDataHoraOperacao() {
+        return $this->dataHoraOperacao;
     }
 
     public function setAtualizadoEm($atualizadoEm) {
@@ -61,7 +61,7 @@ class HistoricoDocumentoPiDTO implements JsonSerializable {
             'unidade' => $this->unidade,
             'operacao' => $this->operacao,
             'documento' => $this->documento,
-            'criadoEm' => $this->criadoEm,
+            'dataHoraOperacao' => $this->dataHoraOperacao,
             'atualizadoEm' => $this->atualizadoEm
         ];
     }

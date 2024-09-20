@@ -853,10 +853,10 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 					$unidadeOperacao = $unidadeOperacao;
 					$operacao = $strNomeOperacao;
 	
-					$itemHistorico->setCriadoEm($dataHoraOperacao);
+					$itemHistorico->setDataHoraOperacao($dataHoraOperacao);
 					$itemHistorico->setUnidade(Encoding::utf8ToIso($unidadeOperacao));
 					$itemHistorico->setOperacao(Encoding::utf8ToIso($operacao));
-					$documento->addHistoricoDocumento($itemHistorico);
+					$documento->addHistorico($itemHistorico);
 	
 				}
 	
@@ -1088,11 +1088,11 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			$ret = $retorno;
 		}
 
-		if (is_array($ret->resultadoDocumento)) {
-			foreach ($ret->resultadoDocumento as $key => $value) {
+		if (is_array($ret)) {
+			foreach ($ret as $key => $value) {
 				$objPacoteDTO = $arrObjPacotesEnviados[$iterador];
 				$objProtocoloDTO = $arrObjProtocolosEnviados[$iterador];
-				$this->atualizaPacote($objPacoteDTO, $objProtocoloDTO, $value->resultado, $strInicioPublicacao);
+				$this->atualizaPacote($objPacoteDTO, $objProtocoloDTO, $value['resultado'], $strInicioPublicacao);
 				$iterador++;
 			}
 		} else {
