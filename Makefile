@@ -1,19 +1,40 @@
-.PHONY: .env all help clean dist install restart down destroy up up-background up-foreground config check-super-isalive
+.PHONY: .env .modulo.env help clean build all install restart down destroy up config test-functional-pi install-phpunit-vendor vendor
 
--include .env
--include .modulo.env
+# -include .env
+# -include .modulo.env
 
 # Parâmetros de configuração
+# Opções possíveis para spe (sistema de proc eletronico): sei41, super
+sistema=super
 base = mysql
+PI_TEST_FUNC = tests_pi
+
+-include  $(PI_TEST_FUNC)/.env
+-include  $(PI_TEST_FUNC)/.modulo.env
+
+ifeq (, $(shell groups |grep docker))
+ CMD_DOCKER_SUDO=sudo
+else
+ CMD_DOCKER_SUDO=
+endif
+
+ifeq (, $(shell which docker-compose))
+ CMD_DOCKER_COMPOSE=$(CMD_DOCKER_SUDO) docker compose
+ CMD_COMPOSE_FUNC = $(CMD_DOCKER_COMPOSE) -f $(PI_TEST_FUNC)/docker-compose.yaml --env-file $(PI_TEST_FUNC)/.env
+else
+ CMD_DOCKER_COMPOSE=$(CMD_DOCKER_SUDO) docker-compose
+ CMD_COMPOSE_FUNC = $(CMD_DOCKER_COMPOSE) -f $(PI_TEST_FUNC)/docker-compose.yaml --env-file $(PI_TEST_FUNC)/.env
+endif
 
 MODULO_NOME = protocolo-integrado
 MODULO_PASTAS_CONFIG = mod-$(MODULO_NOME)
 MODULO_PASTA_NOME = $(notdir $(shell pwd))
-VERSAO_MODULO := $(shell grep 'define."VERSAO_MODULO_PI"' src/ProtocoloIntegradoIntegracao.php | cut -d'"' -f4)
+VERSAO_MODULO := $(shell grep 'define."VERSAO_MODULO_PI"' ./src/ProtocoloIntegradoIntegracao.php | cut -d'"' -f4)
 SEI_SCRIPTS_DIR = dist/sei/scripts/$(MODULO_PASTAS_CONFIG)
 SEI_CONFIG_DIR = dist/sei/config/$(MODULO_PASTAS_CONFIG)
 SEI_MODULO_DIR = dist/sei/web/modulos/$(MODULO_NOME)
 SIP_SCRIPTS_DIR = dist/sip/scripts/$(MODULO_PASTAS_CONFIG)
+FILE_VENDOR_FUNCIONAL = $(PI_TEST_FUNC)/vendor/bin/phpunit
 
 ARQUIVO_CONFIG_SEI=$(SEI_PATH)/sei/config/ConfiguracaoSEI.php
 MSG_ORIENTACAO_CONFIGRACAO=CONFIGURACAO PENDENTE
@@ -25,7 +46,7 @@ CMD_INSTALACAO_RECURSOS_SEI = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PAS
 CMD_INSTALACAO_SEI_MODULO = echo -ne '$(SEI_DATABASE_USER)\n$(SEI_DATABASE_PASSWORD)\n' | php sei_atualizar_versao_modulo_protocolo_integrado.php
 CMD_INSTALACAO_SIP_MODULO = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PASSWORD)\n' | php sip_atualizar_versao_modulo_protocolo_integrado.php
 
-CMD_CURL_SUPER_LOGIN = curl -s -L $(SEI_HOST)/sei | grep -q "<input.*txtUsuario.*>"
+CMD_CURL_SUPER_LOGIN = curl -s -L $(SEI_HOST)/sei | grep "txtUsuario"
 SUCCESS=\033[0;32m
 ERROR=\033[0;31m
 WARNING=\033[1;33m
@@ -61,44 +82,67 @@ clean:  ## Limpa o diretório contendo arquivos temporários de construção do 
 	@rm -rf dist
 	@echo "Limpeza do diretório de distribuição do realizada com sucesso"
 
+.env:
+	@if [ ! -f "$(PI_TEST_FUNC)/.env" ]; then \
+	cp envs/$(base).env $(PI_TEST_FUNC)/.env; \
+	echo "Arquivo  $(PI_TEST_FUNC)/.env nao existia. Copiado o arquivo default da pasta envs."; \
+	echo "Se for o caso, faca as alteracoes nele antes de subir o ambiente."; \
+	echo ""; sleep 5; \
+	fi
+
 .modulo.env:
-	cp -n envs/modulo.env .modulo.env
+	@if [ ! -f "$(PI_TEST_FUNC)/.modulo.env" ]; then \
+	cp envs/modulo.env $(PI_TEST_FUNC)/.modulo.env; \
+	echo "Arquivo  $(PI_TEST_FUNC)/.modulo.env nao existia. Copiado o arquivo default da pasta envs."; \
+	fi
+
+check-super-path:
+	@if [ ! -f $(SEI_PATH)/sei/web/SEI.php ]; then \
+	echo "$(MENSAGEM_AVISO_FONTES)\n" ; \
+	exit 1 ; \
+	fi
+
+check-module-config:
+	@docker cp utils/verificar_modulo.php $(shell docker ps --format "{{.Names}}" | grep httpd):/
+	$(CMD_COMPOSE_FUNC) exec -T httpd bash -c "php /verificar_modulo.php" ; ret=$$?; echo "$$ret"; if [ ! $$ret -eq 0 ]; then echo "$(MENSAGEM_AVISO_MODULO)\n"; exit 1; fi
 
 check-super-isalive: ## Target de apoio. Acessa o Super e verifica se esta respondendo a tela de login
 	@echo ""
-	@echo "$(WARNING)Aguardando inicialização do ambiente de desenvolvimento...$(NC)"
-	@for i in `seq 1 10`; do \
-	    echo "Tentativa $$i/10";  \
-		if $(CMD_CURL_SUPER_LOGIN); then \
-				echo 'Página de login carregada!' ; \
-				break ; \
-		fi; \
-		sleep 5; \
-	done; \
-	if ! $(CMD_CURL_SUPER_LOGIN); then echo '$(ERROR)Ambiente de desenvolvimento não pôde ser carregado corretamente.$(NC)'; exit 1 ; fi;
+	@echo "Vamos tentar acessar a pagina de login do $(sistema), vamos aguardar por 45 segs."
+	@for number in 1 2 3 4 5 6 7 8 9 ; do \
+	    echo 'Tentando acessar...'; var=$$(echo $$($(CMD_CURL_SUPER_LOGIN))); \
+			if [ "$$var" != "" ]; then \
+					echo 'Pagina respondeu com tela de login' ; \
+					break ; \
+			else \
+			    echo 'Aguardando resposta ...'; \
+			fi; \
+			sleep 5; \
+	done
 
+prerequisites-modulo-instalar: check-super-path check-module-config check-super-isalive
 
-install: ## Instala e atualiza as tabelas do módulo na base de dados do sistema
-	docker-compose exec -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SEI_MODULO)"; true
-	docker-compose exec -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SIP_MODULO)"; true 
-	@echo ""
+install: prerequisites-modulo-instalar ## Instala e atualiza as tabelas do módulo na base de dados do sistema
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sei/scripts/ httpd bash -c "$(CMD_ATUALIZACAO_SEQ_SEI)"; true
+	$(CMD_COMPOSE_FUNC) exec -T -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SEI_MODULO)";
+	$(CMD_COMPOSE_FUNC) exec -T -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SIP_MODULO)";
 	@echo "==================================================================================================="
-	@if ! grep -q ProtocoloIntegradoIntegracao "$(ARQUIVO_CONFIG_SEI)" ; then echo '$(MENSAGEM_AVISO_MODULO)\n'; fi
-	@if echo "$(MSG_ORIENTACAO_CONFIGRACAO)" | grep -qw "$(PROTOCOLO_INTEGRADO_LOGIN)" ; then echo '$(MENSAGEM_AVISO_ENV)\n'; fi
 	@echo ""
 	@echo "Fim da instalação do módulo"
 
 
 update: ## Atualiza banco de dados através dos scripts de atualização do sistema
-	docker-compose run --rm -w /opt/sei/scripts/ httpd bash -c "$(CMD_INSTALACAO_SEI)"; true
-	docker-compose run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_SIP)"; true
-	docker-compose run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sei/scripts/ httpd sh -c "$(CMD_INSTALACAO_SEI)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sip/scripts/ httpd sh -c "$(CMD_INSTALACAO_SIP)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sip/scripts/ httpd sh -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
 
+prerequisites-up: .env .modulo.env check-super-path
 
-up: up-backgound  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
+up: prerequisites-up  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
+	$(CMD_COMPOSE_FUNC) up -d 
+	make check-super-isalive
 
-
-up-backgound: .env .modulo.env  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
+up-backgound: .env ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
 	@if [ ! -f ".env" ]; then cp envs/$(base).env .env; fi
 	docker-compose up -d
 	make check-super-isalive
@@ -116,14 +160,23 @@ config:  ## Configura o ambiente para outro banco de dados (mysql|sqlserver|orac
 down:   ## Interrompe execução do ambiente de desenvolvimento local em docker
 	docker-compose down
 
-
 restart: down up ## Reinicia execução do ambiente de desenvolvimento local em docker
 
-
-destroy:   ## Destrói ambiente de desenvolvimento local, junto com os dados armazenados em banco de dados
-	docker-compose down --volumes
-
+destroy: prerequisites-up  ## Destrói ambiente de desenvolvimento local, junto com os dados armazenados em banco de dados
+	$(CMD_COMPOSE_FUNC) down --volumes
 
 help:
 	@echo "Usage: make [target] ... \n"
 	@grep -E '^[a-zA-Z_-]+[[:space:]]*:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+test-functional-pi: .env $(FILE_VENDOR_FUNCIONAL) up vendor
+	$(CMD_COMPOSE_FUNC) run --rm php-test-functional /tests/vendor/bin/phpunit -c /tests/phpunit.xml /tests/tests/$(addsuffix .php,$(teste)) ;
+
+$(FILE_VENDOR_FUNCIONAL): ## target de apoio verifica se o build do phpunit foi feito e executa apenas caso n exista
+	make install-phpunit-vendor
+
+install-phpunit-vendor: ## instala os pacotes composer referentes aos testes via phpunit
+	$(CMD_COMPOSE_FUNC) -f $(PI_TEST_FUNC)/docker-compose.yaml run --rm -w /tests php-test-functional bash -c './composer.phar install'
+
+vendor: composer.json
+	$(CMD_COMPOSE_FUNC) run -w /tests php-test-functional bash -c './composer.phar install'

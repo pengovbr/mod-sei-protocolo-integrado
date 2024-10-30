@@ -5,6 +5,8 @@
 define("VERSAO_MODULO_PI", "3.0.0");
 
 class ProtocoloIntegradoIntegracao extends SeiIntegracao {
+  
+    const VERSAO_MODULO = "3.0.0"; 
       
     public function getNome() {
         return 'Protocolo Integrado';
