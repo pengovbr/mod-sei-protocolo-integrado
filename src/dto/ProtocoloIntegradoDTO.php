@@ -10,7 +10,7 @@ class ProtocoloIntegradoDTO extends InfraDTO {
     }
 
     public function montar() {
-        //Adriano - MPOG - tratamento para identificadores de campos ficarem com atÃ© 30 posiÃ§Ãµes.
+        //Adriano - MPOG - tratamento para identificadores de campos ficarem com até 30 posições.
         $this->adicionarAtributoTabela(InfraDTO::$PREFIXO_NUM, 'IdProtocoloIntegrado', 'id_md_pi_mensagem');
         $this->adicionarAtributoTabela(InfraDTO::$PREFIXO_NUM, 'IdTarefa', 'id_tarefa');
         $this->adicionarAtributoTabela(InfraDTO::$PREFIXO_STR, 'SinPublicar', 'sin_publicar');

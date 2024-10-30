@@ -1,10 +1,10 @@
 <?
 
 /**
- * Arquivo de configuraÃ§Ã£o do MÃ³dulo de IntegraÃ§Ã£o do SEI com o Protocolo Integrado do Governo Federal
+ * Arquivo de configuração do Módulo de Integração do SEI com o Protocolo Integrado do Governo Federal
  *
- * Seu desenvolvimento seguiu os mesmos padrÃµes de configuraÃ§Ã£o implementado pelo SEI e SIP e este
- * arquivo precisa ser adicionado Ã  pasta de configuraÃ§Ãµes do SEI para seu correto carregamento pelo mÃ³dulo.
+ * Seu desenvolvimento seguiu os mesmos padrões de configuração implementado pelo SEI e SIP e este
+ * arquivo precisa ser adicionado à pasta de configurações do SEI para seu correto carregamento pelo módulo.
  */
 
 class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
@@ -12,7 +12,7 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
 	private static $instance = null;
 
     /**
-     * ObtÃ©m instÃ¢ncia Ãºnica (singleton) dos dados de configuraÃ§Ã£o do mÃ³dulo de integraÃ§Ã£o
+     * Obtém instância única (singleton) dos dados de configuração do módulo de integração
      *
      *
      * @return ConfiguracaoModProtocoloIntegrado
@@ -26,7 +26,7 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
 	}
 
     /**
-     * DefiniÃ§Ã£o dos parÃ¢metroÃºde configuraÃ§Ã£o do mÃ³dulo
+     * Definição dos parâmetroúde configuração do módulo
      *
      * @return array
      */
@@ -35,40 +35,40 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
         return array(
             "ProtocoloIntegrado" => array(
 
-                // EndereÃ§o da nova Api de integraÃ§Ã£o com o Protocolo Integrado
-                // Os endereÃ§os disponÃ­veis sÃ£o os seguintes (verifique se houve atualizaÃ§Ãµes durante o procedimento de instalaÃ§Ã£o):
-                //    - HomologaÃ§Ã£o: https://protocolointegrado.preprod.nuvem.gov.br/ ??
-                //    - ProduÃ§Ã£o: https://protocolointegrado.gov.br/ ??
+                // Endereço da nova Api de integração com o Protocolo Integrado
+                // Os endereços disponíveis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
+                //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ ??
+                //    - Produção: https://protocolointegrado.gov.br/ ??
                 "ApiRest" => "",
 
-                // Login do usuÃ¡rio a ser utilizado na autenticaÃ§Ã£o com a Api Rest
+                // Login do usuário a ser utilizado na autenticação com a Api Rest
                 "UsuarioApiRest" => "",
 
-                // Senha do usuÃ¡rio a ser utilizado na autenticaÃ§Ã£o com a Api Rest
+                // Senha do usuário a ser utilizado na autenticação com a Api Rest
                 "SenhaApiRest" => "",
 
-                // EndereÃ§o do Web Service principal de integraÃ§Ã£o com o Protocolo Integrado
-                // Os endereÃ§os disponÃ­veis sÃ£o os seguintes (verifique se houve atualizaÃ§Ãµes durante o procedimento de instalaÃ§Ã£o):
-                //    - HomologaÃ§Ã£o: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
-                //    - ProduÃ§Ã£o: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
+                // Endereço do Web Service principal de integração com o Protocolo Integrado
+                // Os endereços disponíveis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
+                //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
+                //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
                 "WebService" => "",
 
-                // Login do usuÃ¡rio a ser utilizado na autenticaÃ§Ã£o com o Webservice
+                // Login do usuário a ser utilizado na autenticação com o Webservice
                 "UsuarioWebService" => "",
 
-                // Senha do usuÃ¡rio a ser utilizado na autenticaÃ§Ã£o com o Webservice
+                // Senha do usuário a ser utilizado na autenticação com o Webservice
                 "SenhaWebService" => "",
 
-                // NÃºmero de Tentativas para Reenvio dos Metadados
-                // Quando o envio de processos para o Protocolo Integrado for malsucedido, o mÃ³dulo tentarÃ¡ reenviÃ¡-los respeitando 
+                // Número de Tentativas para Reenvio dos Metadados
+                // Quando o envio de processos para o Protocolo Integrado for malsucedido, o módulo tentará reenviá-los respeitando 
                 // a quantidade de vezes especificada abaixo. 
                 "TentativasReenvio" => 15,
 
-                // NÃºmero mÃ¡ximo de andamentos a enviar por vez
-                // Quando o agendamento for executado, este parÃ¢metro utilizado como nÃºmero mÃ¡ximo de andamentos de processos a ser enviado.
+                // Número máximo de andamentos a enviar por vez
+                // Quando o agendamento for executado, este parâmetro utilizado como número máximo de andamentos de processos a ser enviado.
                 "QuantidadeAndamentosEnvio" => 100000,
 
-                // Publicar informaÃ§Ãµes sobre processos restritos
+                // Publicar informações sobre processos restritos
                 "PublicarProcessosRestritos" => false
             )
         );

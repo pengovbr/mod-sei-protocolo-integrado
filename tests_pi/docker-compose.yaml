@@ -1,9 +1,5 @@
 version: '2'
 services:
-  #jod:  
-  #  image: processoeletronico/vagrant_sei4_jod:${ENVIRONMENT_VERSION}
-  #  container_name: jod
-
   #smtp:
   #  image: processoeletronico/vagrant_sei4_mailcatcher:${ENVIRONMENT_VERSION}
   #  container_name: smtp
@@ -40,9 +36,6 @@ services:
     image: ${DATABASE_IMAGE}:${ENVIRONMENT_VERSION}
     environment:
       MYSQL_ROOT_PASSWORD: P@ssword
-    volumes:
-      - ${DATABASE_HOST}:${DATABASE_DATA_DIR}
-      #- /var/sei/backup/${DATABASE_HOST}:/backup
     ports:
       - ${DATABASE_PORT}:${DATABASE_PORT}
 
@@ -63,9 +56,9 @@ services:
       - ${SEI_PATH}/sip:/opt/sip
       - ${SEI_PATH}/infra:/opt/infra
       - ../src:/opt/sei/web/modulos/protocolo-integrado
-      - ../src/config:/opt/sei/config/mod-protocolo-integrado
-      - ../src/scripts:/opt/sei/scripts/mod-protocolo-integrado
-      - ../src/scripts:/opt/sip/scripts/mod-protocolo-integrado
+      - ../src/config:/opt/sei/config/protocolo-integrado
+      - ../src/scripts:/opt/sei/scripts/protocolo-integrado
+      - ../src/scripts:/opt/sip/scripts/protocolo-integrado
       - ../src/config/ConfiguracaoSEI.php:/opt/sei/config/ConfiguracaoSEI.php
       - ../src/config/ConfiguracaoSip.php:/opt/sip/config/ConfiguracaoSip.php
 
@@ -106,19 +99,19 @@ services:
       - ${SEI_PATH}/sei:/opt/sei
       - ${SEI_PATH}/sip:/opt/sip
       - ${SEI_PATH}/infra:/opt/infra
-      - ../src:/opt/sei/web/modulos/gestao-documental
-      - ../src/config:/opt/sei/config/mod-protocolo-integrado
-      - ../src/scripts:/opt/sei/scripts/mod-protocolo-integrado
-      - ../src/scripts:/opt/sip/scripts/mod-protocolo-integrado
+      - ../src:/opt/sei/web/modulos/protocolo-integrado
+      - ../src/config:/opt/sei/config/protocolo-integrado
+      - ../src/scripts:/opt/sei/scripts/protocolo-integrado
+      - ../src/scripts:/opt/sip/scripts/protocolo-integrado
       - ../src/config/ConfiguracaoSEI.php:/opt/sei/config/ConfiguracaoSEI.php:ro
       - ../src/config/ConfiguracaoSip.php:/opt/sip/config/ConfiguracaoSip.php:ro
 
       - ./:/tests
       - ${SEI_PATH}/../tests:/tests/sei
       - ${SEI_PATH}/:/tests/sei/src
-      - ../src/config/:/tests/sei/src/sei/config/mod-protocolo-integrado
+      - ../src/config/:/tests/sei/src/sei/config/protocolo-integrado
       - ../src/config/ConfiguracaoSEI.php:/tests/sei/src/sei/config/ConfiguracaoSEI.php:ro
-      - ../src:/tests/sei/src/sei/web/modulos/gestao-documental
+      - ../src:/tests/sei/src/sei/web/modulos/protocolo-integrado
 
       - ./src/fixtures:/tests/sei/modpi/fixtures
       - ../src/dto:/tests/sei/modpi/dto
@@ -154,7 +147,3 @@ services:
         - database:${DATABASE_HOST}
         - selenium:selenium
       command: "true"
-volumes:
-  mysql:
-  oracle:
-  sqlserver:

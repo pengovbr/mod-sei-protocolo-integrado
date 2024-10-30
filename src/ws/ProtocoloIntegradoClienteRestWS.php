@@ -47,7 +47,7 @@ class ProtocoloIntegradoClienteRestWS {
 		$autentica = $this->autenticarPorOrgao();
 
 		if ($autentica===false) {
-			throw new InfraException("NÃ£o foi possÃ­vel testar a Api do Protocolo Integrado");
+			throw new InfraException("Não foi possível testar a Api do Protocolo Integrado");
 		}
 
 	}
@@ -126,7 +126,7 @@ class ProtocoloIntegradoClienteRestWS {
 			if (isset($data['quantidade'])) {
 				echo "Quantidade: " . $data['quantidade'];
 			} else {
-				echo "Quantidade nÃ£o retornada na resposta.";
+				echo "Quantidade não retornada na resposta.";
 			}		
 		
 			curl_close($ch);
@@ -181,7 +181,7 @@ class ProtocoloIntegradoClienteRestWS {
 	
 			return $data;
 	  	} catch(Exception $e) {
-	  	  	error_log('Exceï¿½ï¿½o:'.$e->getMessage());
+	  	  	error_log('Exceção: '.$e->getMessage());
 	      	return $e;
 	    }
 

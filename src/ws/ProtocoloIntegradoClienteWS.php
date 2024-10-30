@@ -69,25 +69,25 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 		curl_close($ch);
 
 		if (stripos( $this->url,"?wsdl")===false) {
-			throw new InfraException("Endereï¿½o do serviï¿½o invï¿½lido ou serviï¿½o fora do ar.
-							Verifique se este endereï¿½o estï¿½ corretamente informado nos parï¿½metros de integraï¿½ï¿½o ao Protocolo Integrado.",$e);
+			throw new InfraException("Endereço do serviço inválido ou serviço fora do ar.
+							Verifique se este endereço está corretamente informado nos parámetros de integração ao Protocolo Integrado.",$e);
 		}
 
 		if ($curl_errno) {
-			$e =  new Exception($header."Requisiï¿½ï¿½o CURL resultou no seguinte erro: " . $curl_error . "(Cï¿½digo: " . $curl_errno . ")");
+			$e =  new Exception($header."Requisição CURL resultou no seguinte erro: " . $curl_error . "(Código: " . $curl_errno . ")");
 			if ($curl_errno == 60) {
-			    throw new InfraException("Certificado invï¿½lido ou ausente.",$e);
+			    throw new InfraException("Certificado inválido ou ausente.",$e);
 			} else {
-				throw new InfraException("Ocorreu um problema ao realizar a conexï¿½o ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes", $e);
+				throw new InfraException("Ocorreu um problema ao realizar a conexão ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes", $e);
 			}
 		} else {
 			if ($httpCode!=200) {
 				if (strlen($header)>0) {
 					$e = new Exception($header);
 				} else {
-					$e = new Exception("503 Service Unavailable.Nï¿½o foi possï¿½vel conectar ao servidor");
+					$e = new Exception("503 Service Unavailable.Não foi possível conectar ao servidor");
 				}
-				throw new InfraException("Ocorreu um problema ao realizar a conexï¿½o ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes.", $e);
+				throw new InfraException("Ocorreu um problema ao realizar a conexão ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes.", $e);
 			}
 		}
 

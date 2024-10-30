@@ -8,8 +8,8 @@ class ProtocoloIntegradoBD extends InfraBD {
         parent::__construct( $objInfraIBanco );
     }
      /**
-	  ** Fun√ß√£o Criada para recuperar o nome chaves estrangeiras em base Mysql da tabela de pacote
-	  ** Dependendo da vers√£o a rodar o script de atualiza√ß√£o para 1.1.3,a foreign key ter√° nomes diferentes.
+	  ** FunÁ„o Criada para recuperar o nome chaves estrangeiras em base Mysql da tabela de pacote
+	  ** Dependendo da vers„o a rodar o script de atualizaÁ„o para 1.1.3,a foreign key ter· nomes diferentes.
 	  ** 
 	**/
 	public function recuperarChavesEstrangeirasv112(){

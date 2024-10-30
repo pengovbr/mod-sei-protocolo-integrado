@@ -32,7 +32,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			return $ret;
 			
 		} catch(Exception $e) {
-			throw new InfraException('Erro ao listar atividades monitoradas para publica√ß√£o no Protocolo Integrado.', $e);
+			throw new InfraException('Erro ao listar atividades monitoradas para publicaÁ„o no Protocolo Integrado.', $e);
 		}
 		
 	}
@@ -54,7 +54,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			return $ret;
 			
 		} catch(Exception $e) {
-			throw new InfraException('Erro ao listar atividades monitoradas para publica√ß√£o no Protocolo Integrado.', $e);
+			throw new InfraException('Erro ao listar atividades monitoradas para publicaÁ„o no Protocolo Integrado.', $e);
 		}
 		
 	} 
@@ -76,7 +76,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			return $ret;
 
 		} catch(Exception $e) {
-			throw new InfraException('Erro Consultando Atividades monitoradas para publica√ß√£o no Protocolo Integrado.', $e);
+			throw new InfraException('Erro Consultando Atividades monitoradas para publicaÁ„o no Protocolo Integrado.', $e);
 		}
 		
 	}
@@ -98,7 +98,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			return $ret;
 
 		} catch(Exception $e) {
-			throw new InfraException('Erro Consultando Atividades monitoradas para publica√ß√£o no Protocolo Integrado.', $e);
+			throw new InfraException('Erro Consultando Atividades monitoradas para publicaÁ„o no Protocolo Integrado.', $e);
 		}
 		
 	}
@@ -116,7 +116,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			$objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
 			$objProtocoloIntegradoParametrosDTO->retTodos();
 	
-			InfraDebug::getInstance()->gravar('Buscando Configura√ß√£o de Publica√ß√£o no Protocolo Integrado');
+			InfraDebug::getInstance()->gravar('Buscando ConfiguraÁ„o de PublicaÁ„o no Protocolo Integrado');
 			$objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
 			$objRetorno = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
 	
@@ -125,7 +125,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			
 			$this->cadastrarAtividadesIntegracao($objRetorno->getNumAtividadesCarregar());
 			
-			InfraDebug::getInstance()->gravar('Publicando Metadados e Opera√ß√µes dos Processos no Protocolo Integrado');
+			InfraDebug::getInstance()->gravar('Publicando Metadados e OperaÁıes dos Processos no Protocolo Integrado');
 			$arrParam = array();
 			$arrParam[0] = $objRetorno;
 			$arrParam[1] = null;
@@ -167,7 +167,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			$objBD->cadastrar($protocoloIntegradoMonitoramentoProcessosDTO);
 
 		} catch(Exception $e) {
-			throw new InfraException('Erro Cadastrando atividades monitoradas para publica√ß√£o no Protocolo Integrado.', $e);
+			throw new InfraException('Erro Cadastrando atividades monitoradas para publicaÁ„o no Protocolo Integrado.', $e);
 		}
 		
 	}
@@ -255,7 +255,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			}
 
 		} catch(Exception $e) {
-			throw new InfraException('Erro ao cadastrar Atividades que ser√£o enviadas ao Protocolo Integrado .', $e);
+			throw new InfraException('Erro ao cadastrar Atividades que ser„o enviadas ao Protocolo Integrado .', $e);
 		}
 		$tempo2 = time();
 		
@@ -317,7 +317,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 	protected function alterarControlado($arrParam) {}
 
 	public function getSituacoesIntegracao() {
-		$strItensSelSituacoesIntegracoes = array('' => 'Todos', ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO => 'N√£o Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO => 'Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL => 'Erro Negocial', ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA => 'Falha Infra');
+		$strItensSelSituacoesIntegracoes = array('' => 'Todos', ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO => 'N„o Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO => 'Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL => 'Erro Negocial', ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA => 'Falha Infra');
         return $strItensSelSituacoesIntegracoes;
 	}
 	
@@ -409,22 +409,22 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 					}
 				}
 			}
-            // Adriano MPOG - tratando novos IDs de tamanho m√°ximo de 30 posi√ß√µes
+            // Adriano MPOG - tratando novos IDs de tamanho m·ximo de 30 posiÁıes
 			$strSqlNativo .= " md_pi_pacote_envio.id_protocolo IN (select id_protocolo from protocolo p where p.id_unidade_geradora IN (".$strUnidades.")) AND ";
 		} 
-		//Adriano -MPOG - fazendo altera√ß√µes para ficar multibancos o tratamento do formato de data
-		//Se campo inicial da data de gera√ß√£o do processo est√° preenchido
+		//Adriano -MPOG - fazendo alteraÁıes para ficar multibancos o tratamento do formato de data
+		//Se campo inicial da data de geraÁ„o do processo est· preenchido
 		if (isset($filtro['filtroTxtPeriodoGeracaoDe']) && $filtro['filtroTxtPeriodoGeracaoDe'] != '') {
 
 			$strDataInicio = $filtro['filtroTxtPeriodoGeracaoDe'];
 			
-			//C√≥digo provis√≥rio para tratar unifica√ß√£o dos fontes
+			//CÛdigo provisÛrio para tratar unificaÁ„o dos fontes
 			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
 			
 			$strDataInicialFormatada = $strDataInicio . " 00:00:00";
 			$strNovaDataInicial = $objBD->retornarFormatoData($strDataInicialFormatada);
 			
-			//Se campo final da data de gera√ß√£o do processo est√° preenchido
+			//Se campo final da data de geraÁ„o do processo est· preenchido
 			if (isset($filtro['filtroTxtPeriodoGeracaoA']) && $filtro['filtroTxtPeriodoGeracaoA'] != '') {
 				$strDataFim = $filtro['filtroTxtPeriodoGeracaoA'];
 				$strDataFinalFormatada = $strDataFim . " 23:59:59";
@@ -438,10 +438,10 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			}
 			
 		} else if (isset($filtro['filtroTxtPeriodoGeracaoA']) && $filtro['filtroTxtPeriodoGeracaoA'] != '') {
-			//Se apenas o segundo campo de data de gera√ß√£o do processo est√° preenchido, considera apenas os processos produzidos at√© aquela data
+			//Se apenas o segundo campo de data de geraÁ„o do processo est· preenchido, considera apenas os processos produzidos atÈ aquela data
 			$strDataFim = $filtro['filtroTxtPeriodoGeracaoA'];
 
-			//C√≥digo provis√≥rio para tratar unifica√ß√£o dos fontes
+			//CÛdigo provisÛrio para tratar unificaÁ„o dos fontes
 			$objBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
 				
 			$strDataFinalFormatada = $strDataFim . " 23:59:59";
@@ -608,13 +608,13 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		}else if (strlen(trim($senhaWebService)) > 0 && strlen(trim($loginWebService)) > 0) {
 			$conexaoCliente = new ProtocoloIntegradoClienteWS($urlWebService, $loginWebService, $senhaWebService, $opcoes);
 		} else {
-			throw new InfraException('Campos Login e Senha para Acesso ao WebService ou Api Rest devem ser informados na tela de Configura√ß√£o de Par√¢metros do Protocolo Integrado.', $e);
+			throw new InfraException('Campos Login e Senha para Acesso ao WebService ou Api Rest devem ser informados na tela de ConfiguraÁ„o de Par‚metros do Protocolo Integrado.', $e);
 		}
 
 		$retornoWS = $conexaoCliente->getQuantidadeMaximaDocumentosPorRequisicaoServidor();
 
 		if (!is_int($retornoWS->NumeroMaximoDocumentos)) {
-			throw new InfraException('N√£o foi Poss√≠vel Obter a  Quantidade M√°xima de Documentos no WebService do Protocolo Integrado.', $retornoWS);
+			throw new InfraException('N„o foi PossÌvel Obter a  Quantidade M·xima de Documentos no WebService do Protocolo Integrado.', $retornoWS);
 		}
 
 		$quantidadeMaximaDocumentos = $retornoWS->NumeroMaximoDocumentos;
@@ -1140,14 +1140,14 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				$strEmailSistema = $objInfraParametro->getValor('SEI_EMAIL_SISTEMA');
 				$strEmailAdministrador = $objInfraParametro->getValor('SEI_EMAIL_ADMINISTRADOR');
 		
-				$strMensagem = 'Prezado Administrador de Integra√ß√£o, <br />';
-				$strMensagem .= 'H√° '.$diffDias.' dias n√£o h√° envio de informa√ß√µes ao Protocolo Integrado. Favor verificar ';
-				$strMensagem .= 'se os par√¢metros informados na integra√ß√£o est√£o corretos, tais como: login e senha para conex√£o ao webservice, endere√ßo ';
-				$strMensagem .= 'de conex√£o ao webservice e agendamento no SEI do envio das informa√ß√µes.<br /><br /><br />';
+				$strMensagem = 'Prezado Administrador de IntegraÁ„o, <br />';
+				$strMensagem .= 'H· '.$diffDias.' dias n„o h· envio de informaÁıes ao Protocolo Integrado. Favor verificar ';
+				$strMensagem .= 'se os par·metros informados na integraÁ„o est„oo corretos, tais como: login e senha para conex„o ao webservice, endereÁo ';
+				$strMensagem .= 'de conexÁ„o ao webservice e agendamento no SEI do envio das informaÁıes.<br /><br /><br />';
 				$strMensagem .= 'Obrigado.<br />';
-				$strMensagem .= 'Sistema Eletr√¥nico de Informa√ß√µes.';
+				$strMensagem .= 'Sistema EletrÛnico de InformaÁıes.';
 				
-				$strAssunto = '[Plugin SEI-PI] H√° '.$diffDias.' dias n√£o h√° envio de informa√ß√µes ao Protocolo Integrado.';
+				$strAssunto = '[Plugin SEI-PI] H· '.$diffDias.' dias n„o h· envio de informaÁıes ao Protocolo Integrado.';
 				InfraMail::enviarConfigurado(ConfiguracaoSEI::getInstance(), $strEmailSistema, $strEmailAdministrador, null, null, $strAssunto, $strMensagem, 'text/html');
 			}
 		}
@@ -1187,19 +1187,19 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				$strEmailSistema = $objInfraParametro->getValor('SEI_EMAIL_SISTEMA');
 				$strEmailAdministrador = $objInfraParametro->getValor('SEI_EMAIL_ADMINISTRADOR');
 		
-				InfraDebug::getInstance()->gravar('Buscando Configura√ß√£o de Publica√ß√£o no Protocolo Integrado');
+				InfraDebug::getInstance()->gravar('Buscando ConfiguraÁ„o de PublicaÁ„o no Protocolo Integrado');
 				$objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
 				$objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
 				$objProtocoloIntegradoParametrosDTO->retDthDataUltimoProcessamento();
 				$objRetornoParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
 	
-				$strMensagem = 'Prezado Administrador de Integra√ß√£o,<br>Alguns processos n√£o puderam ser enviados ao protocolo integrado no √∫ltimo ciclo de integra√ß√£o realizado pelo SEI em ' . $objRetornoParametrosDTO->getDthDataUltimoProcessamento() . ' <br /> <br />';
-				$strMensagem .= '<' . count($arrPacotesFalhaInfra) . '>' . 'Processos n√£o enviados por erro de infraestrutura <br />';
-				$strMensagem .= '<' . count($arrPacotesErroNegocial) . '>' . 'Processos n√£o enviados por erro negocial <br /> <br />';
+				$strMensagem = 'Prezado Administrador de IntegraÁ„o,<br>Alguns processos n„o puderam ser enviados ao protocolo integrado no ˙ltimo ciclo de integraÁ„o realizado pelo SEI em ' . $objRetornoParametrosDTO->getDthDataUltimoProcessamento() . ' <br /> <br />';
+				$strMensagem .= '<' . count($arrPacotesFalhaInfra) . '>' . 'Processos n„o enviados por erro de infraestrutura <br />';
+				$strMensagem .= '<' . count($arrPacotesErroNegocial) . '>' . 'Processos n„o enviados por erro negocial <br /> <br />';
 				$strMensagem .= 'Favor observar a tabela de monitoramento do SEI para maiores detalhes.  <br />';
 				$strMensagem .= 'Obrigado. <br /> <br />';
-				$strMensagem .= 'Sistema Eletr√¥nico de Informa√ß√µes';
-				$strAssunto = '[Plugin SEI-PI] Processos n√£o integrados no √∫ltimo ciclo ';
+				$strMensagem .= 'Sistema EletrÛnico de InformaÁıes';
+				$strAssunto = '[Plugin SEI-PI] Processos n„o integrados no ˙ltimo ciclo ';
 				InfraMail::enviarConfigurado(ConfiguracaoSEI::getInstance(), $strEmailSistema, $strEmailAdministrador, null, null, $strAssunto, $strMensagem, 'text/html');
 			} 
 		}
