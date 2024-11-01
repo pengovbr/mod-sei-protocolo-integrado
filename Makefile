@@ -58,14 +58,14 @@ up: .env .modulo.env ## Inicia ambiente de desenvolvimento local (docker)
 	make check-super-isalive
 
 update: ## Atualiza banco de dados através dos scripts de atualização do sistema
-	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sei/scripts/ httpd sh -c "$(CMD_INSTALACAO_SEI)"; true
-	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sip/scripts/ httpd sh -c "$(CMD_INSTALACAO_SIP)"; true
-	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sip/scripts/ httpd sh -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sei/scripts/ org-http sh -c "$(CMD_INSTALACAO_SEI)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sip/scripts/ org-http sh -c "$(CMD_INSTALACAO_SIP)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sip/scripts/ org-http sh -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
 
 install: check-super-isalive ## Instala e atualiza as tabelas do módulo na base de dados do sistema
-	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sei/scripts/ httpd bash -c "$(CMD_ATUALIZACAO_SEQ_SEI)"; true
-	$(CMD_COMPOSE_FUNC) exec -T -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SEI_MODULO)";
-	$(CMD_COMPOSE_FUNC) exec -T -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SIP_MODULO)";
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sei/scripts/ org-http bash -c "$(CMD_ATUALIZACAO_SEQ_SEI)"; true
+	$(CMD_COMPOSE_FUNC) exec -T -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) org-http bash -c "$(CMD_INSTALACAO_SEI_MODULO)";
+	$(CMD_COMPOSE_FUNC) exec -T -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) org-http bash -c "$(CMD_INSTALACAO_SIP_MODULO)";
 	@echo "==================================================================================================="
 	@echo ""
 	@echo "Fim da instalação do módulo"
@@ -104,8 +104,8 @@ down: .env .modulo.env ## Interrompe execução do ambiente de desenvolvimento l
 	$(CMD_COMPOSE_FUNC) stop
 
 check-module-config:
-	@docker cp utils/verificar_modulo.php $(shell docker ps --format "{{.Names}}" | grep httpd):/
-	$(CMD_COMPOSE_FUNC) exec -T httpd bash -c "php /verificar_modulo.php" ; exit 1; fi
+	@docker cp utils/verificar_modulo.php $(shell docker ps --format "{{.Names}}" | grep org-http):/
+	$(CMD_COMPOSE_FUNC) exec -T org-http bash -c "php /verificar_modulo.php" ; exit 1; fi
 
 test-functional-pi: .env $(FILE_VENDOR_FUNCIONAL) up vendor
 	$(CMD_COMPOSE_FUNC) run --rm php-test-functional /tests/vendor/bin/phpunit -c /tests/phpunit.xml /tests/tests/$(addsuffix .php,$(teste)) ;

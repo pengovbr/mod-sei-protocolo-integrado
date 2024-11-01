@@ -1,10 +1,11 @@
 version: '2'
+
 services:
-  #smtp:
-  #  image: processoeletronico/vagrant_sei4_mailcatcher:${ENVIRONMENT_VERSION}
-  #  container_name: smtp
-  #  ports:
-  #    - "1080:1080"
+
+  smtp:
+    image: processoeletronico/vagrant_super4_mailcatcher:${ENVIRONMENT_VERSION}
+    ports:
+      - "1080:1080"
 
   memcached:
     image: processoeletronico/vagrant_sei4_memcached:${ENVIRONMENT_VERSION}
@@ -18,7 +19,7 @@ services:
     volumes:
       - ./assets/proxy/:/opt/proxy-conf
     links:
-      - httpd:org-http
+      - org-http:org-http
 
   selenium:
     image: selenium/standalone-chrome-debug
@@ -29,11 +30,11 @@ services:
       - "5900:5900"
     volumes:
       - /dev/shm:/dev/shm
-      # - ./assets/arquivos/test_files_index.txt:/test_files_index.txt
       - /tmp:/tmp
 
   database:
     image: ${DATABASE_IMAGE}:${ENVIRONMENT_VERSION}
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: P@ssword
     ports:
@@ -44,24 +45,24 @@ services:
     ports:
       - "8983:8983"
 
-  httpd:
+  org-http:
     image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
     restart: always
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     depends_on: 
       - database
+    env_file:
+      - .modulo.env
     volumes:
       - ${SEI_PATH}/sei:/opt/sei
       - ${SEI_PATH}/sip:/opt/sip
       - ${SEI_PATH}/infra:/opt/infra
       - ../src:/opt/sei/web/modulos/protocolo-integrado
-      - ../src/config:/opt/sei/config/protocolo-integrado
       - ../src/scripts:/opt/sei/scripts/protocolo-integrado
       - ../src/scripts:/opt/sip/scripts/protocolo-integrado
-      - ../src/config/ConfiguracaoSEI.php:/opt/sei/config/ConfiguracaoSEI.php
-      - ../src/config/ConfiguracaoSip.php:/opt/sip/config/ConfiguracaoSip.php
-
+      - ../src/config:/opt/sei/config/protocolo-integrado
+      - ../src/config/ConfiguracaoSEI.php:/opt/sei/config/ConfiguracaoSEI.php:ro
+      - ../src/config/ConfiguracaoSip.php:/opt/sip/config/ConfiguracaoSip.php:ro
+      - .:/project
     environment:
       - LANG=pt_BR.ISO-8859-1
       - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003 start_with_request=0
@@ -83,19 +84,19 @@ services:
       - SIP_DATABASE_USER=${SIP_DATABASE_USER}
       - SIP_DATABASE_PASSWORD=${SIP_DATABASE_PASSWORD}
       - SIP_DSN=${SIP_DSN}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     links:
-      - database:${DATABASE_HOST}
       - memcached:memcached
-      - solr:solr
-      #- smtp:smtp
-      #- jod:jod
+      - database:${DATABASE_HOST}
+      - smtp:smtp
 
   php-test-functional:
-      image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
-      depends_on:
-        - database
-        - selenium
-      volumes:
+    image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
+    depends_on:
+      - database
+      - selenium
+    volumes:
       - ${SEI_PATH}/sei:/opt/sei
       - ${SEI_PATH}/sip:/opt/sip
       - ${SEI_PATH}/infra:/opt/infra
@@ -105,45 +106,39 @@ services:
       - ../src/scripts:/opt/sip/scripts/protocolo-integrado
       - ../src/config/ConfiguracaoSEI.php:/opt/sei/config/ConfiguracaoSEI.php:ro
       - ../src/config/ConfiguracaoSip.php:/opt/sip/config/ConfiguracaoSip.php:ro
-
+      - .:/project
       - ./:/tests
       - ${SEI_PATH}/../tests:/tests/sei
       - ${SEI_PATH}/:/tests/sei/src
       - ../src/config/:/tests/sei/src/sei/config/protocolo-integrado
       - ../src/config/ConfiguracaoSEI.php:/tests/sei/src/sei/config/ConfiguracaoSEI.php:ro
       - ../src:/tests/sei/src/sei/web/modulos/protocolo-integrado
-
       - ./src/fixtures:/tests/sei/modpi/fixtures
       - ../src/dto:/tests/sei/modpi/dto
       - ../src/bd:/tests/sei/modpi/bd
-
-      environment:
-        - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003 start_with_request=0
-        - XDEBUG_SESSION=default
-        - XDEBUG_MODE=debug   
-        - LANG=pt_BR.ISO-8859-1
-        - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003 start_with_request=0
-        - XDEBUG_SESSION=default
-        - XDEBUG_MODE=debug
-        - HOST_URL=${SEI_HOST}
-        - DATABASE_TYPE=${DATABASE_TYPE}
-        - DATABASE_HOST=${DATABASE_HOST}
-        - DATABASE_PORT=${DATABASE_PORT}
-       
-        - SEI_CHAVE_ACESSO=${SEI_CHAVE_ACESSO}
-        - SEI_DATABASE_NAME=${SEI_DATABASE_NAME}
-        - SEI_DATABASE_USER=${SEI_DATABASE_USER}
-        - SEI_DATABASE_PASSWORD=${SEI_DATABASE_PASSWORD}
-        - SEI_DSN=${SEI_DSN}
-
-        - SIP_CHAVE_ACESSO=${SIP_CHAVE_ACESSO}
-        - SIP_DATABASE_NAME=${SIP_DATABASE_NAME}
-        - SIP_DATABASE_USER=${SIP_DATABASE_USER}
-        - SIP_DATABASE_PASSWORD=${SIP_DATABASE_PASSWORD}
-        - SIP_DSN=${SIP_DSN}
-      extra_hosts:
+    environment:
+      - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003 start_with_request=0
+      - XDEBUG_SESSION=default
+      - XDEBUG_MODE=debug   
+      - LANG=pt_BR.ISO-8859-1
+      - HOST_URL=${SEI_HOST}
+      - DATABASE_TYPE=${DATABASE_TYPE}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - SEI_CHAVE_ACESSO=${SEI_CHAVE_ACESSO}
+      - SEI_DATABASE_NAME=${SEI_DATABASE_NAME}
+      - SEI_DATABASE_USER=${SEI_DATABASE_USER}
+      - SEI_DATABASE_PASSWORD=${SEI_DATABASE_PASSWORD}
+      - SEI_DSN=${SEI_DSN}
+      - SIP_CHAVE_ACESSO=${SIP_CHAVE_ACESSO}
+      - SIP_DATABASE_NAME=${SIP_DATABASE_NAME}
+      - SIP_DATABASE_USER=${SIP_DATABASE_USER}
+      - SIP_DATABASE_PASSWORD=${SIP_DATABASE_PASSWORD}
+      - SIP_DSN=${SIP_DSN}
+    extra_hosts:
       - "host.docker.internal:host-gateway"
-      links:
-        - database:${DATABASE_HOST}
-        - selenium:selenium
-      command: "true"
+    links:
+      - database:${DATABASE_HOST}
+      - selenium:selenium
+      - smtp:smtp
+    command: "true"

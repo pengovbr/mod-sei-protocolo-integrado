@@ -316,43 +316,47 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 	protected function alterarControlado($arrParam) {}
 
-	public function getSituacoesIntegracao() {
-		$strItensSelSituacoesIntegracoes = array('' => 'Todos', ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO => 'Não Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO => 'Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL => 'Erro Negocial', ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA => 'Falha Infra');
-        return $strItensSelSituacoesIntegracoes;
-	}
-	
-	public function getUnidadesGeradoras() {
+  public function getSituacoesIntegracao()
+  {
+    $strItensSelSituacoesIntegracoes = array('' => 'Todos', ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO => 'Não Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO => 'Integrado', ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL => 'Erro Negocial', ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA => 'Falha Infra');
+    return $strItensSelSituacoesIntegracoes;
+  }
 
-		$objInfraSip = new InfraSip(SessaoSEI::getInstance());
+  public function getUnidadesGeradoras()
+  {
+    $objInfraSip = new InfraSip(SessaoSEI::getInstance());
 
-		$ret = $objInfraSip->carregarUnidades(SessaoSEI::getInstance()->getNumIdSistema());
-		$arrUnidadesSip = array();
+    $ret = $objInfraSip->carregarUnidades(SessaoSEI::getInstance()->getNumIdSistema());
+    $arrUnidadesSip = array();
 
-		$srtSeparador = ":UNI:";
-		$strItensUnidadesCompacto = array();
-		foreach ($ret as $uni) {
-			$numIdUnidade = $uni[InfraSip::$WS_UNIDADE_ID];
-			if ($numIdUnidade!='') {
-				$strItensUnidadesCompacto[$numIdUnidade]=$uni[InfraSip::$WS_UNIDADE_SIGLA].$srtSeparador.$numIdUnidade;		
-			}
-		}
-		sort($strItensUnidadesCompacto, SORT_STRING);
-		
-		$strItensUnidades = array();
-		$strItensUnidades[0]='*';
-		foreach ($strItensUnidadesCompacto as $uni=>$uni2) {
-			$strFragmentos = explode($srtSeparador, $uni2);
-			$strItensUnidades[$strFragmentos[1]] = $strFragmentos[0]; 
-		}
-		
-		return $strItensUnidades;
-	}
+    $srtSeparador = ":UNI:";
+    $strItensUnidadesCompacto = array();
+    foreach ($ret as $uni) {
+      $numIdUnidade = $uni[InfraSip::$WS_UNIDADE_ID];
+      if ($numIdUnidade != '') {
+        $strItensUnidadesCompacto[$numIdUnidade] = $uni[InfraSip::$WS_UNIDADE_SIGLA] . $srtSeparador . $numIdUnidade;
+      }
+    }
+    sort($strItensUnidadesCompacto, SORT_STRING);
 
-	public function listarProcessosMonitoradosControlado($filtro = array()) {
-	    
+    $strItensUnidades = array();
+    $strItensUnidades[0] = 'Todas';
+    foreach ($strItensUnidadesCompacto as $uni => $uni2) {
+      $strFragmentos = explode($srtSeparador, $uni2);
+      $strItensUnidades[$strFragmentos[1]] = $strFragmentos[0];
+    }
+
+    return $strItensUnidades;
+  }
+
+  public function listarProcessosMonitorados(ProtocoloIntegradoPacoteEnvioDTO $objPacoteDTO, array $filtro = array())
+  {
+    if ($objPacoteDTO == null) {
+      $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+    }
+
 		$objPacoteRN = new ProtocoloIntegradoPacoteEnvioRN();
-		$objProtocoloIntegradoDTO = new ProtocoloIntegradoDTO();
-		$objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
+		
 		$objPacoteDTO->retNumIdProtocolo();
 		$objPacoteDTO->retStrStaIntegracao();
 		$objPacoteDTO->retDthDataSituacao();
@@ -361,7 +365,6 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		$objPacoteDTO->retStrProtocoloFormatado();
 		$objPacoteDTO->retNumIdProtocoloIntegradoPacoteEnvio();
 
-		$objPacoteDTO->retNumIdProtocoloIntegradoPacoteEnvio();
 		$strSqlNativo = '';
 		
 		if (isset($filtro['filtroCodProtocolo']) && $filtro['filtroCodProtocolo'] != '') {
@@ -471,19 +474,11 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				PaginaSEI::getInstance()->prepararPaginacao($objPacoteDTO, 50);
 			}
 		}
+
+    $arrObjPacotesDTO = $objPacoteRN->listar($objPacoteDTO);
 		
-		$arrObjPacotesDTO = $objPacoteRN->listar($objPacoteDTO);
-		$numPacotes = count($arrObjPacotesDTO);
-		if (isset($filtro['paginacao']) && $filtro['paginacao'] == true) {
-			if(isset($filtro['filtroNumQuantidadeRegistrosPorPagina']) && $filtro['filtroNumQuantidadeRegistrosPorPagina']!=''&&$numPacotes>$filtro['filtroNumQuantidadeRegistrosPorPagina']) {
-				$objPacoteDTO->setNumRegistrosPaginaAtual($filtro['filtroNumQuantidadeRegistrosPorPagina']);
-			}
-			PaginaSEI::getInstance()->processarPaginacao($objPacoteDTO);
-		}
-		$arrObjProcedimentoDTO = $this->montarPacotesMonitorados($arrObjPacotesDTO, $filtro);
-		
-		return $arrObjProcedimentoDTO;
-	}
+		return $arrObjPacotesDTO;
+  }
 
 	public function montarPacotesMonitorados($arrObjPacotesDTO, $filtro = null) {
 
@@ -526,6 +521,37 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		
 		return $arrObjProcedimentoDTO;
 	}
+
+  /**
+   * Trata a situacao do processo
+   *
+   * @param string $staIntegracao
+   * @return string
+   */
+  public function tratarSituacao(string $staIntegracao)
+  {
+    $situacao = '';
+    switch ($staIntegracao) {
+      case ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO:
+        $situacao = 'Não Integrado';
+        break;
+      case ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO:
+        $situacao = 'Integrado';
+        break;
+      case ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA:
+        $situacao = 'Falha Infra';
+        break;
+      case ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL:
+        $situacao = 'Erro Negocial';
+        break;
+
+      default:
+        $situacao .= '<td width="10%" style="font-size:1em"> - </td>';
+        break;
+    }
+
+    return $situacao;
+  }
 
 	public function listarProcessosPublicacao($filtro) {
 
