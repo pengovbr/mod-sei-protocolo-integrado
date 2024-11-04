@@ -38,28 +38,24 @@ try {
     $_POST['hdnInfraPaginaAtual'] = '0';
   }
 
+  $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
+  $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
+
   switch ($_GET['acao']) {
     case 'md_pi_forcar_reenvio':
-      $arrStrItensSelecionados = explode(',', $_REQUEST['hdnForcarReenvioItensSelecionados']);
+      $arrStrItensSelecionados = explode(',', $_REQUEST['hdnInfraItensSelecionados']);
       $arrStrItensSelecionados = array_unique($arrStrItensSelecionados);
-      $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
-      // $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
-      // $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
-      // $objProtocoloIntegradoParametrosDTO->retTodos();
+      $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
+      $objProtocoloIntegradoParametrosDTO->retTodos();
       $objRetornoProtocoloIntegradoParametros = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
       $filtro = array();
       $filtro['pacotes'] = array();
 
       for ($i = 0; $i < count($arrStrItensSelecionados); $i++) {
-        array_push($filtro['pacotes'], $arrStrItensSelecionados[$i]);
-        $objPaginaSEI->adicionarMensagem('Operação realizada com sucesso.');
+        if (!empty(trim($arrStrItensSelecionados[$i]))) {
+          array_push($filtro['pacotes'], $arrStrItensSelecionados[$i]);
+        }
       }
-      $arrParam = array();
-      $arrParam[0] = $objRetornoProtocoloIntegradoParametros;
-      $arrParam[1] = $filtro;
-
-      $objProtocoloIntegradoMonitoramentoProcessosRN->publicarProcessosMonitorados($arrParam);
-      $parametros = '';
 
       if (isset($_REQUEST['filtroCodProtocolo']) && $_REQUEST['filtroCodProtocolo'] != '') {
         $parametros .= '&filtroCodProtocolo=' . $_REQUEST['filtroCodProtocolo'];
@@ -83,6 +79,20 @@ try {
         $parametros .= '&numRegistosPaginaSuperior=' . $_REQUEST['numRegistosPaginaSuperior'];
       }
 
+      if (empty($filtro['pacotes'])) {
+        $objPaginaSEI->adicionarMensagem('Selecione ao menos um processo para reenvio.', InfraPagina::$TIPO_MSG_AVISO);
+        header('Location: ' . $objSessaoSEI->assinarLink('controlador.php?acao=' . $_GET['acao_origem'] . $parametros));
+        die;
+      }
+
+      $arrParam = array();
+      $arrParam[0] = $objRetornoProtocoloIntegradoParametros;
+      $arrParam[1] = $filtro;
+
+      $objProtocoloIntegradoMonitoramentoProcessosRN->publicarProcessosMonitorados($arrParam);
+      $parametros = '';
+
+      $objPaginaSEI->adicionarMensagem('Processo(s) reenviado(s) para protocolo integrado com sucesso.', 5);
       header('Location: ' . $objSessaoSEI->assinarLink('controlador.php?acao=' . $_GET['acao_origem'] . $parametros));
       die;
     case 'md_pi_monitoramento':
@@ -91,7 +101,6 @@ try {
     default:
       throw new InfraException("Ação '" . $_GET['acao'] . "' não reconhecida.");
   }
-  $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
 
   if (isset($_REQUEST['numRegistosPaginaSuperior']) && $_REQUEST['numRegistosPaginaSuperior'] != '') {
     $filtro['filtroNumQuantidadeRegistrosPorPagina'] = $_REQUEST['numRegistosPaginaSuperior'];
@@ -118,7 +127,6 @@ try {
   $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
   $objProtocoloIntegradoParametrosDTO->retNumIdProtocoloIntegradoParametros();
   $objProtocoloIntegradoParametrosDTO->retDthDataUltimoProcessamento();
-  $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
   $objParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
 
   $arrComandos = array();
@@ -195,7 +203,7 @@ try {
 
       $strResultado .= '<td align="center" >';
 
-      $strResultado .= $objPaginaSEI->getTrCheck($key, $pacote->getNumIdProtocoloIntegradoPacoteEnvio(), $pacote->getStrProtocoloFormatado(), 'N', 'ForcarReenvio');
+      $strResultado .= $objPaginaSEI->getTrCheck($key, $pacote->getNumIdProtocoloIntegradoPacoteEnvio(), '');
 
       $strResultado .= '<td align="center"> ' . $pacote->getDthDataMetadados() ?: '-' . ' </td>';
       $strResultado .= '<td align="center"><a onclick="abrirProcesso(\'' . $objPaginaSEI->formatarXHTML($objSessaoSEI->assinarLink('controlador.php?acao=procedimento_trabalhar&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_procedimento=' . $pacote->getNumIdProtocolo())) . '\');" tabindex="' . $objPaginaSEI->getProxTabTabela() . '">' . $pacote->getStrProtocoloFormatado() . '</a></td>';
@@ -331,6 +339,10 @@ $objPaginaSEI->montarJavaScript();
         targets: [0, 4],
         orderable: true
       }],
+      lengthMenu: [
+        [10, 25, 50, -1],
+        [10, 25, 50, 'Todos']
+      ],
       "language": {
         "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
         "lengthMenu": "Mostrar _MENU_ registros por página",

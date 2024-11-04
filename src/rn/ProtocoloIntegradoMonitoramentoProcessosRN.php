@@ -599,7 +599,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 		return $arrObjProcedimentoDTO;
 	}
 
-	private function publicarProcessosMonitorados($arrObjRetornoProtocoloIntegradoParametrosDTOFiltro) {
+	public function publicarProcessosMonitorados($arrObjRetornoProtocoloIntegradoParametrosDTOFiltro) {
 	    
 		$filtro = $arrObjRetornoProtocoloIntegradoParametrosDTOFiltro[1];
 		

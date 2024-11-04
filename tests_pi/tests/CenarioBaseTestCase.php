@@ -65,19 +65,6 @@ class CenarioBaseTestCase extends Selenium2TestCase
 
         $bancoSIP->execute("INSERT INTO `unidade` VALUES (110000004,0,'Arquivo Setorial','Arquivo Setorial','S','N',NULL),(110000005,0,'Arquivo Central','Arquivo Central','S','N',NULL);");
         
-        $objContatoFixture = new ContatoFixture();
-        $objContatoSetorialDTO = $objContatoFixture->carregar([
-            'Nome' =>'Arquivo Setorial'
-        ]);
-
-        $objContatoCentralDTO = $objContatoFixture->carregar([
-            'Nome' =>'Arquivo Central'
-        ]);
-
-        $bancoSEI->execute("INSERT INTO `unidade` VALUES (110000004,'S','Arquivo Setorial','Arquivo Setorial','N',0,'S','N','N','N','93',".$objContatoSetorialDTO->getNumIdContato().",'arquivo setorial arquivo setorial',NULL,NULL),(110000005,'S','Arquivo Central','Arquivo Central','N',0,'S','N','N','N','94',".$objContatoCentralDTO->getNumIdContato().",'arquivo central arquivo central',NULL,NULL);", array());
-        
-        $bancoSIP->execute("INSERT INTO `usuario` VALUES (100000002,0,'Arquivador','Arquivador','S',NULL,NULL,'Arquivador',NULL,NULL,'N'),(100000003,0,'Avaliador','Avaliador','S',NULL,NULL,'Avaliador',NULL,NULL,'N');");
-
         // adicionar ao perfil Administrador recursos que comecem com gd_
         $result_recurso = $bancoSIP->query("SELECT id_recurso from recurso r where r.nome LIKE ?", array("gd_%"));
 
@@ -104,21 +91,6 @@ class CenarioBaseTestCase extends Selenium2TestCase
         $bancoSEI->execute("INSERT INTO `tipo_localizador` VALUES (1,110000001,'TLOC01','Tipo de Localizador 01','S','desc1'),(2,110000001,'TLOC02','Tipo de Localizador 02','S','desc2');");
         
         $bancoSEI->execute("INSERT INTO `localizador` VALUES (1,110000001,1,'complemento localizador 01','A',1,1,1),(2,110000001,1,NULL,'A',1,2,2);");
-
-        /*FIM test_02ConfigSEILocalizadores*/
-      
-        /*INICIO test_03ConfigSEI*/
-        $bancoSEI->execute("INSERT INTO `md_gd_justificativa` VALUES (8, 'A','Justificativa de Arquivamento 01','arq1');");
-
-        $bancoSEI->execute("INSERT INTO `md_gd_justificativa` VALUES (9, 'A','Justificativa de Arquivamento 02','arq2');");
-
-        $bancoSEI->execute("INSERT INTO `md_gd_justificativa` VALUES (10, 'D','Justificativa de Desarquivamento 01','desarq 01');");
-
-        $bancoSEI->execute("INSERT INTO `md_gd_justificativa` VALUES (11, 'D','Justificativa de Desarquivamento 02','desarq 02');");
-        
-        $bancoSEI->execute("INSERT INTO `md_gd_unidade_arquivamento` VALUES (1, 110000004,110000005);");
-
-        $bancoSEI->execute("INSERT INTO `md_gd_unidade_arquivamento` VALUES (2, 110000001,110000005);");
 
         $bancoSEI->execute("UPDATE `unidade` SET sin_arquivamento = ?, sin_protocolo = ? WHERE sigla = ?", array("S", "S", "Teste"));
 
