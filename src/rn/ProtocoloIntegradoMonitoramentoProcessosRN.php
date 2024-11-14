@@ -618,7 +618,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 
 		$quantidadeDocumentos = 1;
 
-		$opcoes = array("soap_version" => SOAP_1_1, "trace" => 1, 'exceptions' => 0, 'encoding' => ' UTF-8');
+		$opcoes = array("soap_version" => SOAP_1_1, "trace" => 1, 'exceptions' => 0, 'encoding' => 'UTF-8');
 
 		$objConfiguracaoModProtocoloIntegrado = ConfiguracaoModProtocoloIntegrado::getInstance();
 		$urlWebService = $objConfiguracaoModProtocoloIntegrado->getValor("ProtocoloIntegrado", "WebService");

@@ -108,7 +108,7 @@ check-module-config:
 	$(CMD_COMPOSE_FUNC) exec -T org-http bash -c "php /verificar_modulo.php" ; exit 1; fi
 
 test-functional-pi: .env $(FILE_VENDOR_FUNCIONAL) up vendor
-	$(CMD_COMPOSE_FUNC) run --rm php-test-functional /tests/vendor/bin/phpunit -c /tests/phpunit.xml /tests/tests/$(addsuffix .php,$(teste)) ;
+	$(CMD_COMPOSE_FUNC) run --rm php-test-functional /tests/vendor/bin/phpunit -c /tests/phpunit.xml --testdox /tests/tests/$(addsuffix .php,$(teste)) ;
 
 $(FILE_VENDOR_FUNCIONAL): ## target de apoio verifica se o build do phpunit foi feito e executa apenas caso n exista
 	make install-phpunit-vendor
