@@ -25,7 +25,7 @@ try {
 
   $dtaPeriodoGeracaoA = $_REQUEST['filtroTxtPeriodoGeracaoA'];
   $filtroProtocolo = $_REQUEST['filtroCodProtocolo'];
-  $filtroStaIntegracao = $_REQUEST['filtroSelSitucaoIntegracao'];
+  $filtroStaIntegracao = $_REQUEST['filtroSelSituacaoIntegracao'];
   $filtroUnidadeGeradora = $_REQUEST['filtroSelUnidade'];
   $filtroIncluirUnidadesFilhas = $_REQUEST['filtroIncluirUnidadesFilhas'];
   if ($filtroIncluirUnidadesFilhas == 'on') {
@@ -60,8 +60,8 @@ try {
       if (isset($_REQUEST['filtroCodProtocolo']) && $_REQUEST['filtroCodProtocolo'] != '') {
         $parametros .= '&filtroCodProtocolo=' . $_REQUEST['filtroCodProtocolo'];
       }
-      if (isset($_REQUEST['filtroSelSitucaoIntegracao']) && $_REQUEST['filtroSelSitucaoIntegracao'] != '') {
-        $parametros .= '&filtroSelSitucaoIntegracao=' . $_REQUEST['filtroSelSitucaoIntegracao'];
+      if (isset($_REQUEST['filtroSelSituacaoIntegracao']) && $_REQUEST['filtroSelSituacaoIntegracao'] != '') {
+        $parametros .= '&filtroSelSituacaoIntegracao=' . $_REQUEST['filtroSelSituacaoIntegracao'];
       }
       if (isset($_REQUEST['filtroSelUnidade']) && $_REQUEST['filtroSelUnidade'] != '') {
         $parametros .= '&filtroSelUnidade=' . $_REQUEST['filtroSelUnidade'];
@@ -380,10 +380,10 @@ $objPaginaSEI->abrirBody($strTitulo, 'onload="inicializar();"');
 
       <div id="divSituacaoPesquisa" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
         <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-          <label id="lblSituacaoPesquisa" for="selSituacaoPesquisa" accesskey="" class="infraLabelOpcional">Situação:</label>
+          <label id="filtroSelSituacaoIntegracaoLabel" for="filtroSelSituacaoIntegracao" accesskey="" class="infraLabelOpcional">Situação:</label>
         </div>
         <div class="col-7 col-md-4 pl-0 pl-md-1 pt-1 media">
-          <select id="selSituacaoPesquisa" name="selSituacaoPesquisa" class="infraSelect w-100 w-md-75" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>">
+          <select id="filtroSelSituacaoIntegracao" name="filtroSelSituacaoIntegracao" class="infraSelect w-100 w-md-75" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>">
             <?= $strItensSelSituacoes ?>
           </select>
         </div>
