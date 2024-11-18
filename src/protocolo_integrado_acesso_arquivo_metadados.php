@@ -65,6 +65,7 @@ try {
       $objPacoteDTO->setNumIdProtocoloIntegradoPacoteEnvio($idPacote);
 
       $objPacoteDTO->retStrArquivoErro();
+      $objPacoteDTO->retNumIdProtocoloIntegradoPacoteEnvio();
 
       $objRetornoPacote =  $objPacoteRN->consultar($objPacoteDTO);
       

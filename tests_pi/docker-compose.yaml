@@ -133,6 +133,8 @@ services:
       - SIP_DATABASE_USER=${SIP_DATABASE_USER}
       - SIP_DATABASE_PASSWORD=${SIP_DATABASE_PASSWORD}
       - SIP_DSN=${SIP_DSN}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     links:
       - memcached:memcached
       - database:${DATABASE_HOST}

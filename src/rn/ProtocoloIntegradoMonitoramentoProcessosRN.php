@@ -386,12 +386,12 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 			}
 		}
 		
-		if (isset($filtro['filtroSelSitucaoIntegracao']) && $filtro['filtroSelSitucaoIntegracao'] != '') {
-
-			$objPacoteDTO->setStrStaIntegracao($filtro['filtroSelSitucaoIntegracao']);
-		} else if (!isset($filtro['filtroSelSitucaoIntegracao'])) {
-			$strSqlNativo .= "sta_integracao<>'NI' AND ";
-		}
+		if (isset($filtro['filtroSelSituacaoIntegracao']) && $filtro['filtroSelSituacaoIntegracao'] != '') {
+ 
+      $objPacoteDTO->setStrStaIntegracao($filtro['filtroSelSituacaoIntegracao']);
+  } else if (!isset($filtro['filtroSelSituacaoIntegracao'])) {
+      $strSqlNativo .= "sta_integracao<>'NI' AND ";
+  }
 		
 		if (isset($filtro['filtroSelUnidade']) && $filtro['filtroSelUnidade'] != '' && $filtro['filtroSelUnidade'] != 0) {
 			$strUnidades = $filtro['filtroSelUnidade'];
@@ -809,6 +809,27 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 						$interessado = new InteressadoPiDTO();
 						$nomeInteressado = substr($strNomeInteressado, 0, 150);
 						$interessado->setNome(Encoding::utf8ToIso($nomeInteressado));
+
+            $objContatoDTO = new ContatoDTO();
+            $objContatoDTO->retStrStaNatureza();            
+            $objContatoDTO->retDblCpf();
+            $objContatoDTO->retDblCnpj();
+            $objContatoDTO->setNumIdContato($objInteressadoDTO->getNumIdContato());
+            $objContatoRN = new ContatoRN();
+            $objContatoDTO = $objContatoRN->consultarRN0324($objContatoDTO);
+            if ($objContatoDTO !== null) {
+              $interessado->setNatureza($objContatoDTO->getStrStaNatureza());
+              switch ($objContatoDTO->getStrStaNatureza()) {
+                case ContatoRN::$TN_PESSOA_FISICA:
+                  $interessado->setCpf($objContatoDTO->getDblCpf());
+                    break;
+                case ContatoRN::$TN_PESSOA_JURIDICA:
+                  $interessado->setCnpj($objContatoDTO->getDblCnpj());
+                    break;
+                default:
+                  break;
+              }
+            }
 						$documento->addInteressado($interessado);
 					}
 				}
