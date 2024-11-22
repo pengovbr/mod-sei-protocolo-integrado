@@ -19,7 +19,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
         }
     }
    
-    public function consultarNovasOperacoesProcessosNaoEnviados($maxIdAtividade, $limit, $numUnidadeTeste=null){
+    public function consultarNovasOperacoesProcessosNaoEnviados($maxIdAtividade, $limit){
         try {
 
             $objConfiguracaoMod = ConfiguracaoModProtocoloIntegrado::getInstance();
@@ -46,10 +46,6 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
 			     "AND (sta_protocolo = 'P' AND $strCondicaoNivelAcesso) ".
 			     "AND exists (select * from documento d " . self::$SQL_HINT_TABLE . " inner join protocolo p2 " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento inner join rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo where rpp.id_protocolo_1 = p.id_protocolo and d.sin_bloqueado='S' )";
 			    
-            if ($numUnidadeTeste!=null) {
-                $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
-            }
-
             $sql = $sql." order by a.dth_abertura "; 
 
             //MYSQL, monta clausula LIMIT no final
@@ -90,7 +86,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
         return $maxIdAtividade;
     }
 
-    public function consultarNovasOperacoesProcesso($limit, $numUnidadeTeste=null) {
+    public function consultarNovasOperacoesProcesso($limit) {
     
         try {
         
@@ -98,7 +94,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
             $topSQLServer = "";
             
             $this->maxIdAtividadeMonitorada = $this->consultaMaxAtividadeMonitorada();
-            $atividadesProcessosIneditos = $this->consultarNovasOperacoesProcessosNaoEnviados($this->maxIdAtividadeMonitorada,$limit,$numUnidadeTeste);
+            $atividadesProcessosIneditos = $this->consultarNovasOperacoesProcessosNaoEnviados($this->maxIdAtividadeMonitorada,$limit);
             
             if (count($atividadesProcessosIneditos) >= $limit) {
                 return $atividadesProcessosIneditos;
@@ -122,11 +118,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
             	     "AND sin_publicar = 'S' ".
             	     "AND exists (select * from documento d " . self::$SQL_HINT_TABLE . " inner join protocolo p2 " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento inner join rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo where rpp.id_protocolo_1 = p.id_protocolo and d.sin_bloqueado='S' )";
             	     // "AND not exists(select * from md_pi_monitora_processos pimp where pimp.id_atividade=a.id_atividade)";
-            	 
-            if ($numUnidadeTeste!=null) {
-                $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
-            }
-            
+
             $sql = $sql." order by a.dth_abertura "; 
             
             // Monta clausula LIMIT de acordo com banco do sistema

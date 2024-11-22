@@ -194,21 +194,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 	}
 
     protected function cadastrarAtividadesIntegracaoConectado($numMaxAtividades) {
-		
-		$tempo1 = time();
-		$numUnidadeTeste = null;
-		try {
-			$objInfraParametroDTO = new InfraParametroDTO();
-			$objParametroBD = new InfraParametroBD($this->getObjInfraIBanco());
-			$objInfraParametroDTO->setStrNome('ID_UNIDADE_TESTE');
-			$objInfraParametroDTO->retTodos();
-	    	$ret = $objParametroBD->listar($objInfraParametroDTO);
-			if (count($ret)>0) {
-		 		$objInfra = $ret[0];
-				$numUnidadeTeste = $objInfra->getStrValor();
-			}
-		} catch(Exception $e) {}
-		
+				
 		try {
 			//Valida Permissao
 			//SessaoSEI::getInstance()->validarAuditarPermissao('md_pi_monitoramento',__METHOD__,$protocoloIntegradoMonitoramentoProcessosDTO);
@@ -233,7 +219,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				if ($numTotal+$numCarregarPorRodada>$numMaxAtividades) {
 					$qtCarregar = $numMaxAtividades-$numTotal;
 				}
-				$arrAtividadesMonitoradasDTO = $objBD->consultarNovasOperacoesProcesso($qtCarregar, $numUnidadeTeste);
+				$arrAtividadesMonitoradasDTO = $objBD->consultarNovasOperacoesProcesso($qtCarregar);
 				
 				$numTotalRodada = count($arrAtividadesMonitoradasDTO);
 				if ($numTotalRodada==0) {
