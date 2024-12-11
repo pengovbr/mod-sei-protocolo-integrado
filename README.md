@@ -7,11 +7,9 @@ Para maiores informações sobre o Protocolo Integrado e como aderir ao projeto,
 
 ### Compatibilidade do Módulo x Versões do SEI
 
-SEI 4.x e SUPER.GOV.BR - Módulo na versão 3.x
-
-SEI 3.x - Módulo na versão 2.x
-
-SEI 2.x - Módulo na versão 1.x
+| Versão SEI/SUPER             | Versão módulo                        |
+| ---                          | ---                                  |
+| 4.0.x, 4.1.1, 4.1.2, 5.0.0   | mod-sei-protocolo-integrado 3.0.x    |
 
 
 ## Documentação
@@ -35,4 +33,3 @@ Em caso de dúvidas ou problemas, favor entrar em conta pelos canais na Central 
 Para mais informações, contate a equipe responsável por meio dos seguintes canais:
 
 -   [Portal de Atendimento (PEN): Canal de Atendimento](https://portaldeservicos.economia.gov.br/)  - Módulo do Protocolo Integrado
--   Telefone: 0800 978 9005

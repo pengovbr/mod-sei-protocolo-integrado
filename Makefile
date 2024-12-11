@@ -147,12 +147,12 @@ clean:  ## Limpa o diretório contendo arquivos temporários de construção do 
 
 up-backgound: .env ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
 	@if [ ! -f ".env" ]; then cp envs/$(base).env .env; fi
-	docker-compose up -d
+	$(CMD_DOCKER_COMPOSE) up -d
 	make check-super-isalive
 	@echo "$(SUCCESS)Ambiente de desenvolvimento iniciado com sucesso: $(SEI_HOST)/sei$(NC)"
 
 up-foreground: .env  ## Inicia ambiente de desenvolvimento local (docker) em primeiro plano no endereço http://localhost:8000
-	docker-compose up
+	$(CMD_DOCKER_COMPOSE) up
 
 config:  ## Configura o ambiente para outro banco de dados (mysql|sqlserver|oracle). Ex: make config base=oracle 
 	@cp -f envs/$(base).env .env
@@ -163,3 +163,11 @@ restart: down up ## Reinicia execução do ambiente de desenvolvimento local em 
 help:
 	@echo "Usage: make [target] ... \n"
 	@grep -E '^[a-zA-Z_-]+[[:space:]]*:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+ 
+
+tests-functional: check-super-isalive	
+	@echo "Vamos iniciar a execucao do teste."	
+	@pytest tests/SeleniumIDE/$(sistema)
+
+generate-der: up
+	docker run --network host --rm -v .:/work -w /work ghcr.io/k1low/tbls doc --rm-dist mariadb://$(SEI_DATABASE_USER):$(SEI_DATABASE_PASSWORD)@localhost:3306/sei
