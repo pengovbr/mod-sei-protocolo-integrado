@@ -32,13 +32,26 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
      */
   public function getArrConfiguracoes()
     {
-      return array(
-          "ProtocoloIntegrado" => array(
-              // Endereço do Web Service principal de integração com o Protocolo Integrado
-              // Os endereços disponÃ­veis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
-              //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
-              //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
-              "WebService" => "",
+        return array(
+            "ProtocoloIntegrado" => array(
+
+                // Endereço da nova Api de integração com o Protocolo Integrado
+                // Os endereços disponíveis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
+                //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ ??
+                //    - Produção: https://protocolointegrado.gov.br/ ??
+                "ApiRest" => "",
+
+                // Login do usuário a ser utilizado na autenticação com a Api Rest
+                "UsuarioApiRest" => "",
+
+                // Senha do usuário a ser utilizado na autenticação com a Api Rest
+                "SenhaApiRest" => "",
+
+                // Endereço do Web Service principal de integração com o Protocolo Integrado
+                // Os endereços disponíveis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
+                //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
+                //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
+                "WebService" => "",
 
               // Login do usuário a ser utilizado na autenticação com o Webservice
               "UsuarioWebService" => "",

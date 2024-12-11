@@ -32,13 +32,26 @@ class ConfiguracaoModProtocoloIntegrado extends InfraConfiguracao  {
      */
   public function getArrConfiguracoes()
     {
-      return array(
-          "ProtocoloIntegrado" => array(
-              // Endereço do Web Service principal de integração com o Protocolo Integrado
-              // Os endereços disponíveis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
-              //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
-              //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
-              "WebService" => getenv('PROTOCOLO_INTEGRADO_WEBSERVICE'),
+        return array(
+            "ProtocoloIntegrado" => array(
+                                
+                // Endereço da nova Api de integração com o Protocolo Integrado
+                // Os endereços disponíveis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
+                //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ ??
+                //    - Produção: https://protocolointegrado.gov.br/ ??
+                "ApiRest" => getenv('PROTOCOLO_INTEGRADO_API_REST'),
+
+                // Login do usuário a ser utilizado na autenticação com a Api Rest
+                "UsuarioApiRest" => getenv('PROTOCOLO_INTEGRADO_API_REST_LOGIN'),
+
+                // Senha do usuário a ser utilizado na autenticação com a Api Rest
+                "SenhaApiRest" => getenv('PROTOCOLO_INTEGRADO_API_REST_SENHA'),
+                
+                // Endereço do Web Service principal de integração com o Protocolo Integrado
+                // Os endereços disponíveis são os seguintes (verifique se houve atualizações durante o procedimento de instalação):
+                //    - Homologação: https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
+                //    - Produção: https://protocolointegrado.gov.br/ProtocoloWS/integradorService?wsdl
+                "WebService" => getenv('PROTOCOLO_INTEGRADO_WEBSERVICE'),
 
               // Login do usuário a ser utilizado na autenticação com o Webservice
               "UsuarioWebService" => getenv('PROTOCOLO_INTEGRADO_LOGIN'),

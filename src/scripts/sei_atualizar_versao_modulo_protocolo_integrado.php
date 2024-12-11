@@ -139,8 +139,8 @@ try {
       {
         $objInfraMetaBD = new InfraMetaBD(BancoSEI::getInstance());
 
-        //Criando a tabela de pacotes nos trÃªs bancos
-        BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_pacote_envio (
+            //Criando a tabela de pacotes nos três bancos
+            BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_pacote_envio (
             id_md_pi_pacote_envio " . $objInfraMetaBD->tipoNumeroGrande() . " NOT NULL,
             id_protocolo " . $objInfraMetaBD->tipoNumeroGrande() . " NOT NULL,
             dth_metadados " . $objInfraMetaBD->tipoDataHora() . "  NULL,
@@ -163,8 +163,8 @@ try {
           BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_pacote_envio', 1);
       }
 
-        //Criando a tabela de monitoramento de processos nos trÃªs bancos
-        BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_monitora_processos (
+            //Criando a tabela de monitoramento de processos nos três bancos
+            BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_monitora_processos (
                         id_md_pi_monitora_processos " . $objInfraMetaBD->tipoNumeroGrande() . "  NOT NULL,
                         id_atividade " . $objInfraMetaBD->tipoNumero() . "  NOT NULL,
                         dth_cadastro " . $objInfraMetaBD->tipoDataHora() . " NULL,
@@ -186,8 +186,8 @@ try {
           BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_monitora_processos', 1);
       }
 
-        //Criando a tabela de configuraÃ§Ã£o de mensagens de publicaÃ§Ã£o no Protocolo Integrado nos trÃªs bancos    
-        BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_mensagem (
+            //Criando a tabela de configuração de mensagens de publicação no Protocolo Integrado nos três bancos    
+            BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_mensagem (
                         id_md_pi_mensagem " . $objInfraMetaBD->tipoNumeroGrande() . " NOT NULL,
                         id_tarefa " . $objInfraMetaBD->tipoNumero() . "  NULL, 
                         sin_publicar " . $objInfraMetaBD->tipoTextoFixo(1) . " NOT NULL,
@@ -198,8 +198,8 @@ try {
 
         $objInfraMetaBD->criarIndice('md_pi_mensagem', 'i01_md_pi_mensagem', array('id_tarefa'));
 
-        //Criando a tabela de configuraÃ§Ã£o de parÃ¢metros do módulo  nos trÃªs bancos
-        BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_parametros (
+            //Criando a tabela de configuração de parÃ¢metros do módulo  nos trés bancos
+            BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_parametros (
                         id_md_pi_parametros " . $objInfraMetaBD->tipoNumeroGrande() . " NOT NULL,
                         url_webservice " . $objInfraMetaBD->tipoTextoVariavel(255) . " NOT NULL,
                         quantidade_tentativas " . $objInfraMetaBD->tipoNumero() . " NOT NULL,

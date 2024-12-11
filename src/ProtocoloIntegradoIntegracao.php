@@ -5,10 +5,12 @@
 define("VERSAO_MODULO_PI", "3.0.2");
 
 class ProtocoloIntegradoIntegracao extends SeiIntegracao {
+  
+    const VERSAO_MODULO = "3.0.0"; 
       
-  public function getNome() {
-      return 'Protocolo Integrado';
-  }
+    public function getNome() {
+        return 'Protocolo Integrado';
+    }
     
   public function getVersao() {
       return VERSAO_MODULO_PI;
@@ -20,9 +22,16 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
 
   public function inicializar($strVersaoSEI)
     {
-      define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
-      $this->carregarArquivoConfiguracaoModulo(DIR_SEI_CONFIG);
-  }    
+        define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
+        $this->carregarArquivoConfiguracaoModulo(DIR_SEI_CONFIG);
+    }
+    
+    public static function getDiretorio()
+    {
+      $arrConfig = ConfiguracaoSEI::getInstance()->getValor('SEI', 'Modulos');
+      $strModulo = $arrConfig['ProtocoloIntegradoIntegracao'];
+        return "modulos/".$strModulo;
+    }
 
   public function processarControlador($strAcao) {        
     switch($strAcao) {
@@ -48,14 +57,14 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
       return false;
   }    
 
-  private function carregarArquivoConfiguracaoModulo($strDiretorioSeiWeb){
-    try{
-        $strArquivoConfiguracao = $strDiretorioSeiWeb . '/mod-protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';
-        include_once $strArquivoConfiguracao;       
-    } catch(Exception $e){
-        LogSEI::getInstance()->gravar("Arquivo de configuração do módulo Protocolo Integrado não pode ser localizado em " . $strArquivoConfiguracao);
+    private function carregarArquivoConfiguracaoModulo($strDiretorioSeiWeb){
+        try{
+            $strArquivoConfiguracao = $strDiretorioSeiWeb . '/protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';
+            include_once $strArquivoConfiguracao;       
+        } catch(Exception $e){
+            LogSEI::getInstance()->gravar("Arquivo de configuração do módulo Protocolo Integrado não pode ser localizado em " . $strArquivoConfiguracao);
+        }
     }
-  }
 }
 
 

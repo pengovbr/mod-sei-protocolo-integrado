@@ -4,7 +4,7 @@
 // ini_set('soap.wsdl_cache_ttl', 0);
 // require_once dirname(__FILE__).'/../../../../SEI.php';
 require_once DIR_SEI_WEB.'/SEI.php';
-require_once dirname(__FILE__).'/Enconding.php';
+require_once dirname(__FILE__).'/Encoding.php';
 
 class ProtocoloIntegradoClienteWS extends SoapClient {
 
@@ -52,36 +52,66 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 
   private function validarConexaoWebService() {
 
-      $ch = curl_init();
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_NOBODY, true);
+		curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; //Windows NT 5.1; en-US; rv:1.7.5) Gecko/20041107 Firefox/1.0');
+		curl_setopt($ch, CURLOPT_URL, $this->url);
 
-      try{
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_setopt($ch, CURLOPT_URL, $this->url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2 );
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_FAILONERROR, true);
-        curl_exec($ch);
-                        
-        $curl_error = null;
-        if (curl_errno($ch)){
-          $curl_error = curl_error($ch);
-        }
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2 );
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 
-        if ($curl_error) {       
-          throw new Exception($this->url." Erro ao obter requisição CURL. Erro detalhado: " . $curl_error );
-        }
-      }finally{
-        curl_close($ch);
-      } 
-  }
+		$retorno = curl_exec($ch);
+		$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$header = substr($retorno, 0, $headerSize);
+		$e = null;
+
+		$curl_errno = curl_errno($ch);
+		$curl_error = null;
+		if ($curl_errno) {
+			$curl_error = curl_error($ch);
+		}
+		curl_close($ch);
+
+		if (stripos( $this->url,"?wsdl")===false) {
+			throw new InfraException("Endereço do serviço inválido ou serviço fora do ar.
+							Verifique se este endereço está corretamente informado nos parámetros de integração ao Protocolo Integrado.",$e);
+		}
+
+		if ($curl_errno) {
+			$e =  new Exception($header."Requisição CURL resultou no seguinte erro: " . $curl_error . "(Código: " . $curl_errno . ")");
+			if ($curl_errno == 60) {
+			    throw new InfraException("Certificado inválido ou ausente.",$e);
+			} else {
+				throw new InfraException("Ocorreu um problema ao realizar a conexão ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes", $e);
+			}
+		} else {
+			if ($httpCode!=200) {
+				if (strlen($header)>0) {
+					$e = new Exception($header);
+				} else {
+					$e = new Exception("503 Service Unavailable.Não foi possível conectar ao servidor");
+				}
+				throw new InfraException("Ocorreu um problema ao realizar a conexão ao Web Service do Protocolo Integrado. Acesse o log do SEI para maiores detalhes.", $e);
+			}
+		}
+
+	}
 
     // Override doRequest to calculate the authentication hash from the $request.
   function __doRequest($request, $location, $action, $version, $one_way = 0) {
+     // Grab all the text from the request.
+     $codSiorg  = $this->login ;
+     $senha     = $this->senha;
     if ($this->acao=='enviarListaDocumentosServidor') {
         $request = $this->listaDocumentosFormatada;
     }
+
+    // Set the HTTP headers.
+    $autorizacao = "Basic ".base64_encode($codSiorg.':'.$senha);
+    stream_context_set_option($this->context, array('http' => array('header' => 'Authorization:'. $autorizacao)));
     $response = parent::__doRequest($request, $location, $action, $version, $one_way);
     return $response;
   }
@@ -101,14 +131,14 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 
   public function enviarListaDocumentosServidor($param){
 
-    try {
-        $this->acao = 'enviarListaDocumentosServidor';
-        $retorno = $this->formatarEnvioListaDocumentosPI($param);
-        return $retorno;
-    } catch(Exception $e) {
-        error_log('Exceção:'.$e->getMessage());
-        return $e;
-    }
+	  	try {
+			$this->acao = 'enviarListaDocumentosServidor';
+			$retorno = $this->formatarEnvioListaDocumentosPI($param);
+			return $retorno;
+	  	} catch(Exception $e) {
+	  	  	error_log('Exceção:'.$e->getMessage());
+	      	return $e;
+	    }
 
       return null;
   }
@@ -136,14 +166,14 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
       return $this->__soapCall('EnviarListaDocumentos', array());
   }
 
-    //Converte elementos(tags) do XML com caracteres especiais (acentos,pontuação,etc.) para formato de enconding aceito pelo PI
-  private function formatarElementoXML($xml, $elemento){
-      $objetos = $xml->getElementsByTagName($elemento);
-    if ($objetos!=null) {
-      for ($ite=0; $ite<$objetos->length; $ite++) {
-        $objetos->item($ite)->nodeValue = InfraString::formatarXML(Encoding::fixUTF8($objetos->item($ite)->nodeValue));
-      }
-    }
-  }
+	//Converte elementos(tags) do XML com caracteres especiais (acentos,pontuaï¿½ï¿½o,etc.) para formato de enconding aceito pelo PI
+	private function formatarElementoXML($xml,$elemento){
+		$objetos = $xml->getElementsByTagName($elemento);
+		if ($objetos!=null) {
+		    for ($ite=0;$ite<$objetos->length;$ite++) {
+				$objetos->item($ite)->nodeValue = InfraString::formatarXML(Encoding::fixUTF8($objetos->item($ite)->nodeValue));
+		    }
+		}
+	}
 
 }
