@@ -820,8 +820,15 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
             $strNomeOperacao = $objProtocoloIntegradoRN->transformarMensagemOperacao($numAtividade, $strMensagem);
     
             $itemHistorico = $dom->createElement("ItemHistorico");
-                
-            $dataHoraOperacao = $dom->createElement("DataHoraOperacao", date('c', $arrAtividades[$j]->getDthDataAbertura()->getTimestamp()));
+            
+            if (!is_null($arrAtividades[$j]->getDthDataAbertura()) && is_string($arrAtividades[$j]->getDthDataAbertura())){
+              $dataHoraOperacaoConvertida = str_replace('/', '-', $arrAtividades[$j]->getDthDataAbertura());
+              $dataHoraOperacao = $dom->createElement("DataHoraOperacao", date('c', strtotime($dataHoraOperacaoConvertida)));
+            }
+            else{
+              $dataHoraOperacao = $dom->createElement("DataHoraOperacao", date('c', $arrAtividades[$j]->getDthDataAbertura()->getTimestamp()));
+            }
+
             $unidadeOperacao = '';
     
           if ($arrAtividades[$j]->getNumIdUnidade() != null) {
@@ -1165,6 +1172,11 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
 				$d->setTime(0, 0);
       }    
         $numAgora = time();
+        if (is_string($d)){
+          $d = str_replace('/', '-', $d);
+          $d = new DateTime($d);
+        }
+
         $diffSegundos = $numAgora - $d->getTimestamp();
         $diffDias = intval($diffSegundos/(60*60*24));
             
