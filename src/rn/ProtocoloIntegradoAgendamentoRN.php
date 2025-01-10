@@ -38,7 +38,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         InfraDebug::getInstance()->gravar('TEMPO TOTAL DE EXECUCAO: '.$numSeg.' s');
         InfraDebug::getInstance()->gravar('FIM');
             
-        LogSEI::getInstance()->gravar(InfraDebug::getInstance()->getStrDebug());
+        LogSEI::getInstance()->gravar(InfraDebug::getInstance()->getStrDebug(), InfraLog::$INFORMACAO);
         InfraDebug::getInstance()->limpar();
           
     } catch(Exception $e) {
@@ -71,7 +71,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         $numSeg = InfraUtil::verificarTempoProcessamento($numSeg);
         InfraDebug::getInstance()->gravar('TEMPO TOTAL DE EXECUCAO: '.$numSeg.' s');
         InfraDebug::getInstance()->gravar('FIM');
-        LogSEI::getInstance()->gravar(InfraDebug::getInstance()->getStrDebug());
+        LogSEI::getInstance()->gravar(InfraDebug::getInstance()->getStrDebug(), InfraLog::$INFORMACAO);
         InfraDebug::getInstance()->limpar();
         
     } catch(Exception $e) {
