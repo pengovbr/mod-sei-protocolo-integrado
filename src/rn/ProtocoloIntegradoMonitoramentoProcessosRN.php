@@ -32,7 +32,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         return $ret;
             
     } catch(Exception $e) {
-        throw new InfraException('Erro ao listar atividades monitoradas para publicação no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro ao listar atividades monitoradas para publicação no Protocolo Integrado.', $e);
     }
         
   }
@@ -54,7 +54,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         return $ret;
             
     } catch(Exception $e) {
-        throw new InfraException('Erro ao listar atividades monitoradas para publicação no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro ao listar atividades monitoradas para publicação no Protocolo Integrado.', $e);
     }
         
   }
@@ -76,7 +76,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         return $ret;
 
     } catch(Exception $e) {
-        throw new InfraException('Erro Consultando Atividades monitoradas para publicação no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro Consultando Atividades monitoradas para publicação no Protocolo Integrado.', $e);
     }
         
   }
@@ -98,7 +98,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         return $ret;
 
     } catch(Exception $e) {
-        throw new InfraException('Erro Consultando Atividades monitoradas para publicação no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro Consultando Atividades monitoradas para publicação no Protocolo Integrado.', $e);
     }
         
   }
@@ -139,7 +139,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         $tempo = $tempoFinal - $tempoInicial;
             
     } catch (Exception $e) {
-        throw new InfraException('Erro acontecido', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro acontecido', $e);
     }
         
   }
@@ -167,7 +167,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         $objBD->cadastrar($protocoloIntegradoMonitoramentoProcessosDTO);
 
     } catch(Exception $e) {
-        throw new InfraException('Erro Cadastrando atividades monitoradas para publicação no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro Cadastrando atividades monitoradas para publicação no Protocolo Integrado.', $e);
     }
         
   }
@@ -189,7 +189,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         return $ret;
 
     } catch(Exception $e) {
-        throw new InfraException('Erro consultando Primeiro Documento Assinadodo Processo.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro consultando Primeiro Documento Assinadodo Processo.', $e);
     }
   }
 
@@ -256,7 +256,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
       }
 
     } catch(Exception $e) {
-        throw new InfraException('Erro ao cadastrar Atividades que serão enviadas ao Protocolo Integrado .', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro ao cadastrar Atividades que serão enviadas ao Protocolo Integrado .', $e);
     }
       $tempo2 = time();
         
@@ -607,7 +607,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
     if (strlen(trim($senhaWebService)) > 0 && strlen(trim($loginWebService)) > 0) {
         $conexaoCliente = new ProtocoloIntegradoClienteWS($urlWebService, $loginWebService, $senhaWebService, $opcoes);
     } else {
-        throw new InfraException('Campos Login e Senha para Acesso ao WebService devem ser informados na tela de Configuração de Parâmetros do Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Campos Login e Senha para Acesso ao WebService devem ser informados na tela de Configuração de Parâmetros do Protocolo Integrado.', $e);
     }
 
       $retornoWS = $conexaoCliente->getQuantidadeMaximaDocumentosPorRequisicaoServidor();
@@ -615,12 +615,12 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
     if (!is_int($retornoWS->NumeroMaximoDocumentos)) {
       if ($retornoWS instanceof SoapFault) {
         if (isset($retornoWS->detail->NegocioFault->mensagemFault)) {
-          throw new InfraException('Usuário e/ou senha inválidos para uso do serviço.
+          throw new InfraException('Módulo Protocolo Integrado: Usuário e/ou senha inválidos para uso do serviço.
 					 Verifique se os parâmetros de integração ao Protocolo Integrado estão corretamente informados.', $retornoWS);
         }
 
       }
-        throw new InfraException('Não foi Possível Obter a  Quantidade Máxima de Documentos no WebService do Protocolo Integrado.', $retornoWS);
+        throw new InfraException('Módulo Protocolo Integrado: Não foi Possível Obter a  Quantidade Máxima de Documentos no WebService do Protocolo Integrado.', $retornoWS);
     }
 
       $quantidadeMaximaDocumentos = $retornoWS->NumeroMaximoDocumentos;
@@ -1258,7 +1258,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         
       return $ret;
     } catch (Exception $e) {
-      throw new InfraException('Erro listando Tarefas.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro listando Tarefas.', $e);
     }
         
   }
@@ -1271,7 +1271,7 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         
       return $ret;
     } catch(Exception $e) {
-      throw new InfraException('Erro listando Unidades.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro listando Unidades.', $e);
     }
         
   }

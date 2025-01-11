@@ -45,7 +45,7 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
         parent::__construct($url, $opcoes);
 
     } catch (Exception $e) {
-           throw new InfraException('Erro ao se conectar ao Webservice', $e);
+           throw new InfraException('Módulo Protocolo Integrado: Erro ao se conectar ao Webservice', $e);
     }
 
   }

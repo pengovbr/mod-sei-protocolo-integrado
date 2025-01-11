@@ -30,7 +30,7 @@ class ProtocoloIntegradoParametrosRN extends InfraRN {
       
   
     }catch(Exception $e){
-      throw new InfraException('Erro listando Parâmetros.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro listando Parâmetros.', $e);
     }
   }
   
@@ -42,7 +42,7 @@ class ProtocoloIntegradoParametrosRN extends InfraRN {
       return $ret;
   
     }catch(Exception $e){
-      throw new InfraException('Erro consultando Parâmetros.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro consultando Parâmetros.', $e);
     }
   }
   protected function alterarControlado(ProtocoloIntegradoParametrosDTO $protocoloIntegradoParametrosDTO){
@@ -53,7 +53,7 @@ class ProtocoloIntegradoParametrosRN extends InfraRN {
       $objProtocoloBD = new ProtocoloIntegradoParametrosBD($this->getObjInfraIBanco());
       $objProtocoloBD->alterar($protocoloIntegradoParametrosDTO);
     }catch(Exception $e){
-      throw new InfraException('Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
     }
   }
 }

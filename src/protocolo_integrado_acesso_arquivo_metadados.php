@@ -46,7 +46,7 @@ try {
           break;
             
     default:
-        throw new InfraException("Ação '".$_GET['acao']."' não reconhecida.");
+        throw new InfraException("Módulo Protocolo Integrado: Ação '".$_GET['acao']."' não reconhecida.");
             
   }
     

@@ -397,7 +397,7 @@ try {
         $objInfraMetaBD = new InfraMetaBD(BancoSEI::getInstance());
 
       if (strlen(ProtocoloIntegradoParametrosRN::$CHAVE_MODULO_PI) != ProtocoloIntegradoParametrosRN::$NUM_CARACTERES_CHAVE_PI) {
-          throw new InfraException("Erro instalando/atualizando módulo Protocolo Integrado no SEI. Necessário definir uma chave de 16 caracteres para variável CHAVE_MODULO_PI no arquivo ProtocoloIntegradoParametrosRN.php");
+          throw new InfraException("Módulo Protocolo Integrado: Erro instalando/atualizando módulo Protocolo Integrado no SEI. Necessário definir uma chave de 16 caracteres para variável CHAVE_MODULO_PI no arquivo ProtocoloIntegradoParametrosRN.php");
       }
 
         $objInfraSequencia = new InfraSequencia(BancoSEI::getInstance());

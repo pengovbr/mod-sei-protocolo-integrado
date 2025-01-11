@@ -31,7 +31,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
       try {           
         $objProtocoloIntegrado->publicarProcessos($objProtocoloIntegradoMonitoramento);
       } catch (Exception $e) {
-          throw new InfraException('Erro ao executar publicação de protocolos.', $e);
+          throw new InfraException('Módulo Protocolo Integrado: Erro ao executar publicação de protocolos.', $e);
       }
             
         $numSeg = InfraUtil::verificarTempoProcessamento($numSeg);
@@ -47,7 +47,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         InfraDebug::getInstance()->setBolEcho(false);
             
         InfraDebug::getInstance()->limpar();
-        throw new InfraException('Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.', $e);
     }
     
   }
@@ -80,7 +80,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         InfraDebug::getInstance()->setBolEcho(false);
               
         InfraDebug::getInstance()->limpar();
-        throw new InfraException('Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.', $e);
     }
         
   }
@@ -115,7 +115,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         InfraDebug::getInstance()->setBolEcho(false);
             
         InfraDebug::getInstance()->limpar();
-        throw new InfraException('Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.', $e);
     }   
   } 
 }
