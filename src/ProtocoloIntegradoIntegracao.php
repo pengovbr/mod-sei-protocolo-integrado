@@ -19,8 +19,11 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
   }
 
   public function inicializar($strVersaoSEI)
-    {
-      define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
+    {      
+      if (!defined('DIR_SEI_WEB')) {
+        define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
+      }
+
       $this->carregarArquivoConfiguracaoModulo(DIR_SEI_CONFIG);
   }    
 
