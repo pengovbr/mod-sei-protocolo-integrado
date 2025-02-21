@@ -44,7 +44,6 @@ services:
     env_file:
       - .modulo.env
     ports:
-      - "80:8000"
       - "8000:8000"
     depends_on:
       - database
@@ -89,3 +88,4 @@ volumes:
   MySql:
   Oracle:
   SqlServer:
+  PostgreSql:
