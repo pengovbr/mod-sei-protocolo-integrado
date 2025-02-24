@@ -364,7 +364,7 @@ $objPaginaSEI->abrirBody($strTitulo, 'onload="inicializar();"');
   <input type="hidden" id="chkPacoteAcao" name="chkPacoteAcao" />
   <?
   $objPaginaSEI->montarBarraComandosSuperior($arrComandos);
-  $objPaginaSEI->abrirAreaDados('20em');
+  $objPaginaSEI->abrirAreaDados('');
   ?>
 
   <div class="row">
