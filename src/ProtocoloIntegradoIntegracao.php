@@ -5,6 +5,12 @@
 define("VERSAO_MODULO_PI", "3.0.2");
 
 class ProtocoloIntegradoIntegracao extends SeiIntegracao {
+
+  const COMPATIBILIDADE_MODULO_SEI = [
+    // Versões SEI
+    '4.0.12', '4.1.1', '4.1.2', '4.1.5',
+    '4.0.12.15', '5.0.0'
+  ];
       
   public function getNome() {
       return 'Protocolo Integrado';
