@@ -27,7 +27,7 @@ else
 endif
 
 MODULO_NOME = protocolo-integrado
-MODULO_PASTAS_CONFIG = mod-$(MODULO_NOME)
+MODULO_PASTAS_CONFIG = $(MODULO_NOME)
 MODULO_PASTA_NOME = $(notdir $(shell pwd))
 VERSAO_MODULO := $(shell grep 'define."VERSAO_MODULO_PI"' ./src/ProtocoloIntegradoIntegracao.php | cut -d'"' -f4)
 SEI_SCRIPTS_DIR = dist/sei/scripts/$(MODULO_PASTAS_CONFIG)
