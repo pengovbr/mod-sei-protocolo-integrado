@@ -53,8 +53,8 @@ class ProtocoloIntegradoClienteRestWS {
 	}
 
 	private function autenticarPorOrgao() {
+		try{
 		$urlService = $this->url . 'autenticarPorOrgao';
-	
 		$data = [
 			"codigoOrgao" => $this->login,
 			"senha" => $this->senha,
@@ -67,7 +67,8 @@ class ProtocoloIntegradoClienteRestWS {
 	
 		curl_setopt($ch, CURLOPT_URL, $urlService);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
-		curl_setopt($ch, CURLOPT_POST, true);            
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_FAILONERROR, false);            
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData); 
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json', 
@@ -75,28 +76,31 @@ class ProtocoloIntegradoClienteRestWS {
 		]);
 	
 		$response = curl_exec($ch);
-	
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$strErrorMsg = null;
 		if ($response === false) {
-			$error = curl_error($ch);
-			curl_close($ch);
-			throw new InfraException("Erro na Api do PI: $error");
+			$strErrorMsg = curl_error($ch);
+
+		} else{
+			if ($httpCode >= 400) {
+				$strErrorMsg .= "Código de erro HTTP: $httpCode com mensagem: $response";
+			}
+		}
+		if (isset($strErrorMsg)) {
+			throw new InfraException("Erro no CURL para $urlService. Erro detalhado: $strErrorMsg.");
 		}
 		
-		$data = json_decode($response, true);
-			
-		if (isset($data['id_token'])) {
-			echo "ID Token: " . $data['id_token'];
-		} else if (isset($data['detail'])) {
-			throw new InfraException(mb_convert_encoding($data['detail'], 'ISO-8859-1', 'auto'));
-		} else {
-			throw new InfraException("Erro Inesperado na Api " . $response);
-		}		
-	
-		curl_close($ch);
+		$data = json_decode($response, true);	
 
 		$this->token = $data['id_token'];
 
 		return $data['id_token'];
+		}
+		finally{
+			if (is_resource($ch)) {
+				curl_close($ch);
+			}
+		}
 	}
 
 	public function getQuantidadeMaximaDocumentosPorRequisicaoServidor(){
