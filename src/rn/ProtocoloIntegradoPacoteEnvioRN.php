@@ -34,7 +34,7 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
         return $ret;
         
     } catch(Exception $e) {
-        throw new InfraException('Erro listando Pacotes.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro listando Pacotes.', $e);
     }
     
   }
@@ -56,7 +56,7 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
         return $ret;
             
     } catch(Exception $e) {
-        throw new InfraException('Erro obtendo número de atividades monitoradas.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro obtendo número de atividades monitoradas.', $e);
     }
     
   }
@@ -79,7 +79,7 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
         return $ret;
         
     } catch(Exception $e) {
-        throw new InfraException('Erro Consultando Pacote.', $e); 
+        throw new InfraException('Módulo Protocolo Integrado: Erro Consultando Pacote.', $e); 
     }
         
   }
@@ -100,7 +100,7 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
       return $objProtocoloBD->cadastrar($protocoloIntegradoPacoteEnvioDTO);
         
     } catch(Exception $e) {
-        throw new InfraException('Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
     }
         
   }

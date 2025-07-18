@@ -64,7 +64,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
         return $this->formataAtividadesMonitoradasParaDTO($rs);
   
     } catch(Exception $e) {
-        throw new InfraException('Erro ao carregar atividades.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro ao carregar atividades.', $e);
     }
 
   }
@@ -136,7 +136,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
         return $arrObjAtividadeMonitoradas;
           
     } catch (Exception $e) {
-        throw new InfraException('Erro ao carregar atividades.', $e);
+        throw new InfraException('Módulo Protocolo Integrado: Erro ao carregar atividades.', $e);
     }
     
   }

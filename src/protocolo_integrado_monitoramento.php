@@ -99,7 +99,7 @@ try {
       $strTitulo = 'Monitoramento de Integração';
       break;
     default:
-      throw new InfraException("Ação '" . $_GET['acao'] . "' não reconhecida.");
+        throw new InfraException("Módulo Protocolo Integrado: Ação '" . $_GET['acao'] . "' não reconhecida.");
   }
 
   if (isset($_REQUEST['numRegistosPaginaSuperior']) && $_REQUEST['numRegistosPaginaSuperior'] != '') {

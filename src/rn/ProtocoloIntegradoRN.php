@@ -49,7 +49,7 @@ class ProtocoloIntegradoRN extends InfraRN {
       return $ret;
   
     }catch(Exception $e){
-      throw new InfraException('Erro listando Tarefas.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro listando Tarefas.', $e);
     }
   }
   protected function consultarConectado(ProtocoloIntegradoDTO $objProtocoloDTO) {
@@ -72,7 +72,7 @@ class ProtocoloIntegradoRN extends InfraRN {
       return $ret;
   
     }catch(Exception $e){
-      throw new InfraException('Erro listando Tarefas.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro listando Tarefas.', $e);
     }
   }
   protected function alterarControlado(ProtocoloIntegradoDTO $protocoloIntegradoDTO){
@@ -99,7 +99,7 @@ class ProtocoloIntegradoRN extends InfraRN {
   
   
     }catch(Exception $e){
-      throw new InfraException('Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
     }
   }
   protected function alterarOperacoesPublicacaoControlado(ProtocoloIntegradoDTO $protocoloIntegradoDTO){
@@ -126,7 +126,7 @@ class ProtocoloIntegradoRN extends InfraRN {
   
   
     }catch(Exception $e){
-      throw new InfraException('Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
+      throw new InfraException('Módulo Protocolo Integrado: Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
     }
   }
   public function transformarMensagemOperacao($numAtividade, $strNomeTarefa){

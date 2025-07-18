@@ -3,6 +3,7 @@ html/
 vendor/
 .vscode/
 
+compatibilidade.json
 .modulo.env
 .env
 *.cache
