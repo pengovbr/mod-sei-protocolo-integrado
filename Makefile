@@ -45,7 +45,7 @@ CMD_INSTALACAO_RECURSOS_SEI = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PAS
 CMD_INSTALACAO_SEI_MODULO = echo -ne '$(SEI_DATABASE_USER)\n$(SEI_DATABASE_PASSWORD)\n' | php sei_atualizar_versao_modulo_protocolo_integrado.php
 CMD_INSTALACAO_SIP_MODULO = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PASSWORD)\n' | php sip_atualizar_versao_modulo_protocolo_integrado.php
 
-CMD_CURL_SUPER_LOGIN = curl -s -L $(SEI_HOST)/sei | grep "txtUsuario"
+CMD_CURL_SUPER_LOGIN = curl -s -L $(SEI_HOST)/sei | grep -q "input.*txtUsuario.*"
 SUCCESS=\033[0;32m
 ERROR=\033[0;31m
 WARNING=\033[1;33m
@@ -83,8 +83,9 @@ check-super-isalive: ## Target de apoio. Acessa o Super e verifica se esta respo
 	@echo ""
 	@echo "Vamos tentar acessar a pagina de login do $(sistema), vamos aguardar por 45 segs."
 	@for number in 1 2 3 4 5 6 7 8 9 ; do \
-	    echo 'Tentando acessar...'; var=$$(echo $$($(CMD_CURL_SUPER_LOGIN))); \
-			if [ "$$var" != "" ]; then \
+	    echo 'Tentando acessar...'; \
+		echo '$(CMD_CURL_SUPER_LOGIN)'; \
+			if $(CMD_CURL_SUPER_LOGIN); then \
 					echo 'Pagina respondeu com tela de login' ; \
 					break ; \
 			else \

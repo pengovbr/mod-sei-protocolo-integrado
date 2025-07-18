@@ -1,15 +1,13 @@
-version: '2'
-
 services:
 
   ### CONTAINERS COMPARTILHADOS ENTRE OS AMBIENTES DE TESTE ###
   smtp:
-    image: processoeletronico/vagrant_super4_mailcatcher:${ENVIRONMENT_VERSION}
+    image: processoeletronico/mailcatcher:${ENVIRONMENT_VERSION}
     ports:
       - "1080:1080"
 
   memcached:
-    image: processoeletronico/vagrant_sei4_memcached:${ENVIRONMENT_VERSION}
+    image: processoeletronico/memcached:${ENVIRONMENT_VERSION}
     ports:
       - "11211:11211"
   
@@ -34,7 +32,7 @@ services:
       - /tmp:/tmp
   
   php-test-functional:
-    image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
+    image: processoeletronico/app-dev-php8:${ENVIRONMENT_VERSION}
     depends_on:
       - database
       - selenium
@@ -97,7 +95,7 @@ services:
 
   ## CONTAINERS DE APLICAC?A?O ###
   org-http:
-    image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
+    image: processoeletronico/app-dev-php8:${ENVIRONMENT_VERSION}
     restart: always
     depends_on: 
       - database
