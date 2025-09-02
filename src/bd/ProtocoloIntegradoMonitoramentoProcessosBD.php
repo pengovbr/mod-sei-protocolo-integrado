@@ -116,7 +116,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
             	     "INNER JOIN md_pi_mensagem pi " . self::$SQL_HINT_TABLE . " on a.id_tarefa = pi.id_tarefa ".
             	     "WHERE ".$restricaoAtividade." AND (sta_protocolo = 'P' AND  (sta_nivel_acesso_global in ($strNiveisAcesso) ) ) ".
             	     "AND sin_publicar = 'S' ".
-            	     "AND exists (select * from documento d " . self::$SQL_HINT_TABLE . " inner join protocolo p2 " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento inner join rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo where rpp.id_protocolo_1 = p.id_protocolo and d.sin_bloqueado='S' )";
+            	     "AND exists (select * from documento d " . self::$SQL_HINT_TABLE . " inner join protocolo p2 " . self::$SQL_HINT_TABLE . " on p2.id_protocolo_agrupador=d.id_documento inner join rel_protocolo_protocolo rpp " . self::$SQL_HINT_TABLE . " on rpp.id_protocolo_2 = p2.id_protocolo where rpp.id_protocolo_1 = p.id_protocolo)";
             	     // "AND not exists(select * from md_pi_monitora_processos pimp where pimp.id_atividade=a.id_atividade)";
 
             $sql = $sql." order by a.dth_abertura "; 
