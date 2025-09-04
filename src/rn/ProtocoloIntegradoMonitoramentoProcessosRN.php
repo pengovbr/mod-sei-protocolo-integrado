@@ -799,22 +799,12 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
             $objContatoDTO = new ContatoDTO();
             $objContatoDTO->retStrStaNatureza();            
             $objContatoDTO->retDblCpf();
-            $objContatoDTO->retDblCnpj();
             $objContatoDTO->setNumIdContato($objInteressadoDTO->getNumIdContato());
             $objContatoRN = new ContatoRN();
             $objContatoDTO = $objContatoRN->consultarRN0324($objContatoDTO);
             if ($objContatoDTO !== null) {
               $interessado->setNatureza($objContatoDTO->getStrStaNatureza());
-              switch ($objContatoDTO->getStrStaNatureza()) {
-                case ContatoRN::$TN_PESSOA_FISICA:
-                  $interessado->setCpf($objContatoDTO->getDblCpf());
-                    break;
-                case ContatoRN::$TN_PESSOA_JURIDICA:
-                  $interessado->setCnpj($objContatoDTO->getDblCnpj());
-                    break;
-                default:
-                  break;
-              }
+              $interessado->setCpf(sprintf("%011s", $objContatoDTO->getDblCpf()));
             }
 						$documento->addInteressado($interessado);
 					}
