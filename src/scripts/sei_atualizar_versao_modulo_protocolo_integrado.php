@@ -428,6 +428,11 @@ try {
       {
     }
 
+    public function versao_2_1_0($strVersaoAtual)
+      {
+        // Nada deverá ser feito
+    }
+
 
     public function versao_3_0_0($strVersaoAtual)
       {
@@ -443,9 +448,46 @@ try {
 
     }
 
-    public function versao_sem_alteracao_banco($strVersaoAtual)
+    public function versao_3_0_1($strVersaoAtual)
     {
+        // Nada deverá ser feito
     }
+
+    public function versao_3_0_2($strVersaoAtual)
+    {
+        // Nada deverá ser feito
+    }
+
+    public function versao_3_1_0($strVersaoAtual)
+    {
+        // Cadastrar parametro versão do módulo PI
+        $objInfraParametroDTO = new InfraParametroDTO();
+        $objInfraParametroDTO->setStrNome(ProtocoloIntegradoIntegracao::PARAMETRO_VERSAO_MODULO);
+        $objInfraParametroDTO->setStrValor('3.1.0');
+
+        $objInfraParametroBD = new InfraParametroBD(BancoSEI::getInstance());
+        $objInfraParametroBD->cadastrar($objInfraParametroDTO);
+    }
+
+    /**
+     * Atualiza o número de versão do módulo nas tabelas de parâmetro do sistema
+     *
+     * @param  string $parStrNumeroVersao
+     * @return void
+     */
+    private function atualizarNumeroVersao($parStrNumeroVersao)
+    {
+        $objInfraParametroDTO = new InfraParametroDTO();
+        $objInfraParametroDTO->setStrNome([ProtocoloIntegradoIntegracao::PARAMETRO_VERSAO_MODULO], InfraDTO::$OPER_IN);
+        $objInfraParametroDTO->retTodos();
+        $objInfraParametroBD = new InfraParametroBD(BancoSEI::getInstance());
+        $arrObjInfraParametroDTO = $objInfraParametroBD->listar($objInfraParametroDTO);
+        foreach ($arrObjInfraParametroDTO as $objInfraParametroDTO) {
+            $objInfraParametroDTO->setStrValor($parStrNumeroVersao);
+            $objInfraParametroBD->alterar($objInfraParametroDTO);
+        }
+    }
+
   }
 
     session_start();
@@ -467,10 +509,11 @@ try {
         '1.1.4' => 'versao_1_1_4',
         '1.1.5' => 'versao_1_1_5',
         '2.0.*' => 'versao_2_0_0',
-        '2.1.*' => 'versao_sem_alteracao_banco',
+        '2.1.*' => 'versao_2_1_0',
         '3.0.*' => 'versao_3_0_0',
-        '3.0.1' => 'versao_sem_alteracao_banco',
-        '3.0.2' => 'versao_sem_alteracao_banco'
+        '3.0.1' => 'versao_3_0_1',
+        '3.0.2' => 'versao_3_0_2',
+        '3.1.*' => 'versao_3_1_0',
     ));
     $VersaoProtocoloIntegradoRN->setStrVersaoInfra('1.595.1');
     $VersaoProtocoloIntegradoRN->setBolMySql(true);
