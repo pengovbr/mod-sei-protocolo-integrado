@@ -139,8 +139,8 @@ try {
       {
         $objInfraMetaBD = new InfraMetaBD(BancoSEI::getInstance());
 
-        //Criando a tabela de pacotes nos trÃªs bancos
-        BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_pacote_envio (
+            //Criando a tabela de pacotes nos três bancos
+            BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_pacote_envio (
             id_md_pi_pacote_envio " . $objInfraMetaBD->tipoNumeroGrande() . " NOT NULL,
             id_protocolo " . $objInfraMetaBD->tipoNumeroGrande() . " NOT NULL,
             dth_metadados " . $objInfraMetaBD->tipoDataHora() . "  NULL,
@@ -163,8 +163,8 @@ try {
           BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_pacote_envio', 1);
       }
 
-        //Criando a tabela de monitoramento de processos nos trÃªs bancos
-        BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_monitora_processos (
+            //Criando a tabela de monitoramento de processos nos três bancos
+            BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_monitora_processos (
                         id_md_pi_monitora_processos " . $objInfraMetaBD->tipoNumeroGrande() . "  NOT NULL,
                         id_atividade " . $objInfraMetaBD->tipoNumero() . "  NOT NULL,
                         dth_cadastro " . $objInfraMetaBD->tipoDataHora() . " NULL,
@@ -186,8 +186,8 @@ try {
           BancoSEI::getInstance()->criarSequencialNativa('seq_md_pi_monitora_processos', 1);
       }
 
-        //Criando a tabela de configuraÃ§Ã£o de mensagens de publicaÃ§Ã£o no Protocolo Integrado nos trÃªs bancos    
-        BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_mensagem (
+            //Criando a tabela de configuração de mensagens de publicação no Protocolo Integrado nos três bancos    
+            BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_mensagem (
                         id_md_pi_mensagem " . $objInfraMetaBD->tipoNumeroGrande() . " NOT NULL,
                         id_tarefa " . $objInfraMetaBD->tipoNumero() . "  NULL, 
                         sin_publicar " . $objInfraMetaBD->tipoTextoFixo(1) . " NOT NULL,
@@ -198,8 +198,8 @@ try {
 
         $objInfraMetaBD->criarIndice('md_pi_mensagem', 'i01_md_pi_mensagem', array('id_tarefa'));
 
-        //Criando a tabela de configuraÃ§Ã£o de parÃ¢metros do módulo  nos trÃªs bancos
-        BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_parametros (
+            //Criando a tabela de configuração de parÃ¢metros do módulo  nos trés bancos
+            BancoSEI::getInstance()->executarSql("CREATE TABLE md_pi_parametros (
                         id_md_pi_parametros " . $objInfraMetaBD->tipoNumeroGrande() . " NOT NULL,
                         url_webservice " . $objInfraMetaBD->tipoTextoVariavel(255) . " NOT NULL,
                         quantidade_tentativas " . $objInfraMetaBD->tipoNumero() . " NOT NULL,
@@ -428,6 +428,11 @@ try {
       {
     }
 
+    public function versao_2_1_0($strVersaoAtual)
+      {
+        // Nada deverá ser feito
+    }
+
 
     public function versao_3_0_0($strVersaoAtual)
       {
@@ -443,9 +448,46 @@ try {
 
     }
 
-    public function versao_sem_alteracao_banco($strVersaoAtual)
+    public function versao_3_0_1($strVersaoAtual)
     {
+        // Nada deverá ser feito
     }
+
+    public function versao_3_0_2($strVersaoAtual)
+    {
+        // Nada deverá ser feito
+    }
+
+    public function versao_3_1_0($strVersaoAtual)
+    {
+        // Cadastrar parametro versão do módulo PI
+        $objInfraParametroDTO = new InfraParametroDTO();
+        $objInfraParametroDTO->setStrNome(ProtocoloIntegradoIntegracao::PARAMETRO_VERSAO_MODULO);
+        $objInfraParametroDTO->setStrValor('3.1.0');
+
+        $objInfraParametroBD = new InfraParametroBD(BancoSEI::getInstance());
+        $objInfraParametroBD->cadastrar($objInfraParametroDTO);
+    }
+
+    /**
+     * Atualiza o número de versão do módulo nas tabelas de parâmetro do sistema
+     *
+     * @param  string $parStrNumeroVersao
+     * @return void
+     */
+    private function atualizarNumeroVersao($parStrNumeroVersao)
+    {
+        $objInfraParametroDTO = new InfraParametroDTO();
+        $objInfraParametroDTO->setStrNome([ProtocoloIntegradoIntegracao::PARAMETRO_VERSAO_MODULO], InfraDTO::$OPER_IN);
+        $objInfraParametroDTO->retTodos();
+        $objInfraParametroBD = new InfraParametroBD(BancoSEI::getInstance());
+        $arrObjInfraParametroDTO = $objInfraParametroBD->listar($objInfraParametroDTO);
+        foreach ($arrObjInfraParametroDTO as $objInfraParametroDTO) {
+            $objInfraParametroDTO->setStrValor($parStrNumeroVersao);
+            $objInfraParametroBD->alterar($objInfraParametroDTO);
+        }
+    }
+
   }
 
     session_start();
@@ -467,10 +509,11 @@ try {
         '1.1.4' => 'versao_1_1_4',
         '1.1.5' => 'versao_1_1_5',
         '2.0.*' => 'versao_2_0_0',
-        '2.1.*' => 'versao_sem_alteracao_banco',
+        '2.1.*' => 'versao_2_1_0',
         '3.0.*' => 'versao_3_0_0',
-        '3.0.1' => 'versao_sem_alteracao_banco',
-        '3.0.2' => 'versao_sem_alteracao_banco'
+        '3.0.1' => 'versao_3_0_1',
+        '3.0.2' => 'versao_3_0_2',
+        '3.1.*' => 'versao_3_1_0',
     ));
     $VersaoProtocoloIntegradoRN->setStrVersaoInfra('1.595.1');
     $VersaoProtocoloIntegradoRN->setBolMySql(true);

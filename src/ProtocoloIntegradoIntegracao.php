@@ -2,19 +2,22 @@
 
 // ATENÇÃO: Identificação da versão do módulo mod-sei-protocolo-integrado. 
 // Este deve estar sempre sincronizado com a constante VERSAO_MODULO_PI no arquivo sip_atualizar_versao_modulo_protocolo_integrado.php
-define("VERSAO_MODULO_PI", "3.0.2");
+define("VERSAO_MODULO_PI", "3.1.0");
 
 class ProtocoloIntegradoIntegracao extends SeiIntegracao {
+  
+    const VERSAO_MODULO = VERSAO_MODULO_PI;
+    const PARAMETRO_VERSAO_MODULO = 'VERSAO_MODULO_PI';
 
   const COMPATIBILIDADE_MODULO_SEI = [
     // Versões SEI
     '4.0.12', '4.1.1', '4.1.2', '4.1.5',
-    '4.0.12.15', '5.0.0'
+    '4.0.12.15', '5.0.0', '5.0.1', '5.0.2'
   ];
       
-  public function getNome() {
-      return 'Protocolo Integrado';
-  }
+    public function getNome() {
+        return 'Protocolo Integrado';
+    }
     
   public function getVersao() {
       return VERSAO_MODULO_PI;
@@ -25,13 +28,19 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
   }
 
   public function inicializar($strVersaoSEI)
-    {      
+    {
       if (!defined('DIR_SEI_WEB')) {
         define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
       }
-
-      $this->carregarArquivoConfiguracaoModulo(DIR_SEI_CONFIG);
-  }    
+        $this->carregarArquivoConfiguracaoModulo(DIR_SEI_CONFIG);
+    }
+    
+    public static function getDiretorio()
+    {
+      $arrConfig = ConfiguracaoSEI::getInstance()->getValor('SEI', 'Modulos');
+      $strModulo = $arrConfig['ProtocoloIntegradoIntegracao'];
+        return "modulos/".$strModulo;
+    }
 
   public function processarControlador($strAcao) {        
     switch($strAcao) {
@@ -57,14 +66,14 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
       return false;
   }    
 
-  private function carregarArquivoConfiguracaoModulo($strDiretorioSeiWeb){
-    try{
-        $strArquivoConfiguracao = $strDiretorioSeiWeb . '/mod-protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';
-        include_once $strArquivoConfiguracao;       
-    } catch(Exception $e){
-        LogSEI::getInstance()->gravar("Arquivo de configuração do módulo Protocolo Integrado não pode ser localizado em " . $strArquivoConfiguracao);
+    private function carregarArquivoConfiguracaoModulo($strDiretorioSeiWeb){
+        try{
+            $strArquivoConfiguracao = $strDiretorioSeiWeb . '/protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';
+            include_once $strArquivoConfiguracao;       
+        } catch(Exception $e){
+            LogSEI::getInstance()->gravar("Arquivo de configuração do módulo Protocolo Integrado não pode ser localizado em " . $strArquivoConfiguracao);
+        }
     }
-  }
 }
 
 

@@ -1,37 +1,31 @@
 <?php
 
-ini_set('max_execution_time', '0');
-ini_set('memory_limit', '-1');
-ini_set('output_buffering', 'On');
+require_once DIR_SEI_WEB . '/SEI.php';
+
+session_start();
+
+InfraDebug::getInstance()->setBolLigado(false);
+InfraDebug::getInstance()->setBolDebugInfra(true);
+InfraDebug::getInstance()->limpar();
+
+$objPaginaSEI = PaginaSEI::getInstance();
+$objSessaoSEI = SessaoSEI::getInstance();
 
 try {
 
-  // require_once dirname(__FILE__).'/../../../SEI.php';
-  require_once DIR_SEI_WEB . '/SEI.php';
-
-  session_start();
-  SessaoSEI::getInstance()->validarLink();
-  SessaoSEI::getInstance()->validarPermissao($_GET['acao']);
-
-  //////////////////////////////////////////////////////////////////////////////
-  //InfraDebug::getInstance()->setBolLigado(false);
-  //InfraDebug::getInstance()->setBolDebugInfra(true);
-  //InfraDebug::getInstance()->limpar();
-  //////////////////////////////////////////////////////////////////////////////
+  $objSessaoSEI->validarLink();
+  $objSessaoSEI->validarPermissao($_GET['acao']);
 
   $filtro = $_REQUEST;
   $dtaPeriodoDe = $_REQUEST['filtroTxtPeriodoDe'];
   $dtaPeriodoA = $_REQUEST['filtroTxtPeriodoA'];
-  if (!isset($_REQUEST['filtroTxtPeriodoGeracaoDe'])) {
-    $dtaPeriodoGeracaoDe = date("d/m/Y", time() - 60 * 60 * 24 * 3);
-    $filtro['filtroTxtPeriodoGeracaoDe'] = $dtaPeriodoGeracaoDe;
-  } else {
+  if (isset($_REQUEST['filtroTxtPeriodoGeracaoDe'])) {
     $dtaPeriodoGeracaoDe = $_REQUEST['filtroTxtPeriodoGeracaoDe'];
   }
 
   $dtaPeriodoGeracaoA = $_REQUEST['filtroTxtPeriodoGeracaoA'];
   $filtroProtocolo = $_REQUEST['filtroCodProtocolo'];
-  $filtroStaIntegracao = $_REQUEST['filtroSelSitucaoIntegracao'];
+  $filtroStaIntegracao = $_REQUEST['filtroSelSituacaoIntegracao'];
   $filtroUnidadeGeradora = $_REQUEST['filtroSelUnidade'];
   $filtroIncluirUnidadesFilhas = $_REQUEST['filtroIncluirUnidadesFilhas'];
   if ($filtroIncluirUnidadesFilhas == 'on') {
@@ -44,35 +38,30 @@ try {
     $_POST['hdnInfraPaginaAtual'] = '0';
   }
 
-  switch ($_GET['acao']) {
+  $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
+  $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
 
+  switch ($_GET['acao']) {
     case 'md_pi_forcar_reenvio':
-      $arrStrItensSelecionados = explode(',', $_REQUEST['hdnForcarReenvioItensSelecionados']);
+      $arrStrItensSelecionados = explode(',', $_REQUEST['hdnInfraItensSelecionados']);
       $arrStrItensSelecionados = array_unique($arrStrItensSelecionados);
-      $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
-      // $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
-      // $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
-      // $objProtocoloIntegradoParametrosDTO->retTodos();
+      $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
+      $objProtocoloIntegradoParametrosDTO->retTodos();
       $objRetornoProtocoloIntegradoParametros = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
       $filtro = array();
       $filtro['pacotes'] = array();
 
       for ($i = 0; $i < count($arrStrItensSelecionados); $i++) {
-        array_push($filtro['pacotes'], $arrStrItensSelecionados[$i]);
-        PaginaSEI::getInstance()->adicionarMensagem('Operação realizada com sucesso.');
+        if (!empty(trim($arrStrItensSelecionados[$i]))) {
+          array_push($filtro['pacotes'], $arrStrItensSelecionados[$i]);
+        }
       }
-      $arrParam = array();
-      $arrParam[0] = $objRetornoProtocoloIntegradoParametros;
-      $arrParam[1] = $filtro;
-
-      $objProtocoloIntegradoMonitoramentoProcessosRN->publicarProcessosMonitorados($arrParam);
-      $parametros = '';
 
       if (isset($_REQUEST['filtroCodProtocolo']) && $_REQUEST['filtroCodProtocolo'] != '') {
         $parametros .= '&filtroCodProtocolo=' . $_REQUEST['filtroCodProtocolo'];
       }
-      if (isset($_REQUEST['filtroSelSitucaoIntegracao']) && $_REQUEST['filtroSelSitucaoIntegracao'] != '') {
-        $parametros .= '&filtroSelSitucaoIntegracao=' . $_REQUEST['filtroSelSitucaoIntegracao'];
+      if (isset($_REQUEST['filtroSelSituacaoIntegracao']) && $_REQUEST['filtroSelSituacaoIntegracao'] != '') {
+        $parametros .= '&filtroSelSituacaoIntegracao=' . $_REQUEST['filtroSelSituacaoIntegracao'];
       }
       if (isset($_REQUEST['filtroSelUnidade']) && $_REQUEST['filtroSelUnidade'] != '') {
         $parametros .= '&filtroSelUnidade=' . $_REQUEST['filtroSelUnidade'];
@@ -90,39 +79,35 @@ try {
         $parametros .= '&numRegistosPaginaSuperior=' . $_REQUEST['numRegistosPaginaSuperior'];
       }
 
-      header('Location: ' . SessaoSEI::getInstance()->assinarLink('controlador.php?acao=' . $_GET['acao_origem'] . $parametros));
+      if (empty($filtro['pacotes'])) {
+        $objPaginaSEI->adicionarMensagem('Selecione ao menos um processo para reenvio.', InfraPagina::$TIPO_MSG_AVISO);
+        header('Location: ' . $objSessaoSEI->assinarLink('controlador.php?acao=' . $_GET['acao_origem'] . $parametros));
         die;
+      }
 
+      $arrParam = array();
+      $arrParam[0] = $objRetornoProtocoloIntegradoParametros;
+      $arrParam[1] = $filtro;
+
+      $objProtocoloIntegradoMonitoramentoProcessosRN->publicarProcessosMonitorados($arrParam);
+      $parametros = '';
+
+      $objPaginaSEI->adicionarMensagem('Processo(s) reenviado(s) para protocolo integrado com sucesso.', 5);
+      header('Location: ' . $objSessaoSEI->assinarLink('controlador.php?acao=' . $_GET['acao_origem'] . $parametros));
+      die;
     case 'md_pi_monitoramento':
       $strTitulo = 'Monitoramento de Integração';
-        break;
-
+      break;
     default:
         throw new InfraException("Módulo Protocolo Integrado: Ação '" . $_GET['acao'] . "' não reconhecida.");
   }
-  $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
 
   if (isset($_REQUEST['numRegistosPaginaSuperior']) && $_REQUEST['numRegistosPaginaSuperior'] != '') {
     $filtro['filtroNumQuantidadeRegistrosPorPagina'] = $_REQUEST['numRegistosPaginaSuperior'];
   }
 
   $filtro['paginacao'] = true;
-  $arrObjPacotesMonitoradosDTO = $objProtocoloIntegradoMonitoramentoProcessosRN->listarProcessosMonitorados($filtro);
-  $strItensSelSituacoes = SeiINT::montarSelectArray(null, '', $filtroStaIntegracao, $objProtocoloIntegradoMonitoramentoProcessosRN->getSituacoesIntegracao());
-  $strItensSelUnidades = SeiINT::montarSelectArray(null, '', $filtroUnidadeGeradora, $objProtocoloIntegradoMonitoramentoProcessosRN->getUnidadesGeradoras());
 
-  $objConfiguracaoModProtocoloIntegrado = ConfiguracaoModProtocoloIntegrado::getInstance();
-  $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
-  $objProtocoloIntegradoParametrosDTO->retNumIdProtocoloIntegradoParametros();
-  $objProtocoloIntegradoParametrosDTO->retDthDataUltimoProcessamento();
-  $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
-  $objParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
-
-  $arrComandos = array();
-
-  $bolAcaoForcarReenvio = SessaoSEI::getInstance()->verificarPermissao('md_pi_forcar_reenvio');
-
-  $numRegistros = count($arrObjPacotesMonitoradosDTO);
   $objPacoteEnvioDTO = new ProtocoloIntegradoPacoteEnvioDTO();
   $objPacoteEnvioDTO->retNumIdProtocolo();
   $objPacoteEnvioDTO->retStrStaIntegracao();
@@ -132,54 +117,67 @@ try {
   $objPacoteEnvioDTO->retStrProtocoloFormatado();
   $objPacoteEnvioDTO->retNumIdProtocoloIntegradoPacoteEnvio();
 
+  $objPaginaSEI->prepararOrdenacao($objPacoteEnvioDTO, 'DataMetadados', InfraDTO::$TIPO_ORDENACAO_DESC);
+  $objPaginaSEI->prepararPaginacao($objPacoteEnvioDTO);
+  $arrObjPacotesMonitoradosDTO = $objProtocoloIntegradoMonitoramentoProcessosRN->listarProcessosMonitorados($objPacoteEnvioDTO, $filtro);
+  $strItensSelSituacoes = InfraINT::montarSelectArray(null, '', $filtroStaIntegracao, $objProtocoloIntegradoMonitoramentoProcessosRN->getSituacoesIntegracao());
+  $strItensSelUnidades = InfraINT::montarSelectArray(null, '', $filtroUnidadeGeradora, $objProtocoloIntegradoMonitoramentoProcessosRN->getUnidadesGeradoras());
+
+  $objConfiguracaoModProtocoloIntegrado = ConfiguracaoModProtocoloIntegrado::getInstance();
+  $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
+  $objProtocoloIntegradoParametrosDTO->retNumIdProtocoloIntegradoParametros();
+  $objProtocoloIntegradoParametrosDTO->retDthDataUltimoProcessamento();
+  $objParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
+
+  $arrComandos = array();
+
+  $bolAcaoForcarReenvio = $objSessaoSEI->verificarPermissao('md_pi_forcar_reenvio');
+
+  $objPaginaSEI->processarPaginacao($objPacoteEnvioDTO);
+  $numRegistros = count($arrObjPacotesMonitoradosDTO);
+
   if ($numRegistros > 0) {
     $bolCheck = false;
     if ($_GET['acao'] == 'md_pi_monitoramento') {
       $bolAcaoReativar = false;
-      $bolAcaoConsultar = SessaoSEI::getInstance()->verificarPermissao('md_pi_monitoramento');
-      $bolAcaoAlterar = SessaoSEI::getInstance()->verificarPermissao('md_pi_monitoramento');
+      $bolAcaoConsultar = $objSessaoSEI->verificarPermissao('md_pi_monitoramento');
+      $bolAcaoAlterar = $objSessaoSEI->verificarPermissao('md_pi_monitoramento');
       $bolAcaoImprimir = false;
-      //$bolAcaoGerarPlanilha = false;
       $bolAcaoExcluir = false;
       $bolAcaoDesativar = false;
       $bolCheck = true;
       $bolColunaArquivo = SessaoInfra::getInstance()->verificarPermissao('md_pi_acesso_arquivo_metadados');
     } else {
       $bolAcaoReativar = false;
-      $bolAcaoConsultar = SessaoSEI::getInstance()->verificarPermissao('md_pi_monitoramento');
-      $bolAcaoAlterar = SessaoSEI::getInstance()->verificarPermissao('md_pi_monitoramento');
+      $bolAcaoConsultar = $objSessaoSEI->verificarPermissao('md_pi_monitoramento');
+      $bolAcaoAlterar = $objSessaoSEI->verificarPermissao('md_pi_monitoramento');
       $bolAcaoImprimir = true;
     }
 
     if ($bolAcaoExcluir) {
       $bolCheck = true;
       $arrComandos[] = '<button type="button" accesskey="E" id="btnExcluir" value="Excluir" onclick="acaoExclusaoMultipla();" class="infraButton"><span class="infraTeclaAtalho">E</span>xcluir</button>';
-      $strLinkExcluir = SessaoSEI::getInstance()->assinarLink('controlador.php?acao=tarefa_excluir&acao_origem=' . $_GET['acao']);
+      $strLinkExcluir = $objSessaoSEI->assinarLink('controlador.php?acao=tarefa_excluir&acao_origem=' . $_GET['acao']);
     }
 
-    $strResultado = '';
     $strSumarioTabela = 'Tabela de Processos.';
     $strCaptionTabela = 'Pacotes';
 
-
-
-    $strResultado .= '<table width="99%" class="infraTable" summary="' . $strSumarioTabela . '">' . "\n";
-    $strResultado .= '<caption class="infraCaption">' . PaginaSEI::getInstance()->gerarCaptionTabela($strCaptionTabela, $numRegistros) . '</caption>';
+    $strResultado = '';
+    $strResultado .= '<table width="99%" id="tblMonitoramentoIntegracaoProcessos" class="infraTable" summary="' . $strSumarioTabela . '">';
+    $strResultado .= '<caption class="infraCaption">' . $objPaginaSEI->gerarCaptionTabela($strCaptionTabela, $numRegistros) . '</caption>';
+    $strResultado .= "<thead>";
     $strResultado .= '<tr>';
-    if ($bolCheck) {
-      // $strResultado .= '<th class="infraTh" width="1%">'.PaginaSEI::getInstance()->getThCheck().'</th>'."\n";
-    }
-    $strResultado .= '<th class="infraTh" width="10%" align="center">' . PaginaSEI::getInstance()->getThCheck('Selecionar', 'ForcarReenvio') . '</th>';
-    $strResultado .= '<th class="infraTh">' . PaginaSEI::getInstance()->getThOrdenacao($objPacoteEnvioDTO, 'Data do Metadado', 'DataMetadados', $arrObjPacotesMonitoradosDTO) . '</th>' . "\n";
+    $strResultado .= '<th class="infraTh" width="1%">' . $objPaginaSEI->getThCheck() . '</th>';
+    $strResultado .= '<th class="infraTh">' . $objPaginaSEI->getThOrdenacao($objPacoteEnvioDTO, 'Data do Metadado', 'DataMetadados', $arrObjPacotesMonitoradosDTO) . '</th>';
+    $strResultado .= '<th class="infraTh">' . $objPaginaSEI->getThOrdenacao($objPacoteEnvioDTO, 'Processo', 'ProtocoloFormatado', $arrObjPacotesMonitoradosDTO) . '</th>';
+    $strResultado .= '<th class="infraTh">Situação</th>';
+    $strResultado .= '<th class="infraTh">' . $objPaginaSEI->getThOrdenacao($objPacoteEnvioDTO, 'Data da Situação', 'DataSituacao', $arrObjPacotesMonitoradosDTO) . '</th>';
+    $strResultado .= $bolColunaArquivo ? '<th class="infraTh" width="8%">Ações</th>' : '';
+    $strResultado .= '</tr>';
 
+    $strResultado .= "</thead><tbody>";
 
-    $strResultado .= '<th class="infraTh">' . PaginaSEI::getInstance()->getThOrdenacao($objPacoteEnvioDTO, 'Processo', 'ProtocoloFormatado', $arrObjPacotesMonitoradosDTO) . '</th>' . "\n";
-    $strResultado .= '<th class="infraTh">Situação</th>' . "\n";
-    $strResultado .= '<th class="infraTh">' . PaginaSEI::getInstance()->getThOrdenacao($objPacoteEnvioDTO, 'Data da Situação', 'DataSituacao', $arrObjPacotesMonitoradosDTO) . '</th>' . "\n";
-    if ($bolColunaArquivo) {
-      $strResultado .= '<th class="infraTh">Ações</th>' . "\n";
-    }
-    $strResultado .= '</tr>' . "\n";
     $numRegistrosRecebidos = 0;
     $numRegistrosGerados = 0;
 
@@ -193,12 +191,7 @@ try {
     $strResultadoDetalhado = '';
     $arrRetIconeIntegracao = array();
 
-
-    $i = 0;
-    $maxPacotesReenvio = 0;
-    $indicePacoteComFalha = 0;
     foreach ($arrObjPacotesMonitoradosDTO as $key => $pacote) {
-
 
       $strImagemStatus = '';
       $strCssProcesso = '';
@@ -210,97 +203,91 @@ try {
 
       $strResultado .= '<td align="center" >';
 
-      $strResultado .= PaginaSEI::getInstance()->getTrCheck($indicePacoteComFalha, $pacote['id_pacote'], $pacote['protocolo']->getStrProtocoloFormatado(), 'N', 'ForcarReenvio');
-      $maxPacotesReenvio++;
-      $indicePacoteComFalha++;
+      $strResultado .= $objPaginaSEI->getTrCheck($key, $pacote->getNumIdProtocoloIntegradoPacoteEnvio(), '');
 
-      if ($pacote['dth_metadados'] == '') { $pacote['dth_metadados'] = '-';
-      }
-      $strResultado .= '<td width="7%" align="center" style="font-size:1em"> ' . $pacote['dth_metadados'] . ' </td>';
-
-      $strResultado .= '<td width="10%" align="center" style="font-size:.9em"><a onclick="abrirProcesso(\'' . PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=procedimento_trabalhar&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_procedimento=' . $pacote['protocolo']->getDblIdProtocolo())) . '\');" tabindex="' . PaginaSEI::getInstance()->getProxTabTabela() . '">' . $pacote['protocolo']->getStrProtocoloFormatado() . '</a></td>';
-
-      switch (trim($pacote['sta_integracao'])) {
-
-        case ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Não Integrado </td>';
-            break;
-        case ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Integrado </td>';
-            break;
-        case ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Falha Infra </td>';
-            break;
-        case ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Erro Negocial </td>';
-            break;
-
-        default:
-          $strResultado .= '<td width="10%" style="font-size:1em"> - </td>';
-            break;
-      }
-
-      if ($pacote['dth_situacao'] == '') { $pacote['dth_situacao'] = '-';
-      }
-      $strResultado .= '<td width="7%" align="center" style="font-size:1em">' . $pacote['dth_situacao'] . '</td>';
+      $strResultado .= '<td align="center"> ' . $pacote->getDthDataMetadados() ?: '-' . ' </td>';
+      $strResultado .= '<td align="center"><a onclick="abrirProcesso(\'' . $objPaginaSEI->formatarXHTML($objSessaoSEI->assinarLink('controlador.php?acao=procedimento_trabalhar&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_procedimento=' . $pacote->getNumIdProtocolo())) . '\');" tabindex="' . $objPaginaSEI->getProxTabTabela() . '">' . $pacote->getStrProtocoloFormatado() . '</a></td>';
+      $strResultado .= '<td align="center">' . $objProtocoloIntegradoMonitoramentoProcessosRN->tratarSituacao(trim($pacote->getStrStaIntegracao())) . '</td>';
+      $strResultado .= '<td align="center">' . $pacote->getDthDataSituacao() ?: '-' . '</td>';
 
       if ($bolColunaArquivo) {
+        if ($pacote->getStrStaIntegracao() != ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO) {
+          $strResultado .=   '<td width="6%" align="center" >';
 
-        if ($pacote['sta_integracao'] != ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO) {
+          $strResultado .=   '<a  target="_blank"  id="linkArquivoMetadados" href="' . $objPaginaSEI->formatarXHTML($objSessaoSEI->assinarLink('controlador.php?acao=md_pi_visualizar_metadados&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_pacote=' . $pacote->getNumIdProtocoloIntegradoPacoteEnvio())) . '" tabindex="' . $objPaginaSEI->getProxTabTabela() . '"><img src="' . ProtocoloIntegradoIntegracao::getDiretorio() . '/imagens/page_green.png" title="Visualizar os Metadados Gerados" alt="Visualizar os Metadados Gerados" class="infraImg" /></a>&nbsp;';
 
-          $strResultado .=   '<td width="3%" align="center" ><a  target="_blank"  id="linkArquivoMetadados" href="' . PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=md_pi_visualizar_metadados&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_pacote=' . $pacote['id_pacote'])) . '" tabindex="' . PaginaSEI::getInstance()->getProxTabTabela() . '"><img src="' . PaginaSEI::getInstance()->getDiretorioImagensGlobal() . '/consultar.gif" title="Visualizar os Metadados Gerados" alt="Visualizar os Metadados Gerados" class="infraImg" /></a>&nbsp;';
-          if ($pacote['sta_integracao'] == ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA || $pacote['sta_integracao'] == ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL) {
-
-            $strResultado .= ' <a TARGET="_blank" href="' . PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=md_pi_visualizar_erro_envio_metadados&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_pacote=' . $pacote['id_pacote'])) . '" tabindex="' . PaginaSEI::getInstance()->getProxTabTabela() . '">' . '<img src="' . PaginaSEI::getInstance()->getDiretorioImagensGlobal() . '/menos.gif" title="Visualizar XML de Erro" alt="Visualizar XML de Erro" class="infraImg" /></a>';
+          if ($pacote->getStrStaIntegracao() == ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA || $pacote->getStrStaIntegracao() == ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL) {
+            $strResultado .= ' <a TARGET="_blank" href="' . $objPaginaSEI->formatarXHTML($objSessaoSEI->assinarLink('controlador.php?acao=md_pi_visualizar_erro_envio_metadados&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_pacote=' . $pacote->getNumIdProtocoloIntegradoPacoteEnvio())) . '" tabindex="' . $objPaginaSEI->getProxTabTabela() . '">' . '<img src="' . ProtocoloIntegradoIntegracao::getDiretorio() . '/imagens/page_red.png" title="Visualizar XML de Erro" alt="Visualizar XML de Erro" class="infraImg" /></a>';
           }
+
           $strResultado .= '</td>';
         } else if ($bolColunaArquivo) {
-
           $strResultado .= '<td align="center"></td>';
         }
       }
-      $strResultado .= PaginaSEI::getInstance()->getAcaoTransportarItem($i, $pacote['protocolo']->getDblIdProtocolo());
-
-      $i++;
+      $strResultado .= $objPaginaSEI->getAcaoTransportarItem($key, $pacote->getNumIdProtocolo());
     }
-    $strResultado .= '</table>';
+    $strResultado .= '</tbody></table>';
   }
 
-  if ($bolAcaoForcarReenvio && $maxPacotesReenvio > 0) {
+  if ($bolAcaoForcarReenvio && $numRegistros > 0) {
     $arrComandos[] = '<input type="button" onclick="forcarReenvio()" name="btnForcar" id="btnForcar" value="Forçar Reenvio" class="infraButton" />';
-    $strLinkForcarReenvio = SessaoSEI::getInstance()->assinarLink('controlador.php?acao=md_pi_forcar_reenvio&acao_origem=' . $_GET['acao']);
+    $strLinkForcarReenvio = $objSessaoSEI->assinarLink('controlador.php?acao=md_pi_forcar_reenvio&acao_origem=' . $_GET['acao']);
   }
 
   $arrComandos[] = '<button type="submit" accesskey="P" id="sbmPesquisar" name="sbmPesquisar" value="Pesquisar" class="infraButton"><span class="infraTeclaAtalho">P</span>esquisar</button>';
-  $arrComandos[] = '<button type="button" accesskey="F" id="btnFechar" value="Fechar" onclick="location.href=\'' . PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=' . PaginaSEI::getInstance()->getAcaoRetorno() . '&acao_origem=' . $_GET['acao'])) . '\'" class="infraButton"><span class="infraTeclaAtalho">F</span>echar</button>';
+  $arrComandos[] = '<button type="button" accesskey="F" id="btnFechar" value="Fechar" onclick="location.href=\'' . $objPaginaSEI->formatarXHTML($objSessaoSEI->assinarLink('controlador.php?acao=' . $objPaginaSEI->getAcaoRetorno() . '&acao_origem=' . $_GET['acao'])) . '\'" class="infraButton"><span class="infraTeclaAtalho">F</span>echar</button>';
 } catch (Exception $e) {
-  PaginaSEI::getInstance()->processarExcecao($e);
+  $objPaginaSEI->processarExcecao($e);
 }
 
-PaginaSEI::getInstance()->montarDocType();
-PaginaSEI::getInstance()->abrirHtml();
-PaginaSEI::getInstance()->abrirHead();
-PaginaSEI::getInstance()->montarMeta();
-PaginaSEI::getInstance()->montarTitle(PaginaSEI::getInstance()->getStrNomeSistema() . ' - ' . $strTitulo);
-PaginaSEI::getInstance()->montarStyle();
-PaginaSEI::getInstance()->abrirStyle();
+$objPaginaSEI->montarDocType();
+$objPaginaSEI->abrirHtml();
+$objPaginaSEI->abrirHead();
+$objPaginaSEI->montarMeta();
+$objPaginaSEI->montarTitle($objPaginaSEI->getStrNomeSistema() . ' - ' . $strTitulo);
+$objPaginaSEI->montarStyle();
 
 ?>
-a.disabled {
-pointer-events: none;
-cursor: default;
-}
-a.enabled {Fechar
-cursor: default;
-}
-a:hover {
-text-decoration: underline;
-}
+<style type="text/css">
+  a.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  a.enabled {
+    cursor: default;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Personalize o estilo da paginação */
+  .dataTables_paginate {
+    margin: 10px;
+    text-align: end;
+  }
+
+  .dataTables_paginate .paginate_button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    background-color: #f2f2f2;
+    color: #333;
+    cursor: pointer;
+  }
+
+  .dataTables_paginate .paginate_button.current {
+    background-color: var(--color-primary-default);
+    color: #fff;
+  }
+</style>
 <?
-PaginaSEI::getInstance()->fecharStyle();
-PaginaSEI::getInstance()->montarJavaScript();
-PaginaSEI::getInstance()->abrirJavaScript();
+$objPaginaSEI->montarJavaScript();
 ?>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+<script type="text/javascript">
   function inicializar() {
 
     infraEfeitoTabelas();
@@ -325,15 +312,6 @@ PaginaSEI::getInstance()->abrirJavaScript();
     }
   }
 
-  function abrirProcesso(link) {
-
-    window.open(link);
-    //document.getElementById('frmMonitoramentoIntegracaoProcessosLista').action = link;
-    //document.getElementById('frmMonitoramentoIntegracaoProcessosLista').submit();
-    //infraOcultarMenuSistemaEsquema();
-
-  }
-
   function replicaValorNumeroRegistrosPorPagina(objValor) {
 
     if (objValor.name == 'numRegistosPaginaSuperior') {
@@ -354,133 +332,128 @@ PaginaSEI::getInstance()->abrirJavaScript();
     }
   <? } ?>
 
+  $(document).ready(function() {
+    $('#tblMonitoramentoIntegracaoProcessos').dataTable({
+      "searching": false,
+      "columnDefs": [{
+        targets: [0, 4],
+        orderable: true
+      }],
+      lengthMenu: [
+        [10, 25, 50, -1],
+        [10, 25, 50, 'Todos']
+      ],
+      "language": {
+        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        "lengthMenu": "Mostrar _MENU_ registros por página",
+        "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+        "zeroRecords": "Nenhum registro encontrado",
+        "paginate": {
+          "previous": "Anterior",
+          "next": "Próximo"
+        },
+      }
+    });
+  });
+</script>
 <?
-PaginaSEI::getInstance()->fecharJavaScript();
-PaginaSEI::getInstance()->fecharHead();
-PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
+$objPaginaSEI->fecharHead();
+$objPaginaSEI->abrirBody($strTitulo, 'onload="inicializar();"');
 ?>
-<form id="frmMonitoramentoIntegracaoProcessosLista" method="post" action="<?= PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=' . $_GET['acao'] . '&acao_origem=' . $_GET['acao'])) ?>">
-
+<form id="frmMonitoramentoIntegracaoProcessosLista" method="post" action="<?= $objPaginaSEI->formatarXHTML($objSessaoSEI->assinarLink('controlador.php?acao=' . $_GET['acao'] . '&acao_origem=' . $_GET['acao'])) ?>">
   <input type="hidden" id="chkPacoteAcao" name="chkPacoteAcao" />
-
   <?
-  PaginaSEI::getInstance()->montarBarraComandosSuperior($arrComandos);
-  PaginaSEI::getInstance()->abrirAreaDados('15em');
+  $objPaginaSEI->montarBarraComandosSuperior($arrComandos);
+  $objPaginaSEI->abrirAreaDados('');
   ?>
 
-
-  <div id="divfiltroCodProtocolo" class="infraAreaDados d-flex flex-column flex-md-row mb-2" style="">
-    <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-      <label id="filtroCodProtocoloLabel" for="filtroCodProtocolo" accesskey="" class="infraLabelOpcional">Nº Processo:</label>
-    </div>
-    <div class="col-7 col-md-4 pl-0 pl-md-1 pt-1 media">
-      <input type="text" id="filtroCodProtocolo" name="filtroCodProtocolo" maxlength="50" class="infraText w-100 w-md-75" onkeypress="return infraLimitarTexto(this,event,50);" value="<?= PaginaSEI::tratarHTML($filtro['filtroCodProtocolo']) ?>" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-    </div>
-  </div>
-
-
-  <div id="divSituacaoPesquisa" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
-    <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-      <label id="lblSituacaoPesquisa" for="selSituacaoPesquisa" accesskey="" class="infraLabelOpcional">Situação:</label>
-    </div>
-    <div class="col-7 col-md-4 pl-0 pl-md-1 pt-1 media">
-      <select id="selSituacaoPesquisa" name="selSituacaoPesquisa" class="infraSelect w-100 w-md-75" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>">
-        <?= $strItensSelSituacoes ?>
-      </select>
-    </div>
-  </div>
-
-
-  <div id="divPeriodoDe" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
-    <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-      <label id="lblPeriodoDe" for="filtroTxtPeriodoDe" class="infraLabelOpcional">Data de envio: </label>
-    </div>
-
-    <div class="d-flex flex-column flex-md-row col-12 col-md-7 pl-0 pl-md-1 media">
-      <div class="col-12 col-md-8 media pl-0 pt-1">
-        <div class="col-6 pl-0 media">
-          <input type="text" id="filtroTxtPeriodoDe" name="filtroTxtPeriodoDe" onkeypress="return infraMascaraData(this, event)" class="infraText w-75" value="<?= PaginaSEI::tratarHTML($dtaPeriodoDe); ?>" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-          <img id="imgDataInicio" src="<?= PaginaSEI::getInstance()->getIconeCalendario() ?>" onclick="infraCalendario('filtroTxtPeriodoDe',this);" alt="Selecionar Data Inicial" title="Selecionar Data Inicial" class="infraImg mx-1" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-          <label id="lblDataE" accesskey="" class="infraLabelOpcional mx-0 pt-1 pl-md-2">a</label>
+  <div class="row">
+    <div class="col-md-6 col-12 ">
+      <div id="divfiltroCodProtocolo" class="infraAreaDados d-flex flex-column flex-md-row mb-2" style="">
+        <div class="col-12 col-md-2 mx-0 px-0 pt-1">
+          <label id="filtroCodProtocoloLabel" for="filtroCodProtocolo" accesskey="" class="infraLabelOpcional">Nº Processo:</label>
         </div>
-        <div class="col-6 pl-0 pl-md-2 media">
-          <input type="text" id="filtroTxtPeriodoA" name="filtroTxtPeriodoA" onkeypress="return infraMascaraData(this, event)" class="infraText w-75" value="<?= PaginaSEI::tratarHTML($dtaPeriodoA); ?>" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-          <img id="imgDataFim" src="<?= PaginaSEI::getInstance()->getIconeCalendario() ?>" onclick="infraCalendario('filtroTxtPeriodoA',this);" alt="Selecionar Data Final" title="Selecionar Data Final" class="infraImg mx-1" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
+        <div class="col-7 col-md-4 pl-0 pl-md-1 pt-1 media">
+          <input type="text" id="filtroCodProtocolo" name="filtroCodProtocolo" maxlength="50" class="infraText w-100 w-md-75" onkeypress="return infraLimitarTexto(this,event,50);" value="<?= PaginaSEI::tratarHTML($filtro['filtroCodProtocolo']) ?>" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
         </div>
+      </div>
+
+      <div id="divSituacaoPesquisa" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
+        <div class="col-12 col-md-2 mx-0 px-0 pt-1">
+          <label id="filtroSelSituacaoIntegracaoLabel" for="filtroSelSituacaoIntegracao" accesskey="" class="infraLabelOpcional">Situação:</label>
+        </div>
+        <div class="col-7 col-md-4 pl-0 pl-md-1 pt-1 media">
+          <select id="filtroSelSituacaoIntegracao" name="filtroSelSituacaoIntegracao" class="infraSelect w-100 w-md-75" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>">
+            <?= $strItensSelSituacoes ?>
+          </select>
+        </div>
+      </div>
+
+      <div id="divPeriodoDe" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
+        <div class="col-12 col-md-2 mx-0 px-0 pt-1">
+          <label id="lblPeriodoDe" for="filtroTxtPeriodoDe" class="infraLabelOpcional">Data de envio: </label>
+        </div>
+
+        <div class="d-flex flex-column flex-md-row col-12 col-md-7 pl-0 pl-md-1 media">
+          <div class="col-12 col-md-12 media pl-0 pt-1">
+            <div class="col-6 pl-0 media">
+              <input type="text" id="filtroTxtPeriodoDe" name="filtroTxtPeriodoDe" onkeypress="return infraMascaraData(this, event)" class="infraText w-75" value="<?= PaginaSEI::tratarHTML($dtaPeriodoDe); ?>" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+              <img id="imgDataInicio" src="<?= $objPaginaSEI->getIconeCalendario() ?>" onclick="infraCalendario('filtroTxtPeriodoDe',this);" alt="Selecionar Data Inicial" title="Selecionar Data Inicial" class="infraImg mx-1" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+              <label id="lblDataE" accesskey="" class="infraLabelOpcional mx-0 pt-1 pl-md-2">a</label>
+            </div>
+            <div class="col-6 pl-0 pl-md-2 media">
+              <input type="text" id="filtroTxtPeriodoA" name="filtroTxtPeriodoA" onkeypress="return infraMascaraData(this, event)" class="infraText w-75" value="<?= PaginaSEI::tratarHTML($dtaPeriodoA); ?>" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+              <img id="imgDataFim" src="<?= $objPaginaSEI->getIconeCalendario() ?>" onclick="infraCalendario('filtroTxtPeriodoA',this);" alt="Selecionar Data Final" title="Selecionar Data Final" class="infraImg mx-1" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="divPeriodoGeracaoDe" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
+        <div class="col-12 col-md-2 mx-0 px-0 pt-1">
+          <label id="lblPeriodoGeracaoDe" for="txtPeriodoGeracaoDe" class="infraLabelOpcional">Data de geração do processo:</label>
+        </div>
+
+        <div class="d-flex flex-column flex-md-row col-12 col-md-7 pl-0 pl-md-1 media">
+          <div class="col-12 col-md-12 media pl-0 pt-1">
+            <div class="col-6 pl-0 media">
+              <input type="text" id="filtroTxtPeriodoGeracaoDe" name="filtroTxtPeriodoGeracaoDe" onkeypress="return infraMascaraData(this, event)" class="infraText w-75" value="<?= PaginaSEI::tratarHTML($dtaPeriodoGeracaoDe); ?>" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+              <img id="imgDataInicio" src="<?= $objPaginaSEI->getIconeCalendario() ?>" onclick="infraCalendario('filtroTxtPeriodoGeracaoDe',this);" alt="Selecionar Data Inicial" title="Selecionar Data Inicial" class="infraImg mx-1" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+              <label id="lblDataE" accesskey="" class="infraLabelOpcional mx-0 pt-1 pl-md-2">a</label>
+            </div>
+            <div class="col-6 pl-0 pl-md-2 media">
+              <input type="text" id="filtroTxtPeriodoGeracaoA" name="filtroTxtPeriodoGeracaoA" onkeypress="return infraMascaraData(this, event)" class="infraText w-75" value="<?= PaginaSEI::tratarHTML($dtaPeriodoGeracaoA); ?>" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+              <img id="imgDataFim" src="<?= $objPaginaSEI->getIconeCalendario() ?>" onclick="infraCalendario('filtroTxtPeriodoGeracaoA',this);" alt="Selecionar Data Final" title="Selecionar Data Final" class="infraImg mx-1" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="divfiltroSelUnidade" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
+        <div class="col-12 col-md-2 mx-0 px-0 pt-1">
+          <label id="lblfiltroSelUnidade" for="filtroSelUnidade" accesskey="" class="infraLabelOpcional">Unidade Geradora:</label>
+        </div>
+        <div class="col-12 col-md-12 pl-0 pl-md-1 pt-1 media">
+          <select id="filtroSelUnidade" name="filtroSelUnidade" class="infraSelect w-100 w-md-100" tabindex="<?= $objPaginaSEI->getProxTabDados() ?>">
+            <?= $strItensSelUnidades ?>
+          </select>
+        </div>
+      </div>
+
+      <br />
+
+      <div id="divfiltroIncluirUnidadesFilhas" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
+        <input type="checkbox" id="filtroIncluirUnidadesFilhas" name="filtroIncluirUnidadesFilhas" class="infraCheckbox" <?= $filtroIncluirUnidadesFilhas ?> tabindex="<?= $objPaginaSEI->getProxTabDados() ?>" />
+        <label id="lblfiltroIncluirUnidadesFilhas" for="filtroIncluirUnidadesFilhas" accesskey="">Incluir Unidades Filhas</label>
       </div>
     </div>
   </div>
 
-
-  <div id="divPeriodoGeracaoDe" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
-    <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-      <label id="lblPeriodoGeracaoDe" for="txtPeriodoGeracaoDe" class="infraLabelOpcional">Data de geração do processo:</label>
-    </div>
-
-    <div class="d-flex flex-column flex-md-row col-12 col-md-7 pl-0 pl-md-1 media">
-      <div class="col-12 col-md-8 media pl-0 pt-1">
-        <div class="col-6 pl-0 media">
-          <input type="text" id="filtroTxtPeriodoGeracaoDe" name="filtroTxtPeriodoGeracaoDe" onkeypress="return infraMascaraData(this, event)" class="infraText w-75" value="<?= PaginaSEI::tratarHTML($dtaPeriodoGeracaoDe); ?>" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-          <img id="imgDataInicio" src="<?= PaginaSEI::getInstance()->getIconeCalendario() ?>" onclick="infraCalendario('filtroTxtPeriodoGeracaoDe',this);" alt="Selecionar Data Inicial" title="Selecionar Data Inicial" class="infraImg mx-1" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-          <label id="lblDataE" accesskey="" class="infraLabelOpcional mx-0 pt-1 pl-md-2">a</label>
-        </div>
-        <div class="col-6 pl-0 pl-md-2 media">
-          <input type="text" id="filtroTxtPeriodoGeracaoA" name="filtroTxtPeriodoGeracaoA" onkeypress="return infraMascaraData(this, event)" class="infraText w-75" value="<?= PaginaSEI::tratarHTML($dtaPeriodoGeracaoA); ?>" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-          <img id="imgDataFim" src="<?= PaginaSEI::getInstance()->getIconeCalendario() ?>" onclick="infraCalendario('filtroTxtPeriodoGeracaoA',this);" alt="Selecionar Data Final" title="Selecionar Data Final" class="infraImg mx-1" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div id="divfiltroSelUnidade" class="infraAreaDados d-flex flex-column flex-md-row mb-1">
-    <div class="col-12 col-md-2 mx-0 px-0 pt-1">
-      <label id="lblfiltroSelUnidade" for="filtroSelUnidade" accesskey="" class="infraLabelOpcional">Unidade Geradora:</label>
-    </div>
-    <select id="filtroSelUnidade" name="filtroSelUnidade" class="infraSelect w-100 w-md-100" tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>">
-      <?= $strItensSelUnidades ?>
-    </select>
-  </div>
-
-  <div id="divfiltroIncluirUnidadesFilhas" class="infraDivCheckbox col-10 col-md-3 pl-0 pl-md-1 pt-2 media my-auto">
-    <input type="checkbox" id="filtroIncluirUnidadesFilhas" name="filtroIncluirUnidadesFilhas" class="infraCheckbox" <?= $filtroIncluirUnidadesFilhas ?> tabindex="<?= PaginaSEI::getInstance()->getProxTabDados() ?>" />
-    <label id="lblfiltroIncluirUnidadesFilhas" for="filtroIncluirUnidadesFilhas" accesskey="">Incluir Unidades Filhas</label>
-  </div>
-  
-  <?
-  if ($numRegistros > 0) {
-    ?>
-    <div style="float:right;padding:0 1.5em">
-      <label style="">Quantidade de registros por página</label>
-      <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' value="<?= $_REQUEST['numRegistosPaginaSuperior'] ?>" onkeyup='replicaValorNumeroRegistrosPorPagina(this)' id='numRegistosPaginaSuperior' name='numRegistosPaginaSuperior'>
-      <input size="10" value="OK" class="infraButton" style="vertical-align:top" type="submit">
-    </div>
-    <?
-  }
-  ?>
-
-  <?
-  // PaginaSEI::getInstance()->fecharAreaDados();
-  PaginaSEI::getInstance()->montarAreaTabela($strResultado, $numRegistros);
-  ?>
-  <?
-  if ($numRegistros > 0) {
-    ?>
-    <div style="float:right;padding:0 1.5em">
-      <label style="">Quantidade de registros por página</label>
-      <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' id='numRegistosPaginaInferior' value="<?= $_REQUEST['numRegistosPaginaSuperior'] ?>" name='numRegistosPaginaInferior' onkeyup='replicaValorNumeroRegistrosPorPagina(this)'>
-      <input size="10" value="OK" class="infraButton" style="vertical-align:top" type="submit">
-    </div>
-    <?
-  }
-  ?>
-  <?
-  PaginaSEI::getInstance()->montarAreaDebug();
-  PaginaSEI::getInstance()->montarBarraComandosInferior($arrComandos);
-
-  ?>
+  <? $objPaginaSEI->fecharAreaDados(); ?>
+  <? $objPaginaSEI->montarAreaTabela($strResultado, $numRegistros); ?>
+  <? $objPaginaSEI->montarBarraComandosInferior($arrComandos); ?>
 </form>
 <?
-PaginaSEI::getInstance()->fecharBody();
-PaginaSEI::getInstance()->fecharHtml();
+$objPaginaSEI->fecharBody();
+$objPaginaSEI->fecharHtml();
 ?>

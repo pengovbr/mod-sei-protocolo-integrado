@@ -3,12 +3,14 @@ require_once dirname(__FILE__) . '/../../web/Sip.php';
 
 // ATENÇÃO: Identificação da versão do módulo mod-SIP-protocolo-integrado. 
 // Este deve estar sempre sincronizado com a constante VERSAO_MODULO_PI no arquivo ProtocoloIntegradoIntegracao.php
-define("VERSAO_MODULO_PI", "3.0.2");
+define("VERSAO_MODULO_PI", "3.1.0");
 
 try {
 
   class VersaoProtocoloIntegradoRN extends InfraScriptVersao
     {
+
+    const PARAMETRO_VERSAO_MODULO = 'VERSAO_MODULO_PI';
 
     public function __construct()
       {
@@ -145,6 +147,10 @@ try {
     
     public function versao_2_0_0() {
     }
+
+    public function versao_2_1_0() {
+        // Nada deverá ser feito
+    }
     
     public function versao_3_0_0() {
         // Remoção de menu de consiguração do módulo devido a transição das configurações técnicas para o arquivo de configuração ConfiguracaoModProtocoloIntegrado.php
@@ -164,8 +170,46 @@ try {
 
     }
 
-    public function versao_sem_alteracao_banco() {
+    public function versao_3_0_1($strVersaoAtual)
+    {
+        // Nada deverá ser feito
     }
+
+    public function versao_3_0_2($strVersaoAtual)
+    {
+        // Nada deverá ser feito
+    }
+
+    public function versao_3_1_0($strVersaoAtual)
+    {
+        // Cadastrar parametro versão do módulo PI
+        $objInfraParametroDTO = new InfraParametroDTO();
+        $objInfraParametroDTO->setStrNome(self::PARAMETRO_VERSAO_MODULO);
+        $objInfraParametroDTO->setStrValor('3.1.0');
+
+        $objInfraParametroBD = new InfraParametroBD(BancoSip::getInstance());
+        $objInfraParametroBD->cadastrar($objInfraParametroDTO);
+    }
+
+    /**
+     * Atualiza o número de versão do módulo nas tabelas de parâmetro do sistema
+     *
+     * @param  string $parStrNumeroVersao
+     * @return void
+     */
+    private function atualizarNumeroVersao($parStrNumeroVersao)
+    {
+        $objInfraParametroDTO = new InfraParametroDTO();
+        $objInfraParametroDTO->setStrNome([self::PARAMETRO_VERSAO_MODULO], InfraDTO::$OPER_IN);
+        $objInfraParametroDTO->retTodos();
+        $objInfraParametroBD = new InfraParametroBD(BancoSip::getInstance());
+        $arrObjInfraParametroDTO = $objInfraParametroBD->listar($objInfraParametroDTO);
+        foreach ($arrObjInfraParametroDTO as $objInfraParametroDTO) {
+            $objInfraParametroDTO->setStrValor($parStrNumeroVersao);
+            $objInfraParametroBD->alterar($objInfraParametroDTO);
+        }
+    }
+
   }
 
     session_start();
@@ -184,10 +228,11 @@ try {
         '1.1.2' => 'versao_1_1_2',
         '1.1.5' => 'versao_1_1_5',
         '2.0.*' => 'versao_2_0_0',
-        '2.1.*' => 'versao_sem_alteracao_banco',
+        '2.1.*' => 'versao_2_1_0',
         '3.0.*' => 'versao_3_0_0',
-        '3.0.1' => 'versao_sem_alteracao_banco',
-        '3.0.2' => 'versao_sem_alteracao_banco'
+        '3.0.1' => 'versao_3_0_1',
+        '3.0.2' => 'versao_3_0_2',
+        '3.1.*' => 'versao_3_1_0'
     ));
 
     $VersaoProtocoloIntegradoRN->setStrVersaoInfra('1.595.1');

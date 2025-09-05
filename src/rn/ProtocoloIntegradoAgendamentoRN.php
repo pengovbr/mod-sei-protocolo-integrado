@@ -1,34 +1,36 @@
 <?php
-    
-require_once DIR_SEI_WEB.'/SEI.php';
 
-class ProtocoloIntegradoAgendamentoRN extends InfraRN {
+require_once DIR_SEI_WEB . '/SEI.php';
 
-  public function __construct() {
-      parent::__construct();
+class ProtocoloIntegradoAgendamentoRN extends InfraRN
+{
+  public function __construct()
+  {
+    parent::__construct();
   }
-        
-  protected function inicializarObjInfraIBanco() {
-      return BancoSEI::getInstance();
+
+  protected function inicializarObjInfraIBanco()
+  {
+    return BancoSEI::getInstance();
   }
-        
-  public function publicarProtocoloIntegrado() {
-        
+
+  public function publicarProtocoloIntegrado()
+  {
     try {
-        LimiteSEI::getInstance()->configurarNivel3();
+      LimiteSEI::getInstance()->configurarNivel3();
 
-        InfraDebug::getInstance()->setBolLigado(true);
-        InfraDebug::getInstance()->setBolDebugInfra(false);
-        InfraDebug::getInstance()->setBolEcho(false);
-        InfraDebug::getInstance()->limpar();
-            
-        SessaoSEI::getInstance(false)->simularLogin(SessaoSEI::$USUARIO_SEI, SessaoSEI::$UNIDADE_TESTE);
-        $numSeg = InfraUtil::verificarTempoProcessamento();
-            
-        InfraDebug::getInstance()->gravar('Inicializando Publicações no Protocolo Integrado');
-        $objProtocoloIntegradoMonitoramento = new ProtocoloIntegradoMonitoramentoProcessosDTO();    
-        $objProtocoloIntegrado = new ProtocoloIntegradoMonitoramentoProcessosRN();
-      try {           
+      InfraDebug::getInstance()->setBolLigado(true);
+      InfraDebug::getInstance()->setBolDebugInfra(false);
+      InfraDebug::getInstance()->setBolEcho(false);
+      InfraDebug::getInstance()->limpar();
+
+      SessaoSEI::getInstance(false)->simularLogin(SessaoSEI::$USUARIO_SEI, SessaoSEI::$UNIDADE_TESTE);
+      $numSeg = InfraUtil::verificarTempoProcessamento();
+
+      InfraDebug::getInstance()->gravar('Inicializando Publicações no Protocolo Integrado');
+      $objProtocoloIntegradoMonitoramento = new ProtocoloIntegradoMonitoramentoProcessosDTO();
+      $objProtocoloIntegrado = new ProtocoloIntegradoMonitoramentoProcessosRN();
+      try {
         $objProtocoloIntegrado->publicarProcessos($objProtocoloIntegradoMonitoramento);
       } catch (Exception $e) {
           throw new InfraException('Módulo Protocolo Integrado: Erro ao executar publicação de protocolos.', $e);
@@ -49,11 +51,10 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         InfraDebug::getInstance()->limpar();
         throw new InfraException('Módulo Protocolo Integrado: Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.', $e);
     }
-    
   }
 
-  public function notificarNovosPacotesNaoSendoGerados() {
-        
+  public function notificarNovosPacotesNaoSendoGerados()
+  {
     try {
         
         LimiteSEI::getInstance()->configurarNivel3();
@@ -82,11 +83,10 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         InfraDebug::getInstance()->limpar();
         throw new InfraException('Módulo Protocolo Integrado: Erro ao publicar Metadados e Operações dos Processos no Protocolo Integrado.', $e);
     }
-        
   }
 
-  public function notificarProcessosComFalhaPublicacaoProtocoloIntegrado() {
-    
+  public function notificarProcessosComFalhaPublicacaoProtocoloIntegrado()
+  {
     try {
         LimiteSEI::getInstance()->configurarNivel3();
             
@@ -119,5 +119,3 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
     }   
   } 
 }
- 
-?>
