@@ -50,9 +50,9 @@ try {
       $arrStrItensSelecionados = explode(',', $_REQUEST['hdnForcarReenvioItensSelecionados']);
       $arrStrItensSelecionados = array_unique($arrStrItensSelecionados);
       $objProtocoloIntegradoMonitoramentoProcessosRN = new ProtocoloIntegradoMonitoramentoProcessosRN();
-      // $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
-      // $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
-      // $objProtocoloIntegradoParametrosDTO->retTodos();
+      $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
+      $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
+      $objProtocoloIntegradoParametrosDTO->retTodos();
       $objRetornoProtocoloIntegradoParametros = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
       $filtro = array();
       $filtro['pacotes'] = array();
