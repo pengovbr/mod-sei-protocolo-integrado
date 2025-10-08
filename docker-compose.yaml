@@ -1,16 +1,16 @@
 version: '2'
 services:
   jod:
-    image: processoeletronico/vagrant_sei4_jod:${ENVIRONMENT_VERSION}
+    image: processoeletronico/jod:${ENVIRONMENT_VERSION}
     container_name: jod
 
   smtp:
-    image: processoeletronico/vagrant_sei4_mailcatcher:${ENVIRONMENT_VERSION}
+    image: processoeletronico/mailcatcher:${ENVIRONMENT_VERSION}
     ports:
       - "1080:1080"
 
   memcached:
-    image: processoeletronico/vagrant_sei4_memcached:${ENVIRONMENT_VERSION}
+    image: processoeletronico/memcached:${ENVIRONMENT_VERSION}
     ports:
       - "11211:11211"
 
@@ -22,22 +22,12 @@ services:
       - ${DATABASE_PORT}:${DATABASE_PORT}
 
   solr:
-    # sei 4.0.x e 4.1.x
-    image: processoeletronico/vagrant_sei4_solr:${ENVIRONMENT_VERSION}
-    
-    # sei 5.0.x
-    # image: processoeletronico/solr9.4.0:latest
-
+    image: processoeletronico/solr9.6.1:${ENVIRONMENT_VERSION}
     ports:
       - "8983:8983"
 
   httpd:
-    # sei 4.0.x e 4.1.x
-    image: processoeletronico/vagrant_sei4_httpd:${ENVIRONMENT_VERSION}
-
-    # sei 5.0.x
-    # image: processoeletronico/sei5-alpine:${ENVIRONMENT_VERSION}
-
+    image: ${HTTPD_IMAGE}:${ENVIRONMENT_VERSION}
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"

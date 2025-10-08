@@ -6,7 +6,7 @@
 # Parâmetros de configuração
 
 # Opções possíveis para spe (sistema de proc eletronico): sei4, sei41, super e sei5
-sistema = super
+sistema = sei5
 base = mysql
 
 MODULO_NOME = protocolo-integrado
