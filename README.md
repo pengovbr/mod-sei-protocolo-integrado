@@ -9,7 +9,7 @@ Para maiores informações sobre o Protocolo Integrado e como aderir ao projeto,
 
 | Versão SEI/SUPER             | Versão módulo                        |
 | ---                          | ---                                  |
-| 4.0.x, 4.1.1, 4.1.2, 5.0.0   | mod-sei-protocolo-integrado 3.0.x    |
+| 4.0.x, 4.1.1, 4.1.2, 5.0.0, 5.0.1, 5.0.2, 5.0.3   | mod-sei-protocolo-integrado 3.0.3    |
 
 
 ## Documentação
