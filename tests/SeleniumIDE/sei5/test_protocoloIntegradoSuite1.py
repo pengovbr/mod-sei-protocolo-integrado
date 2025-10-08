@@ -15,10 +15,11 @@ class TestProtocoloIntegradoSuite1():
   def setup_method(self, method):
     chrome_options = Options()
     chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--user-data-dir=/tmp')
+    chrome_options.add_argument('--profile-directory=Default')
+    chrome_options.add_argument('--user-data-dir=~/.config/google-chrome')
     self.driver = webdriver.Chrome(options=chrome_options)
     self.vars = {}
     self.driver.set_window_size(1600, 900)
@@ -47,15 +48,18 @@ class TestProtocoloIntegradoSuite1():
     assert len(elements) > 0
     self.driver.find_element(By.XPATH, "//td[contains(text(),'ProtocoloIntegradoAgendamentoRN :: notificarNovosPacotesNaoSendoGerados')]/../td[7]/a/img[@title='Executar Agendamento']").click() #//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: notificarNovosPacotesNaoSendoGerados\')]/../td[7]/a/img
     self.driver.switch_to.alert.accept()
-    elements = self.driver.find_elements(By.XPATH, "//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: notificarNovosPacotesNaoSendoGerados\')]/../td[contains(.,\'Sucesso\')]")
-    assert len(elements) > 0
+    time.sleep(3)
+    element = self.driver.find_elements(By.XPATH, '//td[contains(text(),\'ProtocoloIntegradoAgendamentoRN :: notificarNovosPacotesNaoSendoGerados\')]/../td[contains(text(),\'Sucesso\')]')
+    assert len(element) > 0
     self.driver.find_element(By.XPATH, "//td[contains(text(),'ProtocoloIntegradoAgendamentoRN :: notificarProcessosComFalhaPublicacaoProtocoloIntegrado')]/../td[7]/a/img[@title='Executar Agendamento']").click() #//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: notificarProcessosComFalhaPublicacaoProtocoloIntegrado\')]/../td[7]/a/img
     self.driver.switch_to.alert.accept()
-    elements = self.driver.find_elements(By.XPATH, "//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: notificarProcessosComFalhaPublicacaoProtocoloIntegrado\')]/../td[contains(.,\'Sucesso\')]")
+    time.sleep(3)
+    elements = self.driver.find_elements(By.XPATH, "//td[contains(text(),'ProtocoloIntegradoAgendamentoRN :: notificarProcessosComFalhaPublicacaoProtocoloIntegrado')]/../td[contains(text(),'Sucesso')]")
     assert len(elements) > 0
     self.driver.find_element(By.XPATH, "//td[contains(text(),'ProtocoloIntegradoAgendamentoRN :: publicarProtocoloIntegrado')]/../td[7]/a/img[@title='Executar Agendamento']").click() #//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: publicarProtocoloIntegrado\')]/../td[7]/a/img
     self.driver.switch_to.alert.accept()
-    elements = self.driver.find_elements(By.XPATH, "//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: publicarProtocoloIntegrado\')]/../td[contains(.,\'Sucesso\')]")
+    time.sleep(3)
+    elements = self.driver.find_elements(By.XPATH, "//td[contains(text(),'ProtocoloIntegradoAgendamentoRN :: publicarProtocoloIntegrado')]/../td[contains(text(),'Sucesso')]")
     assert len(elements) > 0
   
   def test_20AgendamentoEnviar(self):
@@ -174,14 +178,17 @@ class TestProtocoloIntegradoSuite1():
     assert len(elements) > 0
     self.driver.find_element(By.XPATH, "//td[contains(text(),'ProtocoloIntegradoAgendamentoRN :: notificarNovosPacotesNaoSendoGerados')]/../td[7]/a/img[@title='Executar Agendamento']").click() #//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: notificarNovosPacotesNaoSendoGerados\')]/../td[7]/a/img
     self.driver.switch_to.alert.accept()
-    elements = self.driver.find_elements(By.XPATH, "//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: notificarNovosPacotesNaoSendoGerados\')]/../td[contains(.,\'Sucesso\')]")
+    time.sleep(3)
+    elements = self.driver.find_elements(By.XPATH, "//td[contains(text(),\'ProtocoloIntegradoAgendamentoRN :: notificarNovosPacotesNaoSendoGerados\')]/../td[contains(text(),\'Sucesso\')]")
     assert len(elements) > 0
     self.driver.find_element(By.XPATH, "//td[contains(text(),'ProtocoloIntegradoAgendamentoRN :: notificarProcessosComFalhaPublicacaoProtocoloIntegrado')]/../td[7]/a/img[@title='Executar Agendamento']").click() #//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: notificarProcessosComFalhaPublicacaoProtocoloIntegrado\')]/../td[7]/a/img
     self.driver.switch_to.alert.accept()
-    elements = self.driver.find_elements(By.XPATH, "//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: notificarProcessosComFalhaPublicacaoProtocoloIntegrado\')]/../td[contains(.,\'Sucesso\')]")
+    time.sleep(3)
+    elements = self.driver.find_elements(By.XPATH, "//td[contains(text(),\'ProtocoloIntegradoAgendamentoRN :: notificarProcessosComFalhaPublicacaoProtocoloIntegrado\')]/../td[contains(text(),\'Sucesso\')]")
     assert len(elements) > 0
     self.driver.find_element(By.XPATH, "//td[contains(text(),'ProtocoloIntegradoAgendamentoRN :: publicarProtocoloIntegrado')]/../td[7]/a/img[@title='Executar Agendamento']").click() #//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: publicarProtocoloIntegrado\')]/../td[7]/a/img
     self.driver.switch_to.alert.accept()
-    elements = self.driver.find_elements(By.XPATH, "//td[contains(.,\'ProtocoloIntegradoAgendamentoRN :: publicarProtocoloIntegrado\')]/../td[contains(.,\'Sucesso\')]")
+    time.sleep(3)
+    elements = self.driver.find_elements(By.XPATH, "//td[contains(text(),\'ProtocoloIntegradoAgendamentoRN :: publicarProtocoloIntegrado\')]/../td[contains(text(),\'Sucesso\')]")
     assert len(elements) > 0
   
