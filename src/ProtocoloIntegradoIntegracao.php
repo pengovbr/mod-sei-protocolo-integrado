@@ -2,14 +2,14 @@
 
 // ATENÇÃO: Identificação da versão do módulo mod-sei-protocolo-integrado. 
 // Este deve estar sempre sincronizado com a constante VERSAO_MODULO_PI no arquivo sip_atualizar_versao_modulo_protocolo_integrado.php
-define("VERSAO_MODULO_PI", "3.0.2");
+define("VERSAO_MODULO_PI", "3.0.3");
 
 class ProtocoloIntegradoIntegracao extends SeiIntegracao {
 
   const COMPATIBILIDADE_MODULO_SEI = [
     // Versões SEI
     '4.0.12', '4.1.1', '4.1.2', '4.1.5',
-    '4.0.12.15', '5.0.0'
+    '4.0.12.15', '5.0.0', '5.0.1', '5.0.2', '5.0.3'
   ];
       
   public function getNome() {
