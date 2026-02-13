@@ -176,8 +176,12 @@ class ProtocoloIntegradoRN extends InfraRN {
         case 'NIVEL_ACESSO':
                 $objProtocoloRN = new ProtocoloRN();
                 $arrObjNivelAcessoDTO = InfraArray::indexarArrInfraDTO($objProtocoloRN->listarNiveisAcessoRN0878(), 'StaNivel');
-                $strNomeTarefa = str_replace('@NIVEL_ACESSO@', $arrObjNivelAcessoDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrDescricao(), $strNomeTarefa);
-                        
+                $idNivelAcesso = $objAtributoAndamentoDTO->getStrIdOrigem();
+                if (isset($arrObjNivelAcessoDTO[$idNivelAcesso])) {
+                    $strNomeTarefa = str_replace('@NIVEL_ACESSO@', $arrObjNivelAcessoDTO[$idNivelAcesso]->getStrDescricao(), $strNomeTarefa);
+                } else {
+                    $strNomeTarefa = str_replace('@NIVEL_ACESSO@', '"nível de acesso não encontrado"', $strNomeTarefa);
+                }
             break;
     
         case 'GRAU_SIGILO':
@@ -186,16 +190,25 @@ class ProtocoloIntegradoRN extends InfraRN {
                                 
             $objGrauSigiloDTO->setStrDescricao(InfraString::transformarCaixaBaixa($objGrauSigiloDTO->getStrDescricao()));
           }
+          $idGrauSigilo = $objAtributoAndamentoDTO->getStrIdOrigem();
           if ($objAtributoAndamentoDTO->getNumIdAtividade()==TarefaRN::$TI_GERACAO_PROCEDIMENTO ||
                     $objAtributoAndamentoDTO->getNumIdAtividade()==TarefaRN::$TI_GERACAO_DOCUMENTO ||
                     $objAtributoAndamentoDTO->getNumIdAtividade()==TarefaRN::$TI_RECEBIMENTO_DOCUMENTO ||
                     $objAtributoAndamentoDTO->getNumIdAtividade()==TarefaRN::$TI_ALTERACAO_NIVEL_ACESSO_GLOBAL){
                         
-                 $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' ('.$arrObjGrauSigiloDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrDescricao().')', $strNomeTarefa);
+                 if (isset($arrObjGrauSigiloDTO[$idGrauSigilo])) {
+                     $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' ('.$arrObjGrauSigiloDTO[$idGrauSigilo]->getStrDescricao().')', $strNomeTarefa);
+                 } else {
+                     $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' ("grau de sigilo não encontrado")', $strNomeTarefa);
+                 }
                   
           }else{
                         
-              $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' '.$arrObjGrauSigiloDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrDescricao(), $strNomeTarefa);
+              if (isset($arrObjGrauSigiloDTO[$idGrauSigilo])) {
+                  $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' '.$arrObjGrauSigiloDTO[$idGrauSigilo]->getStrDescricao(), $strNomeTarefa);
+              } else {
+                  $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' "grau de sigilo não encontrado"', $strNomeTarefa);
+              }
           }
             break;
                 
@@ -218,10 +231,18 @@ class ProtocoloIntegradoRN extends InfraRN {
             if ($objAtributoAndamentoDTO->getStrIdOrigem()==null){
               $strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', '"não informada"', $strNomeTarefa);
             }else if(is_array($arrObjHipoteseLegalDTO)){
-                $strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', HipoteseLegalINT::formatarHipoteseLegal($arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrNome(), $arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrBaseLegal()), $strNomeTarefa);
+                $idHipoteseLegal = $objAtributoAndamentoDTO->getStrIdOrigem();
+                if (isset($arrObjHipoteseLegalDTO[$idHipoteseLegal])) {
+                    $strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', HipoteseLegalINT::formatarHipoteseLegal($arrObjHipoteseLegalDTO[$idHipoteseLegal]->getStrNome(), $arrObjHipoteseLegalDTO[$idHipoteseLegal]->getStrBaseLegal()), $strNomeTarefa);
+                } else {
+                    $strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', '"hipótese legal não encontrada"', $strNomeTarefa);
+                }
             }
-          }else if(is_array($arrObjHipoteseLegalDTO) && $arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]){
-              $strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', ', '.HipoteseLegalINT::formatarHipoteseLegal($arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrNome(), $arrObjHipoteseLegalDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrBaseLegal()), $strNomeTarefa);
+          }else if(is_array($arrObjHipoteseLegalDTO)){
+              $idHipoteseLegal = $objAtributoAndamentoDTO->getStrIdOrigem();
+              if (isset($arrObjHipoteseLegalDTO[$idHipoteseLegal])) {
+                  $strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', ', '.HipoteseLegalINT::formatarHipoteseLegal($arrObjHipoteseLegalDTO[$idHipoteseLegal]->getStrNome(), $arrObjHipoteseLegalDTO[$idHipoteseLegal]->getStrBaseLegal()), $strNomeTarefa);
+              }
           }
                     
             break;
@@ -244,10 +265,20 @@ class ProtocoloIntegradoRN extends InfraRN {
             if ($objAtributoAndamentoDTO->getStrIdOrigem()==null){
               $strNomeTarefa = str_replace('@TIPO_CONFERENCIA@', '"não informado"', $strNomeTarefa);
             }else{
-                  $strNomeTarefa = str_replace('@TIPO_CONFERENCIA@', $arrObjTipoConferenciaDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrDescricao(), $strNomeTarefa);
+              $idTipoConferencia = $objAtributoAndamentoDTO->getStrIdOrigem();
+              if (isset($arrObjTipoConferenciaDTO[$idTipoConferencia])) {
+                  $strNomeTarefa = str_replace('@TIPO_CONFERENCIA@', $arrObjTipoConferenciaDTO[$idTipoConferencia]->getStrDescricao(), $strNomeTarefa);
+              } else {
+                  $strNomeTarefa = str_replace('@TIPO_CONFERENCIA@', '"tipo de conferência não encontrado"', $strNomeTarefa);
+              }
             }
           }else{
-                    $strNomeTarefa = str_replace('@TIPO_CONFERENCIA@', ', conferido com '.$arrObjTipoConferenciaDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrDescricao(), $strNomeTarefa);
+            $idTipoConferencia = $objAtributoAndamentoDTO->getStrIdOrigem();
+            if (isset($arrObjTipoConferenciaDTO[$idTipoConferencia])) {
+                    $strNomeTarefa = str_replace('@TIPO_CONFERENCIA@', ', conferido com '.$arrObjTipoConferenciaDTO[$idTipoConferencia]->getStrDescricao(), $strNomeTarefa);
+            } else {
+                    $strNomeTarefa = str_replace('@TIPO_CONFERENCIA@', ', conferido com "tipo de conferência não encontrado"', $strNomeTarefa);
+            }
           }
             break;
 
