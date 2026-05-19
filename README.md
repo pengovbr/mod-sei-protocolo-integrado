@@ -18,7 +18,7 @@ As instruções disponíveis para o projeto podem ser encontradas na pasta docs/
 
 - **[MANUAL DE INSTALAÇÃO](docs/INSTALACAO.md)**
 - **[MANUAL DE USO](docs/Manual_de_Uso.pdf)**
-- **[SOLICITAÇÃO DE CREDENCIAIS](https://www.gov.br/economia/pt-br/assuntos/processo-eletronico-nacional/conteudo/protocolo-integrado-1/solicitacao-de-credenciais-para-uso-do-web-service)**
+- **[SOLICITAÇÃO DE CREDENCIAIS](https://www.gov.br/gestao/pt-br/assuntos/gestaoeinovacao/informacoes-sistemas-e-servicos-de-gestao/processo-eletronico-nacional/conteudo/protocolo-integrado-1/solicitacao-de-credenciais-para-uso-do-web-service)**
 
 ## Observações
 
