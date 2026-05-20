@@ -1,6 +1,5 @@
 <?php
 
-use utilphp\util;
 use PHPUnit\Extensions\Selenium2TestCase\Keys as Keys;
 
 
@@ -145,30 +144,29 @@ class PaginaIniciarProcesso extends PaginaTeste
       return '999990.' . $strSequencia . '/2015-00';
   }
 
-  public static function gerarProcessoTeste($test, array $dadosProcesso = null)
+  public function gerarProcessoTeste(array $dadosProcesso = null)
     {
-      $test->byLinkText("Iniciar Processo")->click();
+      $this->test->byLinkText("Iniciar Processo")->click();
 
       $dadosProcesso = $dadosProcesso ?: array();
       $dadosProcesso["TIPO_PROCESSO"] = @$dadosProcesso["TIPO_PROCESSO"] ?: "Licitação: Pregão Eletrônico";
-      $dadosProcesso["DESCRICAO"] = @$dadosProcesso["DESCRICAO"] ?: util::random_string(20);
-      $dadosProcesso["OBSERVACOES"] = @$dadosProcesso["OBSERVACOES"] ?: util::random_string(100);
-      $dadosProcesso["INTERESSADOS"] = @$dadosProcesso["INTERESSADOS"] ?: util::random_string(40);
+      $dadosProcesso["DESCRICAO"] = @$dadosProcesso["DESCRICAO"] ?: CenarioBaseTestCase::gerarStringAleatoria(20);
+      $dadosProcesso["OBSERVACOES"] = @$dadosProcesso["OBSERVACOES"] ?: CenarioBaseTestCase::gerarStringAleatoria(100);
+      $dadosProcesso["INTERESSADOS"] = @$dadosProcesso["INTERESSADOS"] ?: CenarioBaseTestCase::gerarStringAleatoria(40);
       $dadosProcesso["RESTRICAO"] = @$dadosProcesso["RESTRICAO"] ?: PaginaIniciarProcesso::STA_NIVEL_ACESSO_PUBLICO;
       $dadosProcesso["HIPOTESE_LEGAL"] = @$dadosProcesso["HIPOTESE_LEGAL"] ?: "";
 
-      $paginaIniciarProcesso = new PaginaIniciarProcesso($test);
-      $paginaIniciarProcesso->selecionarTipoProcesso($dadosProcesso["TIPO_PROCESSO"]);
-      $paginaIniciarProcesso->descricao($dadosProcesso["DESCRICAO"]);
-      $paginaIniciarProcesso->observacoes($dadosProcesso["OBSERVACOES"]);
-      $paginaIniciarProcesso->selecionarRestricao($dadosProcesso["RESTRICAO"], $dadosProcesso["HIPOTESE_LEGAL"]);
-      $paginaIniciarProcesso->adicionarInteressado($dadosProcesso["INTERESSADOS"]);
+      $this->selecionarTipoProcesso($dadosProcesso["TIPO_PROCESSO"]);
+      $this->descricao($dadosProcesso["DESCRICAO"]);
+      $this->observacoes($dadosProcesso["OBSERVACOES"]);
+      $this->selecionarRestricao($dadosProcesso["RESTRICAO"], $dadosProcesso["HIPOTESE_LEGAL"]);
+      $this->adicionarInteressado($dadosProcesso["INTERESSADOS"]);
 
-      $paginaIniciarProcesso->salvarProcesso();
+      $this->salvarProcesso();
 
-      $test->frame(null);
-      $test->frame("ifrArvore");
-      $protocoloProcesso = trim($test->byXPath("//a[@title='". $dadosProcesso["TIPO_PROCESSO"] ."'] | //span[@title='". $dadosProcesso["TIPO_PROCESSO"] ."']")->text());
+      $this->test->frame(null);
+      $this->test->frame("ifrArvore");
+      $protocoloProcesso = trim($this->test->byXPath("//a[@title='". $dadosProcesso["TIPO_PROCESSO"] ."'] | //span[@title='". $dadosProcesso["TIPO_PROCESSO"] ."']")->text());
 
       return $protocoloProcesso;
   }

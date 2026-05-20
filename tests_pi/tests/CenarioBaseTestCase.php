@@ -1,6 +1,5 @@
 <?php
 
-use \utilphp\util;
 use PHPUnit\Extensions\Selenium2TestCase;
 use Tests\Funcional\Sei\Fixtures\ContatoFixture;
 use function PHPSTORM_META\map;
@@ -39,13 +38,9 @@ class CenarioBaseTestCase extends Selenium2TestCase
     protected $paginaCancelarDocumento = null;
     protected $paginaMoverDocumento = null;
     protected $paginaArquivarProcesso = null;
-    protected $paginaAvaliacaoDeProcessos = null;
-    protected $paginaPreparacaoListagemEliminacao = null;
-    protected $paginaGestaoListagemEliminacao = null;
     protected $paginaUnidades = null;
-    protected $paginaAcervoGlobalDePendencias = null;
-    protected $paginaArquivoDaUnidade = null;
     protected $paginaAgendamentos = null;
+    protected $paginaIniciarProcesso = null;
 
     public function setUpPage(): void
     {
@@ -63,6 +58,7 @@ class CenarioBaseTestCase extends Selenium2TestCase
         $this->paginaMoverDocumento = new PaginaMoverDocumento($this);
         $this->paginaUnidades = new PaginaUnidades($this);
         $this->paginaAgendamentos = new PaginaAgendamentos($this);
+        $this->paginaIniciarProcesso = new PaginaIniciarProcesso($this);
         $this->currentWindow()->maximize();
     }
 
@@ -332,9 +328,9 @@ class CenarioBaseTestCase extends Selenium2TestCase
     {
         return array(
             "TIPO_PROCESSO" => $contextoProducao['TIPO_PROCESSO'],
-            "DESCRICAO" => util::random_string(100),
+            "DESCRICAO" => self::gerarStringAleatoria(100),
             "OBSERVACOES" => null,
-            "INTERESSADOS" => str_repeat(util::random_string(9) . ' ', 25),
+            "INTERESSADOS" => str_repeat(self::gerarStringAleatoria(9) . ' ', 25),
             "RESTRICAO" => PaginaIniciarProcesso::STA_NIVEL_ACESSO_PUBLICO,
             "ORIGEM" => $contextoProducao['URL'],
         );
@@ -346,9 +342,9 @@ class CenarioBaseTestCase extends Selenium2TestCase
             'TIPO' => 'G', // Documento do tipo Gerado pelo sistema
             "NUMERO" => null, //Gerado automaticamente no cadastramento do documento
             "TIPO_DOCUMENTO" => $contextoProducao['TIPO_DOCUMENTO'],
-            "DESCRICAO" => trim(str_repeat(util::random_string(9) . ' ', 10)),
+            "DESCRICAO" => trim(str_repeat(self::gerarStringAleatoria(9) . ' ', 10)),
             "OBSERVACOES" => null,
-            "INTERESSADOS" => str_repeat(util::random_string(9) . ' ', 25),
+            "INTERESSADOS" => str_repeat(self::gerarStringAleatoria(9) . ' ', 25),
             "RESTRICAO" => PaginaIniciarProcesso::STA_NIVEL_ACESSO_PUBLICO,
             "ORDEM_DOCUMENTO_REFERENCIADO" => null,
             "ARQUIVO" => ".html",
@@ -369,9 +365,9 @@ class CenarioBaseTestCase extends Selenium2TestCase
             "NUMERO" => null, //Gerado automaticamente no cadastramento do documento
             "TIPO_DOCUMENTO" => $contextoProducao['TIPO_DOCUMENTO'],
             "DATA_ELABORACAO" => '01/01/2017',
-            "DESCRICAO" => str_repeat(util::random_string(9) . ' ', 10),
-            "OBSERVACOES" => util::random_string(500),
-            "INTERESSADOS" => str_repeat(util::random_string(9) . ' ', 25),
+            "DESCRICAO" => str_repeat(self::gerarStringAleatoria(9) . ' ', 10),
+            "OBSERVACOES" => self::gerarStringAleatoria(500),
+            "INTERESSADOS" => str_repeat(self::gerarStringAleatoria(9) . ' ', 25),
             "ORDEM_DOCUMENTO_REFERENCIADO" => $ordemDocumentoReferenciado,
             "RESTRICAO" => PaginaIniciarProcesso::STA_NIVEL_ACESSO_PUBLICO,
             "ARQUIVO" => $arquivos,
@@ -391,9 +387,9 @@ class CenarioBaseTestCase extends Selenium2TestCase
             "NUMERO" => null, //Gerado automaticamente no cadastramento do documento
             "TIPO_DOCUMENTO" => $contextoProducao['TIPO_DOCUMENTO'],
             "DATA_ELABORACAO" => '01/01/2017',
-            "DESCRICAO" => str_repeat(util::random_string(9) . ' ', 10),
-            "OBSERVACOES" => util::random_string(500),
-            "INTERESSADOS" => str_repeat(util::random_string(9) . ' ', 25),
+            "DESCRICAO" => str_repeat(self::gerarStringAleatoria(9) . ' ', 10),
+            "OBSERVACOES" => self::gerarStringAleatoria(500),
+            "INTERESSADOS" => str_repeat(self::gerarStringAleatoria(9) . ' ', 25),
             "ORDEM_DOCUMENTO_REFERENCIADO" => $ordemDocumentoReferenciado,
             "RESTRICAO" => PaginaIniciarProcesso::STA_NIVEL_ACESSO_PUBLICO,
             "ARQUIVO" => $arquivos,
@@ -419,6 +415,10 @@ class CenarioBaseTestCase extends Selenium2TestCase
         $this->frame(null);
         $this->byXPath("//img[contains(@title, 'Controle de Processos')]")->click();
         $this->paginaMapeamentoUnidade->navegarMapeamentoUnidade();
+    }
+
+    public static function gerarStringAleatoria($length = 10) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
 
 }

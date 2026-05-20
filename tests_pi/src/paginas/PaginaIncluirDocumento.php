@@ -1,6 +1,5 @@
 <?php
 
-use utilphp\util;
 use PHPUnit_Extensions_Selenium2TestCase_Keys as Keys;
 
 class PaginaIncluirDocumento extends PaginaTeste
@@ -28,6 +27,7 @@ class PaginaIncluirDocumento extends PaginaTeste
         $this->test->byLinkText($tipoDocumento)->click();
     }
     catch (Exception $e){
+      //die($tipoDocumento);
         $this->test->byXPath("//img[@id='imgExibirSeries'] | //a[@id='ancExibirSeries']")->click();
         $this->test->byId('txtFiltro')->value($tipoDocumento);
         sleep(2);
@@ -127,10 +127,10 @@ class PaginaIncluirDocumento extends PaginaTeste
       sleep(2);
 
       $dadosDocumento = $dadosDocumento ?: array();
-      $dadosDocumento["TIPO_DOCUMENTO"] = @$dadosDocumento["TIPO_DOCUMENTO"] ?: "Ofício";
-      $dadosDocumento["DESCRICAO"] = @$dadosDocumento["DESCRICAO"] ?: util::random_string(20);
-      $dadosDocumento["OBSERVACOES"] = @$dadosDocumento["OBSERVACOES"] ?: util::random_string(100);
-      $dadosDocumento["INTERESSADOS"] = @$dadosDocumento["INTERESSADOS"] ?: util::random_string(40);
+      $dadosDocumento["TIPO_DOCUMENTO"] = @$dadosDocumento["TIPO_DOCUMENTO"] ?: "Aviso";
+      $dadosDocumento["DESCRICAO"] = @$dadosDocumento["DESCRICAO"] ?: CenarioBaseTestCase::gerarStringAleatoria(20);
+      $dadosDocumento["OBSERVACOES"] = @$dadosDocumento["OBSERVACOES"] ?: CenarioBaseTestCase::gerarStringAleatoria(100);
+      $dadosDocumento["INTERESSADOS"] = @$dadosDocumento["INTERESSADOS"] ?: CenarioBaseTestCase::gerarStringAleatoria(40);
       $dadosDocumento["RESTRICAO"] = @$dadosDocumento["RESTRICAO"] ?: PaginaIncluirDocumento::STA_NIVEL_ACESSO_PUBLICO;
       $dadosDocumento["HIPOTESE_LEGAL"] = @$dadosDocumento["HIPOTESE_LEGAL"] ?: "";
 
@@ -169,11 +169,11 @@ class PaginaIncluirDocumento extends PaginaTeste
 
       $dadosDocumento = $dadosDocumento ?: array();
       $dadosDocumento["TIPO_DOCUMENTO"] = @$dadosDocumento["TIPO_DOCUMENTO"] ?: "Ofício";
-      $dadosDocumento["DESCRICAO"] = @$dadosDocumento["DESCRICAO"] ?: util::random_string(20);
+      $dadosDocumento["DESCRICAO"] = @$dadosDocumento["DESCRICAO"] ?: CenarioBaseTestCase::gerarStringAleatoria(20);
       $dadosDocumento["DATA_ELABORACAO"] = @$dadosDocumento["DATA_ELABORACAO"] ?: date("d/m/Y");
       $dadosDocumento["FORMATO_DOCUMENTO"] = @$dadosDocumento["FORMATO_DOCUMENTO"] ?: self::STA_FORMATO_NATO_DIGITAL;
-      $dadosDocumento["OBSERVACOES"] = @$dadosDocumento["OBSERVACOES"] ?: util::random_string(100);
-      $dadosDocumento["INTERESSADOS"] = @$dadosDocumento["INTERESSADOS"] ?: util::random_string(40);
+      $dadosDocumento["OBSERVACOES"] = @$dadosDocumento["OBSERVACOES"] ?: CenarioBaseTestCase::gerarStringAleatoria(100);
+      $dadosDocumento["INTERESSADOS"] = @$dadosDocumento["INTERESSADOS"] ?: CenarioBaseTestCase::gerarStringAleatoria(40);
       $dadosDocumento["RESTRICAO"] = @$dadosDocumento["RESTRICAO"] ?: PaginaIncluirDocumento::STA_NIVEL_ACESSO_PUBLICO;
       $dadosDocumento["HIPOTESE_LEGAL"] = @$dadosDocumento["HIPOTESE_LEGAL"] ?: "";
 

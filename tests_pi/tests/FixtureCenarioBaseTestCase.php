@@ -1,6 +1,5 @@
 <?php
 
-use \utilphp\util;
 use PHPUnit\Extensions\Selenium2TestCase;
 use Tests\Funcional\Sei\Fixtures\{ProtocoloFixture,ProcedimentoFixture,AtividadeFixture,ContatoFixture};
 use Tests\Funcional\Sei\Fixtures\{ParticipanteFixture,RelProtocoloAssuntoFixture,AtributoAndamentoFixture};
@@ -22,8 +21,8 @@ class FixtureCenarioBaseTestCase extends CenarioBaseTestCase
         }
 
         $parametros = [
-            'Descricao' => $dadosProcesso['DESCRICAO'] ?: util::random_string(20),
-            'Interessados' => $dadosProcesso['INTERESSADOS'] ?: util::random_string(40),
+            'Descricao' => $dadosProcesso['DESCRICAO'] ?: CenarioBaseTestCase::gerarStringAleatoria(20),
+            'Interessados' => $dadosProcesso['INTERESSADOS'] ?: CenarioBaseTestCase::gerarStringAleatoria(40),
             'IdHipoteseLegal' => $dadosProcesso['HIPOTESE_LEGAL'] ? $objHipLegalDTO->getNumIdHipoteseLegal() : null,
             'StaNivelAcessoLocal' => $dadosProcesso["RESTRICAO"] ?: PaginaIniciarProcesso::STA_NIVEL_ACESSO_PUBLICO,
             'StaNivelAcessoGlobal' => $dadosProcesso["RESTRICAO"] ?: PaginaIniciarProcesso::STA_NIVEL_ACESSO_PUBLICO
