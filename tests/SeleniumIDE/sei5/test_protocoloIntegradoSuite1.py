@@ -21,6 +21,7 @@ class TestProtocoloIntegradoSuite1():
     chrome_options.add_argument('--profile-directory=Default')
     chrome_options.add_argument('--user-data-dir=~/.config/google-chrome')
     self.driver = webdriver.Chrome(options=chrome_options)
+    self.driver.implicitly_wait(5)
     self.vars = {}
     self.driver.set_window_size(1600, 900)
   
