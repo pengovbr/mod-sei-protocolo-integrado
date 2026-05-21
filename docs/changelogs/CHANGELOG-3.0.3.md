@@ -11,7 +11,7 @@ As melhorias entregues em cada uma das versões são cumulativas, ou seja, cont�
     
 | Versão SEI/SUPER             | Versão módulo                        |
 | ---                          | ---                                  |
-| 4.0.x, 4.1.1, 4.1.2, 5.0.0, 5.0.1, 5.0.2, 5.0.3   | mod-sei-protocolo-integrado 3.0.x    |
+| 4.0.x, 4.1.1, 4.1.2, 5.0.0, 5.0.1, 5.0.2, 5.0.3, 5.0.4   | mod-sei-protocolo-integrado 3.0.x    |
 
 Para maiores informações sobre os procedimentos de instalação ou atualização, acesse os seguintes documentos localizados no pacote de distribuição mod-sei-protocolo-integrado-VERSAO.zip:
 > Atenção: É impreterível seguir rigorosamente o disposto no README.md do Módulo para instalação ou atualização com sucesso.
