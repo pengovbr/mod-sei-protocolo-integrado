@@ -8,8 +8,7 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
 
   const COMPATIBILIDADE_MODULO_SEI = [
     // Versões SEI
-    '4.0.12', '4.1.1', '4.1.2', '4.1.5',
-    '4.0.12.15', '5.0.0', '5.0.1', '5.0.2', '5.0.3', '5.0.4'
+    '5.0.0', '5.0.1', '5.0.2', '5.0.3', '5.0.4'
   ];
       
   public function getNome() {
