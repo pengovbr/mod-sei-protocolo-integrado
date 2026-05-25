@@ -15,21 +15,4 @@ class PaginaTipoProcessoReativar extends PaginaTeste
 
       $this->test->byXPath("//a[@link='pen_map_tipo_processo_reativar']")->click();
   }
-
-  public function reativarMapeamento()
-    {
-      $this->test->byXPath("//a[contains(@class, 'reativar')]")->click();
-      $bolExisteAlerta=$this->alertTextAndClose();
-    if($bolExisteAlerta!=null) { $this->test->keys(Keys::ENTER);
-    }
-  }
-
-  public function reativarMapeamentoCheckbox() 
-    {
-      $this->test->byXPath("//div[contains(@class, 'infraCheckboxDiv')]")->click();
-      $this->test->byId("btnReativar")->click();
-      $bolExisteAlerta=$this->alertTextAndClose();
-    if($bolExisteAlerta!=null) { $this->test->keys(Keys::ENTER);
-    }
-  }
 }

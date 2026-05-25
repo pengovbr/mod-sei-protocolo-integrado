@@ -180,5 +180,5 @@ $(FILE_VENDOR_FUNCIONAL): ## target de apoio verifica se o build do phpunit foi 
 install-phpunit-vendor: ## instala os pacotes composer referentes aos testes via phpunit
 	$(CMD_COMPOSE_FUNC) -f $(TESTS_PI_DIR)/docker-compose.yaml run --rm -w /tests php-test-functional bash -c './composer.phar install'
 
-vendor: composer.json
+vendor: $(TESTS_PI_DIR)/composer.json
 	$(CMD_COMPOSE_FUNC) run --rm -w /tests php-test-functional bash -c './composer.phar install'

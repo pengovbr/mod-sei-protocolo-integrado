@@ -13,164 +13,33 @@ class PaginaProcesso extends PaginaTeste
   public function concluirProcesso()
     {
       $this->test->frame(null);
-    try {// SEI 4.1
-        $this->test->frame("ifrConteudoVisualizacao");     
-    } catch (Exception $e){// SEI 4.0.12.15
-        $this->test->frame("ifrVisualizacao");
-    }
+      $this->test->frame("ifrConteudoVisualizacao");     
+
       $concluirProcessoButton = $this->test->byXPath("//img[@alt='Concluir Processo']");
       $concluirProcessoButton->click();
 
-      if (InfraUtil::compararVersoes(SEI_VERSAO, ">=", "4.1.1")) {
-        $this->test->frame("ifrVisualizacao");
-        $confirmarConcluirProcessoButton = $this->test->byId('sbmSalvar');
-        $confirmarConcluirProcessoButton->click();
-      }
+      $this->test->frame("ifrVisualizacao");
+      $confirmarConcluirProcessoButton = $this->test->byId('sbmSalvar');
+      $confirmarConcluirProcessoButton->click();
+
   }
 
   public function incluirDocumento()
     {
       $this->test->frame(null);
       $this->test->frame("ifrConteudoVisualizacao");
-    try {// SEI 4.1
-        $this->test->frame("ifrConteudoVisualizacao");     
-        $incluirDocumentoButton = $this->test->byXPath("//img[@alt='Incluir Documento']");
+      $this->test->frame("ifrVisualizacao");
+      $incluirDocumentoButton = $this->test->byXPath("a[1]/img[@alt='Incluir Documento']");
 
-    } catch (Exception $e){// SEI 4.0.12.15
-        $this->test->frame("ifrVisualizacao");
-        $incluirDocumentoButton = $this->test->byXPath("a[1]/img[@alt='Incluir Documento']");
-    }
       $incluirDocumentoButton->click();
   }
 
   public function enviarProcesso()
     {
       $this->test->frame(null);
-    try {// SEI 4.1
-        $this->test->frame("ifrConteudoVisualizacao");     
-    } catch (Exception $e){// SEI 4.0.12.15
-        $this->test->frame("ifrVisualizacao");
-    }
+      $this->test->frame("ifrConteudoVisualizacao");     
+
       $this->test->byXPath("//img[@alt='Enviar Processo']")->click();
-  }
-
-  public function cancelarTramitacaoExterna()
-    {
-      $this->test->frame(null);
-    try {// SEI 4.1
-        $this->test->frame("ifrConteudoVisualizacao");     
-    } catch (Exception $e){// SEI 4.0.12.15
-        $this->test->frame("ifrVisualizacao");
-    }        $this->test->byXPath(utf8_encode("//img[@alt='Cancelar Tramitação Externa']"))->click();
-  }
-
-  public function navegarParaEditarProcesso()
-    {
-      $this->test->frame(null);
-    try {// SEI 4.1
-        $this->test->frame("ifrConteudoVisualizacao");     
-    } catch (Exception $e){// SEI 4.0.12.15
-        $this->test->frame("ifrVisualizacao");
-    }
-      $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Consultar/Alterar Processo']");
-      $this->editarProcessoButton->click();
-  }
-
-  public function navegarParaTramitarProcesso()
-    {
-      $this->test->waitUntil(function($testCase) {
-          $this->selecionarProcesso();
-
-          $this->test->frame(null);
-        try {// SEI 4.1
-            $this->test->frame("ifrConteudoVisualizacao");  
-            $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Envio Externo de Processo']");
-            $this->editarProcessoButton->click();
-            sleep(2);
-    
-            $this->test->frame("ifrVisualizacao");   
-        } catch (Exception $e){// SEI 4.0.12.15
-            $this->test->frame("ifrVisualizacao");
-            $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Envio Externo de Processo']");
-            $this->editarProcessoButton->click();
-            sleep(2);
-        }
-           
-          $testCase->assertStringContainsString('Envio Externo de Processo', $testCase->byCssSelector('body')->text());
-          return true;
-      }, PEN_WAIT_TIMEOUT);
-  }
-
-  public function navegarParaArquivarProcesso()
-    {
-      $this->test->waitUntil(function($testCase) {
-          $this->selecionarProcesso();
-
-
-          $this->test->frame(null);
-        try {// SEI 4.1
-            $this->test->frame("ifrConteudoVisualizacao");  
-            $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Arquivar Processo']");
-            $this->editarProcessoButton->click();
-                
-            $this->test->frame("ifrVisualizacao");   
-        } catch (Exception $e){// SEI 4.0.12.15
-            $this->test->frame("ifrVisualizacao");
-            $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Arquivar Processo']");
-            $this->editarProcessoButton->click();
-        }
-
-          sleep(2);
-          $testCase->assertStringContainsString('Arquivar Processo', $testCase->byCssSelector('body')->text());
-          return true;
-      }, PEN_WAIT_TIMEOUT);
-  }
-
-  public function navegarParaConsultarAndamentos()
-    {
-      $this->test->waitUntil(function($testCase) {
-          $this->test->frame(null);
-          $this->test->frame("ifrArvore");
-          $testCase->byLinkText('Consultar Andamento')->click();
-
-          $this->test->frame(null);
-        try {// SEI 4.1
-            $this->test->frame("ifrConteudoVisualizacao");   
-            $this->test->frame("ifrVisualizacao");  
-        } catch (Exception $e){// SEI 4.0.12.15
-            $this->test->frame("ifrVisualizacao");
-        }
-          sleep(2);
-          $testCase->assertStringContainsString(utf8_encode('Histórico do Processo'), $testCase->byCssSelector('body')->text());
-          return true;
-      }, PEN_WAIT_TIMEOUT);
-  }
-
-  public function navegarParaConsultarRecibos()
-    {
-      $this->test->waitUntil(function($testCase) {
-          // Selecionar processo na Ã¡rvore
-          $this->selecionarProcesso();
-
-          $this->test->frame(null);
-          $this->test->frame("ifrConteudoVisualizacao");
-        try {// SEI 4.1
-            $this->test->frame("ifrConteudoVisualizacao");
-            $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Consultar Recibos']");
-            $this->editarProcessoButton->click();
-            sleep(2);
-                
-            $this->test->frame("ifrVisualizacao");  
-        } catch (Exception $e){// SEI 4.0.12.15
-            $this->test->frame("ifrVisualizacao");
-            $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Consultar Recibos']");
-            $this->editarProcessoButton->click();
-            sleep(2);
-        }
-
-          $testCase->assertStringContainsString('Consultar Recibos', $testCase->byCssSelector('body')->text());
-          return true;
-      }, PEN_WAIT_TIMEOUT);
   }
 
   public function navegarParaAnexarProcesso()
@@ -179,19 +48,13 @@ class PaginaProcesso extends PaginaTeste
           $this->selecionarProcesso();
 
           $this->test->frame(null);
-        try {// SEI 4.1
-            $this->test->frame("ifrConteudoVisualizacao");    
-            $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Anexar Processo']");
-            $this->editarProcessoButton->click();
-            sleep(2);
-    
-            $this->test->frame("ifrVisualizacao"); 
-        } catch (Exception $e){// SEI 4.0.12.15
-            $this->test->frame("ifrVisualizacao");
-            $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Anexar Processo']");
-            $this->editarProcessoButton->click();
-            sleep(2);
-        }
+          $this->test->frame("ifrConteudoVisualizacao");    
+          $this->editarProcessoButton = $this->test->byXPath("//img[@alt='Anexar Processo']");
+          $this->editarProcessoButton->click();
+          sleep(2);
+  
+          $this->test->frame("ifrVisualizacao"); 
+
 
           $testCase->assertStringContainsString(utf8_encode('Anexação de Processos'), $testCase->byCssSelector('body')->text());
           return true;
@@ -207,34 +70,12 @@ class PaginaProcesso extends PaginaTeste
     {
       $this->test->frame(null);
 
-    try {// SEI 4.1
-        $this->test->frame("ifrConteudoVisualizacao");
-        sleep(2);
-        $this->test->frame("ifrVisualizacao");        
-    } catch (Exception $e){// SEI 4.0.12.15
-        $this->test->frame("ifrVisualizacao");
-    }
+      $this->test->frame("ifrConteudoVisualizacao");
+      sleep(2);
+      $this->test->frame("ifrVisualizacao");        
+
         
       return $this->test->byId('divArvoreInformacao')->text();
-  }
-
-  public function processoAberto()
-    {
-    try
-      {
-        $this->test->frame(null);
-      try {// SEI 4.1
-        $this->test->frame("ifrConteudoVisualizacao");     
-      } catch (Exception $e){// SEI 4.0.12.15
-          $this->test->frame("ifrVisualizacao");
-      }
-        $this->test->byXPath("//img[@alt='Reabrir Processo']");
-        return false;
-    }
-    catch(Exception $e)
-      {
-        return true;
-    }
   }
 
   public function processoBloqueado()

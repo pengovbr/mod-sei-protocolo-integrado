@@ -29,14 +29,12 @@ class CenarioBaseTestCase extends Selenium2TestCase
     protected $paginaDocumento = null;
     protected $paginaAssinaturaDocumento = null;
     protected $paginaProcesso = null;
-    protected $paginaEditarProcesso = null;
     protected $paginaTramitar = null;
     protected $paginaConsultarAndamentos = null;
     protected $paginaControleProcesso = null;
     protected $paginaIncluirDocumento = null;
     protected $paginaAnexarProcesso = null;
     protected $paginaCancelarDocumento = null;
-    protected $paginaMoverDocumento = null;
     protected $paginaArquivarProcesso = null;
     protected $paginaUnidades = null;
     protected $paginaAgendamentos = null;
@@ -48,14 +46,12 @@ class CenarioBaseTestCase extends Selenium2TestCase
         $this->paginaDocumento = new PaginaDocumento($this);
         $this->paginaAssinaturaDocumento = new PaginaAssinaturaDocumento($this);
         $this->paginaProcesso = new PaginaProcesso($this);
-        $this->paginaEditarProcesso = new PaginaEditarProcesso($this);
         $this->paginaTramitar = new PaginaTramitarProcesso($this);
         $this->paginaConsultarAndamentos = new PaginaConsultarAndamentos($this);
         $this->paginaControleProcesso = new PaginaControleProcesso($this);
         $this->paginaIncluirDocumento = new PaginaIncluirDocumento($this);
         $this->paginaAnexarProcesso = new PaginaAnexarProcesso($this);
         $this->paginaCancelarDocumento = new PaginaCancelarDocumento($this);
-        $this->paginaMoverDocumento = new PaginaMoverDocumento($this);
         $this->paginaUnidades = new PaginaUnidades($this);
         $this->paginaAgendamentos = new PaginaAgendamentos($this);
         $this->paginaIniciarProcesso = new PaginaIniciarProcesso($this);
@@ -235,29 +231,6 @@ class CenarioBaseTestCase extends Selenium2TestCase
         }
 
         sleep(1);
-    }
-
-    protected function validarDadosProcesso($descricao, $restricao, $observacoes, $listaInteressados, $hipoteseLegal = null)
-    {
-        sleep(2);
-        $this->paginaProcesso->navegarParaEditarProcesso();
-        $this->paginaEditarProcesso = new PaginaEditarProcesso($this);
-        $this->assertEquals(utf8_encode($descricao), $this->paginaEditarProcesso->descricao());
-        $this->assertEquals($restricao, $this->paginaEditarProcesso->restricao());
-
-        $listaInteressados = is_array($listaInteressados) ? $listaInteressados : array($listaInteressados);
-        for ($i = 0; $i < count($listaInteressados); $i++) {
-            $this->assertStringStartsWith(substr($listaInteressados[$i], 0, 100), $this->paginaEditarProcesso->listarInteressados()[$i]);
-        }
-
-        if ($observacoes) {
-            $this->assertStringContainsString($observacoes, $this->byCssSelector('body')->text());
-        }
-
-        if ($hipoteseLegal != null) {
-            $hipoteseLegalDocumento = $this->paginaEditarProcesso->recuperarHipoteseLegal();
-            $this->assertEquals($hipoteseLegal, $hipoteseLegalDocumento);
-        }
     }
 
     protected function validarDocumentoCancelado($nomeDocArvore)

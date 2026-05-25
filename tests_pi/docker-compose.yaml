@@ -115,9 +115,9 @@ services:
       - ./src/config/ConfiguracaoSEI.php:/tests/sei/src/sei/config/ConfiguracaoSEI.php:ro
       - ../src:/tests/sei/src/sei/web/modulos/protocolo-integrado
 
-      - ./src/fixtures:/tests/sei/modgd/fixtures
-      - ../src/dto:/tests/sei/modgd/dto
-      - ../src/bd:/tests/sei/modgd/bd
+      - ./src/fixtures:/tests/sei/mod-protocolo-integrado/fixtures
+      - ../src/dto:/tests/sei/mod-protocolo-integrado/dto
+      - ../src/bd:/tests/sei/mod-protocolo-integrado/bd
       - /tmp:/tmp
       - .tmp/sei_arquivos:/var/sei/arquivos/${DATABASE_HOST}
       environment:

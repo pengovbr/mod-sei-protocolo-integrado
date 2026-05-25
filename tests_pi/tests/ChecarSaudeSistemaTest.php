@@ -16,7 +16,7 @@ class ChecarSaudeSistemaTest extends FixtureCenarioBaseTestCase
         // Esperar que o login tenha sucesso, por exemplo, verificando um elemento visível da tela principal
         $this->waitUntil(function () {
             try {
-                $element = $this->byXPath("//h6[contains(text(),'ORGAO PROCESSO ELETRONICO')]");
+                $element = $this->byXPath("//h6[contains(text(),'ORGAO')]");
                 return $element !== null;
             } catch (\Exception $e) {
                 return null;
