@@ -4,15 +4,10 @@ Este documento descreve as principais mudanças aplicadas nesta versão do módu
 
 As melhorias entregues em cada uma das versões são cumulativas, ou seja, contêm todas as implementações realizada em versões anteriores.
 
-
 ## Compatibilidade de versões
-* O módulo é compatível com as seguintes versões:
-    * SEI: 4.0.x e versões superiores
+* O módulo é compatível com as seguintes versões do **SEI**:
+    * 5.0.0, 5.0.1, 5.0.2, 5.0.3, 5.0.4
     
-| Versão SEI/SUPER             | Versão módulo                        |
-| ---                          | ---                                  |
-| 5.0.0, 5.0.1, 5.0.2, 5.0.3, 5.0.4   | mod-sei-protocolo-integrado 3.0.x    |
-
 Para maiores informações sobre os procedimentos de instalação ou atualização, acesse os seguintes documentos localizados no pacote de distribuição mod-sei-protocolo-integrado-VERSAO.zip:
 > Atenção: É impreterível seguir rigorosamente o disposto no README.md do Módulo para instalação ou atualização com sucesso.
 
@@ -23,16 +18,17 @@ Para maiores informações sobre os procedimentos de instalação ou atualizaç�
 
 Todas as atualizações podem incluir itens referentes à segurança, requisito em permanente monitoramento e evolução, motivo pelo qual a atualização com a maior brevidade possível é sempre recomendada.
 
-#### Erro ao utilizar string como date ou date como string em alguns bancos de dados. (https://github.com/pengovbr/mod-sei-protocolo-integrado/commit/4e0f60a33c54f40514d8bdd05640e52c0f59c245)
-Ao depender do banco há comportamentos divergentes
+**CORREÇÕES DE PROBLEMAS**
 
-#### Logs de execução do agendamento no infra-log são registrados como Informação (https://github.com/pengovbr/mod-sei-protocolo-integrado/commit/b81a56eaf7f84c32f15bc54b2b5c8c978a0d9385)
-Logs de "TEMPO TOTAL DE EXECUCAO" vão aparecer como tipo Informação e não como erro. 
+Nesta versão, foram corrigidos os seguintes erros:
 
-#### Exceções agora contém o prefixo do nome do módulo (18d807c9c2dad091f205612abef9d74af91edbc1)
+ * **Erro ao utilizar string como date ou date como string em alguns bancos de dados. (#93):** Ao depender do banco há comportamentos divergentes
 
-#### Ocorria erro ao tentar forçar o envio dos protocolos com erro (#79)
-Ao tentar forçar envio de processos com erro na tela de Monitoramento ocorria erro de null.
+ * **Logs de execução do agendamento no infra-log registrados como Informação (#98):** Logs de "TEMPO TOTAL DE EXECUCAO" vão aparecer como tipo Informação e não como erro. 
+
+ * **Exceções passam a conter o prefixo do nome do módulo (#99):** Corrige erro nas exceções atribuindo o prefixo do nome do módulo.
+
+ * **Erro ao tentar forçar o envio dos protocolos com erro (#79):** Ao tentar forçar envio de processos com erro na tela de Monitoramento ocorria erro de null.
 
 ### Atualização de Versão
 
