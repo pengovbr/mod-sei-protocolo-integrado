@@ -11,14 +11,11 @@ Este documento descreve como proceder para migrar a versão 2.x do módulo PI pa
 - **SEI ou SUPER, versão 4.0.x ou superior instalada**;
 - Possuir a versão 2.1.x do módulo do Protocolo Integrado (verificar a versão através da funcionalidade SEI > Infra > Módulos). 
 - Usuário de acesso ao banco de dados do SEI e SIP com permissões para criar novas estruturas no banco de dados;
-- Credenciais (usuário e senha) para publicar no Protocolo Integrado, conforme orientações presentes no seguinte endereço: https://www.comprasgovernamentais.gov.br/index.php/pen/processo-eletronico-nacional-2/web-service/solicitacao-de-credenciais-para-uso-do-web-service .
+- Credenciais (usuário e senha) para publicar no Protocolo Integrado, conforme orientações presentes na página de orientações para [solicitação de credenciais para uso de webservice](https://www.gov.br/gestao/pt-br/assuntos/gestaoeinovacao/informacoes-sistemas-e-servicos-de-gestao/processo-eletronico-nacional/conteudo/protocolo-integrado-1/solicitacao-de-credenciais-para-uso-do-web-service).
 
 Por questões de segurança, a equipe do Protocolo Integrado libera inicialmente o acesso ao webservice do ambiente de homologação do sistema e, posteriormente, o acesso ao webservice de produção após testes completado os testes em ambiente de homologação.
 
-Para maiores informações, entre em contato pelo telefone 0800 978-9005 ou diretamente pela Central de Serviços do PEN, endereço https://portaldeservicos.economia.gov.br/citsmart/login/login.load.
-
-
-
+Para maiores informações, entre em contato por meio da [Central de Serviços do PEN](https://portaldeservicos.gestao.gov.br), endereço https://portaldeservicos.gestao.gov.br.
 
 
 ### Procedimentos:
@@ -169,9 +166,8 @@ Publica informações de processos restritos
 
 Em caso de dúvidas ou problemas durante o procedimento de atualização, favor entrar em conta pelos canais de atendimento disponibilizados na Central de Atendimento do Processo Eletrônico Nacional, que conta com uma equipe para avaliar e responder esta questão de forma mais rápida possível.
 
-Para mais informações, contate a equipe responsável por meio dos seguintes canais:
-- [Portal de Atendimento (PEN): Canal de Atendimento](https://portaldeservicos.economia.gov.br) - Módulo do Barramento
-- Telefone: 0800 978 9005
+Para mais informações, contate a equipe responsável por meio do seguinte canal:
+- [Portal de Atendimento (PEN): Canal de Atendimento](https://portaldeservicos.gestao.gov.br/) - Módulo do Protocolo Integrado
 
 
 
