@@ -2,8 +2,7 @@
 
 ## Orientações Iniciais
 
-Para maiores informações sobre o Protocolo Integrado e como aderir ao projeto, acesse a página [Protocolo Integrado](https://www.gov.br/economia/pt-br/assuntos/processo-eletronico-nacional/conteudo/protocolo-integrado-1) para maiores informações. 
-
+Para maiores informações sobre o Protocolo Integrado e como aderir ao projeto, acesse a página [Protocolo Integrado](https://www.gov.br/gestao/pt-br/assuntos/gestaoeinovacao/informacoes-sistemas-e-servicos-de-gestao/processo-eletronico-nacional/conteudo/protocolo-integrado-1) para maiores informações.
 
 ### Compatibilidade do Módulo x Versões do SEI
 
@@ -32,4 +31,4 @@ Em caso de dúvidas ou problemas, favor entrar em conta pelos canais na Central 
 
 Para mais informações, contate a equipe responsável por meio dos seguintes canais:
 
--   [Portal de Atendimento (PEN): Canal de Atendimento](https://portaldeservicos.economia.gov.br/)  - Módulo do Protocolo Integrado
+-   [Portal de Atendimento (PEN): Canal de Atendimento](https://portaldeservicos.gestao.gov.br)  - Módulo do Protocolo Integrado
