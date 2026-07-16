@@ -1,14 +1,14 @@
 # Manual de Instalação do Módulo Protocolo Integrado - PI
 
-Este documento apresenta o manual para a instalação do Módulo do Protocolo Integrado, que permite ao SEI enviar metadados dos processos e suas tramitações para o sistema Protocolo Integrado (protocolointegrado.gov.br).
+Este documento apresenta o manual para a instalação do Módulo do Protocolo Integrado, que permite ao SEI enviar metadados dos processos e suas tramitações para o sistema [Protocolo Integrado](https://protocolointegrado.gov.br/Protocolo/).
 
 > Este módulo é compatível com o SEI ou SUPER a partir da versão 4.0.
 
 **ATENÇÃO: Caso o módulo já se encontre instalado em uma versão anterior, siga as instruções detalhadas de atualização no documento MIGRACAO.md presente no arquivo de distribuição do módulo (mod-sei-protocolo-integrado-VERSAO.zip)**
 
-O Protocolo Integrado é um sistema instituído pela Portaria Interministerial nº 2.320, de 30 de dezembro de 2014, de adesão obrigatória para os órgãos do Governo Federal, que objetiva servir ao cidadão como ferramenta de consulta sobre as tramitações de documentos e processos atuados no âmbito da Administração Pública Federal. Maiores informações sobre o projeto deste sistema podem ser acessadas através do endereço: https://gov.br/pen
+O Protocolo Integrado é um sistema instituído pela Portaria Interministerial nº 2.320, de 30 de dezembro de 2014, de adesão obrigatória para os órgãos do Governo Federal, que objetiva servir ao cidadão como ferramenta de consulta sobre as tramitações de documentos e processos atuados no âmbito da Administração Pública Federal. Maiores informações sobre o projeto deste sistema podem ser acessadas através da página do [Protocolo Integrado](https://www.gov.br/gestao/pt-br/assuntos/gestaoeinovacao/informacoes-sistemas-e-servicos-de-gestao/processo-eletronico-nacional/conteudo/protocolo-integrado-1).
 
-O módulo do Protocolo Integrado adiciona novas funcionalidade para permitir o envio dos metadados de processos do SEI/SUPER para o Protocolo Integrado. O envio destes metadados é realizado de modo bastante simples, além de ser transparente para aquelas pessoas utilizam o sistema.
+O módulo do Protocolo Integrado adiciona novas funcionalidades para permitir o envio dos metadados de processos do SEI/SUPER para o Protocolo Integrado. O envio destes metadados é realizado de modo bastante simples, além de ser transparente para as pessoas que utilizam o sistema.
 
 Este documento está estruturado nas seguintes seções:
 
@@ -34,11 +34,11 @@ Todos os itens descritos nesta seção são destinados à equipe de tecnologia d
 ### Pré-requisitos
 - **SEI ou SUPER, versão 4.0.x ou superior instalada**;
 - Usuário de acesso ao banco de dados do SEI e SIP com permissões para criar novas estruturas no banco de dados;
-- Credenciais (usuário e senha) para publicar no Protocolo Integrado, conforme orientações presentes no seguinte endereço: https://portaldeservicos.economia.gov.br .
+- Credenciais (usuário e senha) para publicar no Protocolo Integrado, conforme orientações presentes na página de orientações para [solicitação de credenciais para uso de webservice](https://www.gov.br/gestao/pt-br/assuntos/gestaoeinovacao/informacoes-sistemas-e-servicos-de-gestao/processo-eletronico-nacional/conteudo/protocolo-integrado-1/solicitacao-de-credenciais-para-uso-do-web-service).
 
-Por questões de segurança, a equipe do Protocolo Integrado libera inicialmente o acesso ao webservice do ambiente de homologação do sistema e, posteriormente, o acesso ao webservice de produção após testes completado os testes em ambiente de homologação.
+Por questões de segurança, a equipe do Protocolo Integrado libera inicialmente o acesso ao webservice do ambiente de homologação do sistema e, posteriormente, o acesso ao webservice de produção após completado os testes em ambiente de homologação.
 
-Para maiores informações, entre em contato pelo telefone 0800 978-9005 ou diretamente pela Central de Serviços do PEN, endereço https://portaldeservicos.economia.gov.br/.
+Para maiores informações, entre em contato por meio da [Central de Serviços do PEN](https://portaldeservicos.gestao.gov.br), endereço https://portaldeservicos.gestao.gov.br.
 
 ---
 
@@ -241,7 +241,6 @@ Livre escolha quanto à periodicidade de execução.
 
 Em caso de dúvidas ou problemas durante o procedimento de atualização, favor entrar em conta pelos canais de atendimento disponibilizados na Central de Atendimento do Processo Eletrônico Nacional, que conta com uma equipe para avaliar e responder esta questão de forma mais rápida possível.
 
-Para mais informações, contate a equipe responsável por meio dos seguintes canais:
-- [Portal de Atendimento (PEN): Canal de Atendimento](https://portaldeservicos.economia.gov.br) - Módulo do Protocolo Integrado
-- Telefone: 0800 978 9005
+Para mais informações, contate a equipe responsável por meio do seguinte canal:
+- [Portal de Atendimento (PEN): Canal de Atendimento](https://portaldeservicos.gestao.gov.br/) - Módulo do Protocolo Integrado
 
