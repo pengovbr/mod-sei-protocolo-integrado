@@ -8,7 +8,7 @@
 "autoload": {
   "classmap": [
       "src/",
-      "sei/modgd/"
+      "sei/mod-protocolo-integrado/"
   ]
 },
 
