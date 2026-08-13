@@ -129,7 +129,7 @@ $ php -c /etc/php.ini <DIRETÓRIO RAIZ DE INSTALAÇÃO DO SEI E SIP>/sei/scripts
 ---
 
 
-### 1.5. Configurar os parâmetros do Módulo 
+### 1.7. Configurar os parâmetros do Módulo 
 
 A instalação da nova versão do **mod-sei-protocolo-integrado** cria um arquivo de configuração específico para o módulo dentro da pasta de configuração do SEI (**<DIRETÓRIO RAIZ DE INSTALAÇÃO DO SEI>/sei/config/mod-protocolo-integrado/**). 
 
@@ -168,7 +168,7 @@ Publica informações de processos restritos
 
 ---
 
-### 1.7. Recursos Criados no SIP
+### 1.8. Recursos Criados no SIP
 
 A título de esclarecimento, é importante destacar que além dos itens e subtitens de menu apresentados, o processo de instalação também cria, no SIP, os seguintes 7 recursos:
 
@@ -193,7 +193,7 @@ Responsável por dar permissão à tela de monitoramento dos processos enviados 
 
 --- 
 
-### 1.8 Agendamentos Criados no SEI
+### 1.9 Agendamentos Criados no SEI
 
 Além dos itens de menu e recursos já vistos (criados no SIP), o processo de instalação do módulo também realiza, no SEI, a criação de três agendamentos relacionados ao Protocolo Integrado (menu Infra > Agendamentos). Os mesmos encontram-se inicialmente desativados e serão descritos a seguir.
 
@@ -237,7 +237,7 @@ Livre escolha quanto à periodicidade de execução.
 
 ---
 
-## 5. SUPORTE
+## SUPORTE
 
 Em caso de dúvidas ou problemas durante o procedimento de atualização, favor entrar em conta pelos canais de atendimento disponibilizados na Central de Atendimento do Processo Eletrônico Nacional, que conta com uma equipe para avaliar e responder esta questão de forma mais rápida possível.
 
