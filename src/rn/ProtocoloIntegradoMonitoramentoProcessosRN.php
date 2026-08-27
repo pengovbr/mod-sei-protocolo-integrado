@@ -773,9 +773,9 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
           for ($k = 0; $k < count($arrRelProtocoloProtocoloDTO); $k++) {
     
               $protocoloRelacionadoDTO = $arrRelProtocoloProtocoloDTO[$k];
-              $codProtocoloRelacionado = InfraUtil::retirarFormatacao($protocoloRelacionadoDTO->getStrProtocoloFormatadoProtocolo2());
+              $codProtocoloRelacionado = InfraUtil::retirarFormatacao($protocoloRelacionadoDTO->getStrProtocoloFormatadoProtocolo2(), false);
             if (strlen($codProtocoloRelacionado) == 13 || strlen($codProtocoloRelacionado) == 14 || strlen($codProtocoloRelacionado) == 15 || strlen($codProtocoloRelacionado) == 17 || strlen($codProtocoloRelacionado) == 21) {
-              $protocoloRelacionado = $dom->createElement("ProtocoloRelacionado", InfraUtil::retirarFormatacao($protocoloRelacionadoDTO->getStrProtocoloFormatadoProtocolo2()));
+              $protocoloRelacionado = $dom->createElement("ProtocoloRelacionado", $codProtocoloRelacionado);
               $protocolosRelacionados->appendChild($protocoloRelacionado);
               array_push($arrCodigoProtocoloRelacionado, $codProtocoloRelacionado);
             }
