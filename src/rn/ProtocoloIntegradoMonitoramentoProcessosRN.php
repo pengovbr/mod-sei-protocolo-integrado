@@ -546,7 +546,8 @@ class ProtocoloIntegradoMonitoramentoProcessosRN extends InfraRN {
         $objPIMonitoraProcessosBD = new ProtocoloIntegradoMonitoramentoProcessosBD($this->getObjInfraIBanco());
             
         $strDataAgendamentoExecutado = $objPIMonitoraProcessosBD->retornarFormatoData($strDataAgendamentoExecutado);
-        $strSqlNativo .=  "(dth_agendamento_executado is null OR dth_agendamento_executado<>".$strDataAgendamentoExecutado.") AND ";
+        $strDataAgendamentoQuery = ($strDataAgendamentoExecutado != null) ? "OR dth_agendamento_executado<>".$strDataAgendamentoExecutado : "";
+        $strSqlNativo .=  "(dth_agendamento_executado is null $strDataAgendamentoQuery) AND ";
     }
     if (isset($filtro['numMaxResultados'])) {
         $objPacoteDTO->setNumMaxRegistrosRetorno($filtro['numMaxResultados']);
