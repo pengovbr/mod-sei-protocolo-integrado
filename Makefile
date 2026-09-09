@@ -1,13 +1,18 @@
-.PHONY: .env all help clean dist install restart down destroy up up-background up-foreground config check-super-isalive
-
--include .env
--include .modulo.env
+.PHONY: .env .modulo.env all help clean dist install restart down destroy up up-background up-foreground config check-super-isalive test-functional-pi install-phpunit-vendor vendor 
 
 # Parâmetros de configuração
 
 # Opções possíveis para spe (sistema de proc eletronico): sei4, sei41, super e sei5
 sistema = sei5
 base = mysql
+TESTS_PI_DIR = tests_pi
+
+-include $(TESTS_PI_DIR)/.env
+-include $(TESTS_PI_DIR)/.modulo.env
+
+ifndef HOST_URL
+HOST_URL=http://org-http:8000
+endif
 
 MODULO_NOME = protocolo-integrado
 MODULO_PASTAS_CONFIG = mod-$(MODULO_NOME)
@@ -18,7 +23,6 @@ SEI_CONFIG_DIR = dist/sei/config/$(MODULO_PASTAS_CONFIG)
 SEI_MODULO_DIR = dist/sei/web/modulos/$(MODULO_NOME)
 SIP_SCRIPTS_DIR = dist/sip/scripts/$(MODULO_PASTAS_CONFIG)
 
-ARQUIVO_CONFIG_SEI=$(SEI_PATH)/sei/config/ConfiguracaoSEI.php
 MSG_ORIENTACAO_CONFIGRACAO=CONFIGURACAO PENDENTE
 MODULO_COMPACTADO = mod-sei-$(MODULO_NOME)-v$(VERSAO_MODULO).zip
 
@@ -45,8 +49,10 @@ endif
 
 ifeq (, $(shell which docker-compose))
  CMD_DOCKER_COMPOSE=$(CMD_DOCKER_SUDO) docker compose
+ CMD_COMPOSE_FUNC=$(CMD_DOCKER_SUDO) docker compose -f $(TESTS_PI_DIR)/docker-compose.yaml
 else
  CMD_DOCKER_COMPOSE=$(CMD_DOCKER_SUDO) docker-compose
+ CMD_COMPOSE_FUNC=$(CMD_DOCKER_SUDO) docker-compose -f $(TESTS_PI_DIR)/docker-compose.yaml
 endif
 
 all: clean build
@@ -78,7 +84,18 @@ clean:  ## Limpa o diretório contendo arquivos temporários de construção do 
 	@echo "Limpeza do diretório de distribuição do realizada com sucesso"
 
 .modulo.env:
-	cp -n envs/modulo.env .modulo.env
+	@if [ ! -f "$(TESTS_PI_DIR)/.modulo.env" ]; then \
+		cp envs/modulo.env $(TESTS_PI_DIR)/.modulo.env; \
+		echo "Arquivo  $(TESTS_PI_DIR)/.modulo.env nao existia. Copiado o arquivo default da pasta envs."; \
+	fi
+
+.env:
+	@if [ ! -f "$(TESTS_PI_DIR)/.env" ]; then \
+		cp envs/$(base).env $(TESTS_PI_DIR)/.env; \
+		echo "Arquivo  $(TESTS_PI_DIR)/.env nao existia. Copiado o arquivo default da pasta envs."; \
+		echo "Se for o caso, faca as alteracoes nele antes de subir o ambiente."; \
+		echo ""; sleep 5; \
+	fi
 
 check-super-isalive: ## Target de apoio. Acessa o Super e verifica se esta respondendo a tela de login
 	@echo ""
@@ -95,8 +112,8 @@ check-super-isalive: ## Target de apoio. Acessa o Super e verifica se esta respo
 
 
 install: ## Instala e atualiza as tabelas do módulo na base de dados do sistema
-	$(CMD_DOCKER_COMPOSE) exec -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SEI_MODULO)"; true
-	$(CMD_DOCKER_COMPOSE) exec -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SIP_MODULO)"; true 
+	$(CMD_COMPOSE_FUNC) exec -w /opt/sei/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SEI_MODULO)"; true
+	$(CMD_COMPOSE_FUNC) exec -w /opt/sip/scripts/$(MODULO_PASTAS_CONFIG) httpd bash -c "$(CMD_INSTALACAO_SIP_MODULO)"; true 
 	@echo ""
 	@echo "==================================================================================================="
 	@if ! grep -q ProtocoloIntegradoIntegracao "$(ARQUIVO_CONFIG_SEI)" ; then echo '$(MENSAGEM_AVISO_MODULO)\n'; fi
@@ -106,23 +123,22 @@ install: ## Instala e atualiza as tabelas do módulo na base de dados do sistema
 
 
 update: ## Atualiza banco de dados através dos scripts de atualização do sistema
-	$(CMD_DOCKER_COMPOSE) run --rm -w /opt/sei/scripts/ httpd bash -c "$(CMD_INSTALACAO_SEI)"; true
-	$(CMD_DOCKER_COMPOSE) run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_SIP)"; true
-	$(CMD_DOCKER_COMPOSE) run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sei/scripts/ httpd bash -c "$(CMD_INSTALACAO_SEI)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_SIP)"; true
+	$(CMD_COMPOSE_FUNC) run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
 
 
 up: up-backgound  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
 
 
 up-backgound: .env .modulo.env  ## Inicia ambiente de desenvolvimento local (docker) no endereço http://localhost:8000
-	@if [ ! -f ".env" ]; then cp envs/$(base).env .env; fi
-	$(CMD_DOCKER_COMPOSE) up -d
+	$(CMD_COMPOSE_FUNC) up -d
 	make check-super-isalive
 	@echo "$(SUCCESS)Ambiente de desenvolvimento iniciado com sucesso: $(SEI_HOST)/sei$(NC)"
 
 
 up-foreground: .env  ## Inicia ambiente de desenvolvimento local (docker) em primeiro plano no endereço http://localhost:8000
-	$(CMD_DOCKER_COMPOSE) up
+	$(CMD_COMPOSE_FUNC) up
 
 
 config:  ## Configura o ambiente para outro banco de dados (mysql|sqlserver|oracle). Ex: make config base=oracle 
@@ -130,14 +146,14 @@ config:  ## Configura o ambiente para outro banco de dados (mysql|sqlserver|orac
 	@echo "Ambiente configurado para utilizar a base de dados $(base). (base=[mysql|oracle|sqlserver])"
 
 down:   ## Interrompe execução do ambiente de desenvolvimento local em docker
-	$(CMD_DOCKER_COMPOSE) down
+	$(CMD_COMPOSE_FUNC) down
 
 
 restart: down up ## Reinicia execução do ambiente de desenvolvimento local em docker
 
 
 destroy:   ## Destrói ambiente de desenvolvimento local, junto com os dados armazenados em banco de dados
-	$(CMD_DOCKER_COMPOSE) down --volumes
+	$(CMD_COMPOSE_FUNC) down --volumes
 
 
 help:
@@ -154,3 +170,15 @@ generate-der: up
 
 cria_json_compatibilidade:
 	$(shell ./gerar_json_compatibilidade.sh)
+
+test-functional-pi: .env $(FILE_VENDOR_FUNCIONAL) up vendor
+	$(CMD_COMPOSE_FUNC) run --rm php-test-functional /tests/vendor/bin/phpunit -c /tests/phpunit.xml --testdox /tests/tests/$(addsuffix .php,$(teste)) ;
+
+$(FILE_VENDOR_FUNCIONAL): ## target de apoio verifica se o build do phpunit foi feito e executa apenas caso n exista
+	make install-phpunit-vendor
+
+install-phpunit-vendor: ## instala os pacotes composer referentes aos testes via phpunit
+	$(CMD_COMPOSE_FUNC) -f $(TESTS_PI_DIR)/docker-compose.yaml run --rm -w /tests php-test-functional bash -c './composer.phar install'
+
+vendor: $(TESTS_PI_DIR)/composer.json
+	$(CMD_COMPOSE_FUNC) run --rm -w /tests php-test-functional bash -c './composer.phar install'
