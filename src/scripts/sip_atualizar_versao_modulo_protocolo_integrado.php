@@ -169,29 +169,14 @@ try {
       $numIdPerfilSeiInformatica = ScriptSip::obterIdPerfil($numIdSistemaSei, 'Informática');
       $objRecursoConfigurarParametrosDTO = ScriptSip::adicionarRecursoPerfil($numIdSistemaSei, $numIdPerfilSeiInformatica, 'protocolo_integrado_configurar_parametros');
       $objRecursoMonitoramentoDTO = ScriptSip::adicionarRecursoPerfil($numIdSistemaSei, $numIdPerfilSeiInformatica, 'md_pi_monitoramento');
+      // item_menu
       $numIdMenuSei = ScriptSip::obterIdMenu($numIdSistemaSei, 'Principal');
-      $objItemMenuDTOControleProcesso = ScriptSip::adicionarItemMenu($numIdSistemaSei, $numIdPerfilSeiInformatica, $numIdMenuSei, $numIdItemMenuSeiInformatica, null, 'Protocolo Integrado', 0);
-
-      //criando Protocolo Integrado -> Configuração de Parâmetros
-      ScriptSip::adicionarItemMenu(
-        $numIdSistemaSei,
-        $numIdPerfilSeiInformatica,
-        $numIdMenuSei,
-        $objItemMenuDTOControleProcesso->getNumIdItemMenu(),
-        $objRecursoConfigurarParametrosDTO->getNumIdRecurso(),
-        'Parâmetros',
-        10
-      );
-
-      ScriptSip::adicionarItemMenu(
-        $numIdSistemaSei,
-        $numIdPerfilSeiInformatica,
-        $numIdMenuSei,
-        $objItemMenuDTOControleProcesso->getNumIdItemMenu(),
-        $objRecursoMonitoramentoDTO->getNumIdRecurso(),
-        'Monitoramento',
-        30
-    );
+      $numIdItemMenuSeiAdministracao = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Administração');
+      $numIdItemMenu = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Configuração das Mensagens', $numIdItemMenuSeiAdministracao);
+      ScriptSip::removerItemMenu($numIdSistemaSei, $numIdMenuSei, $numIdItemMenu);
+      
+      $numIdItemMenu = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Monitoramento', $numIdItemMenuSeiAdministracao);
+      ScriptSip::removerItemMenu($numIdSistemaSei, $numIdMenuSei, $numIdItemMenu);
     }
 
     public function versao_sem_alteracao_banco() {
