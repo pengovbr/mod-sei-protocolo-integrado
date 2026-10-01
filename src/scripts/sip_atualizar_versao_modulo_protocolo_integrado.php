@@ -189,6 +189,14 @@ try {
 
         $objInfraParametroBD = new InfraParametroBD(BancoSip::getInstance());
         $objInfraParametroBD->cadastrar($objInfraParametroDTO);
+
+        $numIdSistemaSei = ScriptSip::obterIdSistema('SEI');
+        $numIdMenuSei = ScriptSip::obterIdMenu($numIdSistemaSei, 'Principal');
+        $numIdItemMenuSeiAdministracao = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Administração');
+        $numIdItemMenu = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Configuração das Mensagens', $numIdItemMenuSeiAdministracao);
+        ScriptSip::removerItemMenu($numIdSistemaSei, $numIdMenuSei, $numIdItemMenu);
+        $numIdItemMenu = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Monitoramento', $numIdItemMenuSeiAdministracao);
+        ScriptSip::removerItemMenu($numIdSistemaSei, $numIdMenuSei, $numIdItemMenu);
     }
 
     /**
