@@ -1,0 +1,30 @@
+{
+  "config": {
+    "platform": {
+        "php": "8.2"
+    } 
+},
+
+"autoload": {
+  "classmap": [
+      "src/",
+      "sei/mod-protocolo-integrado/"
+  ]
+},
+
+"autoload-dev": {
+    "psr-4": {
+        "Tests\\": "sei/"
+    }
+},
+
+"require-dev": {
+    "phpunit/phpunit": "9.*",
+    "phpunit/php-code-coverage": "*",
+    "phpunit/phpunit-selenium": "dev-master", 
+    "besimple/soap": "*", 
+    "squizlabs/php_codesniffer": "*",
+    "phpcompatibility/php-compatibility": "*",
+    "pheromone/phpcs-security-audit": "*"
+  }
+}
