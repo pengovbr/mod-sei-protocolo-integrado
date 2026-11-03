@@ -1,4 +1,4 @@
-name: Testes para SEI 5.0.4 Bancos oracle, mysql, sqlserver e postgres
+name: Testes para SEI main Bancos oracle, mysql, sqlserver e postgres
 
 on:
   pull_request:
@@ -33,16 +33,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-            path: sei/src/sei/web/modulos/mod-protocolo-integrado
+            path: sei/src/sei/web/modulos/mod-sei-protocolo-integrado
 
       - name: Run make test
         run: |
              sudo echo "127.0.0.1 org-http" | sudo tee -a /etc/hosts
-             cd sei/src/sei/web/modulos/mod-protocolo-integrado
-             make config base=${{ matrix.banco }}; make up; sleep 90s; make update; make install
+             cd sei/src/sei/web/modulos/mod-sei-protocolo-integrado
+             make config base=${{ matrix.banco }}; make up; sleep 10s; make update; make install
 
       - name: Run headless test
         run: |
-          cd sei/src/sei/web/modulos/mod-protocolo-integrado
+          cd sei/src/sei/web/modulos/mod-sei-protocolo-integrado
           xvfb-run -s "-screen 0 1920x1080x24" make test-functional-pi
 

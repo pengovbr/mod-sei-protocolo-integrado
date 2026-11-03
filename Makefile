@@ -142,7 +142,7 @@ up-foreground: .env  ## Inicia ambiente de desenvolvimento local (docker) em pri
 
 
 config:  ## Configura o ambiente para outro banco de dados (mysql|sqlserver|oracle). Ex: make config base=oracle 
-	@cp -f envs/$(base).env .env
+	@cp -f envs/$(base).env $(TESTS_PI_DIR)/.env
 	@echo "Ambiente configurado para utilizar a base de dados $(base). (base=[mysql|oracle|sqlserver])"
 
 down:   ## Interrompe execução do ambiente de desenvolvimento local em docker

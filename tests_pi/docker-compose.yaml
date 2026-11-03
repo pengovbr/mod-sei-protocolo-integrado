@@ -1,4 +1,3 @@
-version: '2'
 services:
   jod:
     image: processoeletronico/jod:${ENVIRONMENT_VERSION}
@@ -134,13 +133,11 @@ services:
         - SEI_DATABASE_NAME=${SEI_DATABASE_NAME}
         - SEI_DATABASE_USER=${SEI_DATABASE_USER}
         - SEI_DATABASE_PASSWORD=${SEI_DATABASE_PASSWORD}
-        - SEI_DSN=${SEI_DSN}
 
         - SIP_CHAVE_ACESSO=${SIP_CHAVE_ACESSO}
         - SIP_DATABASE_NAME=${SIP_DATABASE_NAME}
         - SIP_DATABASE_USER=${SIP_DATABASE_USER}
         - SIP_DATABASE_PASSWORD=${SIP_DATABASE_PASSWORD}
-        - SIP_DSN=${SIP_DSN}
       extra_hosts:
       - "host.docker.internal:host-gateway"
       links:
