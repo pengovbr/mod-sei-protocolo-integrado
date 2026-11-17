@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . '/../../web/Sip.php';
 
 // ATENÇÃO: Identificação da versão do módulo mod-SIP-protocolo-integrado. 
 // Este deve estar sempre sincronizado com a constante VERSAO_MODULO_PI no arquivo ProtocoloIntegradoIntegracao.php
-define("VERSAO_MODULO_PI", "3.0.3");
+define("VERSAO_MODULO_PI", "3.0.4");
 
 try {
 
@@ -164,6 +164,21 @@ try {
 
     }
 
+    public function versao_3_0_4() {
+      $numIdSistemaSei = ScriptSip::obterIdSistema('SEI');
+      $numIdPerfilSeiInformatica = ScriptSip::obterIdPerfil($numIdSistemaSei, 'Informática');
+      $objRecursoConfigurarParametrosDTO = ScriptSip::adicionarRecursoPerfil($numIdSistemaSei, $numIdPerfilSeiInformatica, 'protocolo_integrado_configurar_parametros');
+      $objRecursoMonitoramentoDTO = ScriptSip::adicionarRecursoPerfil($numIdSistemaSei, $numIdPerfilSeiInformatica, 'md_pi_monitoramento');
+      // item_menu
+      $numIdMenuSei = ScriptSip::obterIdMenu($numIdSistemaSei, 'Principal');
+      $numIdItemMenuSeiAdministracao = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Administração');
+      $numIdItemMenu = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Configuração das Mensagens', $numIdItemMenuSeiAdministracao);
+      ScriptSip::removerItemMenu($numIdSistemaSei, $numIdMenuSei, $numIdItemMenu);
+      
+      $numIdItemMenu = ScriptSip::obterIdItemMenu($numIdSistemaSei, $numIdMenuSei, 'Monitoramento', $numIdItemMenuSeiAdministracao);
+      ScriptSip::removerItemMenu($numIdSistemaSei, $numIdMenuSei, $numIdItemMenu);
+    }
+
     public function versao_sem_alteracao_banco() {
     }
   }
@@ -188,7 +203,8 @@ try {
         '3.0.*' => 'versao_3_0_0',
         '3.0.1' => 'versao_sem_alteracao_banco',
         '3.0.2' => 'versao_sem_alteracao_banco',
-        '3.0.3' => 'versao_sem_alteracao_banco'
+        '3.0.3' => 'versao_sem_alteracao_banco',
+        '3.0.4' => 'versao_3_0_4'
     ));
 
     $VersaoProtocoloIntegradoRN->setStrVersaoInfra('1.595.1');
