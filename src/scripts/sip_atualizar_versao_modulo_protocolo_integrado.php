@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . '/../../web/Sip.php';
 
 // ATENÇÃO: Identificação da versão do módulo mod-SIP-protocolo-integrado. 
 // Este deve estar sempre sincronizado com a constante VERSAO_MODULO_PI no arquivo ProtocoloIntegradoIntegracao.php
-define("VERSAO_MODULO_PI", "3.0.4");
+define("VERSAO_MODULO_PI", "3.0.5");
 
 try {
 
@@ -204,7 +204,8 @@ try {
         '3.0.1' => 'versao_sem_alteracao_banco',
         '3.0.2' => 'versao_sem_alteracao_banco',
         '3.0.3' => 'versao_sem_alteracao_banco',
-        '3.0.4' => 'versao_3_0_4'
+        '3.0.4' => 'versao_3_0_4',
+        '3.0.5' => 'versao_sem_alteracao_banco',
     ));
 
     $VersaoProtocoloIntegradoRN->setStrVersaoInfra('1.595.1');
