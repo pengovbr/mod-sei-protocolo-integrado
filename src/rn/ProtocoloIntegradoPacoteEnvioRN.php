@@ -31,9 +31,8 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
         //$objInfraException->lancarValidacoes();
             
         $objProtocoloBD = new ProtocoloIntegradoPacoteEnvioBD($this->getObjInfraIBanco());
-        $ret = $objProtocoloBD->listar($protocoloIntegradoPacoteEnvioDTO);
             
-        return $ret;
+        return $objProtocoloBD->listar($protocoloIntegradoPacoteEnvioDTO);
         
     } catch(Exception $e) {
         throw new InfraException('Módulo Protocolo Integrado: Erro listando Pacotes.', $e);
@@ -53,9 +52,8 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
         //$objInfraException->lancarValidacoes();
             
         $objProtocoloBD = new ProtocoloIntegradoPacoteEnvioBD($this->getObjInfraIBanco());
-        $ret = $objProtocoloBD->contar($protocoloIntegradoPacoteEnvioDTO);
             
-        return $ret;
+        return $objProtocoloBD->contar($protocoloIntegradoPacoteEnvioDTO);
             
     } catch(Exception $e) {
         throw new InfraException('Módulo Protocolo Integrado: Erro obtendo número de atividades monitoradas.', $e);
@@ -75,10 +73,9 @@ class ProtocoloIntegradoPacoteEnvioRN extends InfraRN {
         //$objInfraException->lancarValidacoes();
             
         $objProtocoloBD = new ProtocoloIntegradoPacoteEnvioBD($this->getObjInfraIBanco());
-        $ret = $objProtocoloBD->consultar($protocoloIntegradoPacoteEnvioDTO);
             
         //Auditoria
-        return $ret;
+        return $objProtocoloBD->consultar($protocoloIntegradoPacoteEnvioDTO);
         
     } catch(Exception $e) {
         throw new InfraException('Módulo Protocolo Integrado: Erro Consultando Pacote.', $e); 

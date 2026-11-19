@@ -50,7 +50,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
           $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
       }
 
-        $sql = $sql." order by a.dth_abertura "; 
+        $sql .= " order by a.dth_abertura "; 
 
         //MYSQL, monta clausula LIMIT no final
       if ($this->getObjInfraIBanco() instanceof InfraMySQL) {
@@ -62,8 +62,8 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
     
         $rs = $this->getObjInfraIBanco()->consultarSql($sql);
   
-        $arrObjAtividadeMonitoradas = array();
-        $arrPacotes = array();
+        $arrObjAtividadeMonitoradas = [];
+        $arrPacotes = [];
   
         return $this->formataAtividadesMonitoradasParaDTO($rs);
   
@@ -83,9 +83,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
         $maxIdAtividade = $this->getObjInfraIBanco()->formatarLeituraNum($item ['id_atividade']);
     }
         
-    if (is_null($maxIdAtividade)) {
-        $maxIdAtividade = 0;
-    }
+    $maxIdAtividade ??= 0;
         
       return $maxIdAtividade;
   }
@@ -127,7 +125,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
           $sql = $sql." AND p.id_unidade_geradora NOT IN (".$numUnidadeTeste.") ";
       }
             
-        $sql = $sql." order by a.dth_abertura "; 
+        $sql .= " order by a.dth_abertura "; 
             
         // Monta clausula LIMIT de acordo com banco do sistema
       if ($this->getObjInfraIBanco() instanceof InfraMySQL) {
@@ -139,7 +137,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
         $rs = $this->getObjInfraIBanco()->consultarSql($sql);
             
         $arrObjAtividadeMonitoradas = $this->formataAtividadesMonitoradasParaDTO($rs, $atividadesProcessosIneditos);
-        $arrPacotes = array();
+        $arrPacotes = [];
             
         return $arrObjAtividadeMonitoradas;
           
@@ -149,7 +147,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
     
   }
   
-  public function formataAtividadesMonitoradasParaDTO($resultadoAtividades, $arrAtividadesMonitoradasPrevias = array()){
+  public function formataAtividadesMonitoradasParaDTO($resultadoAtividades, $arrAtividadesMonitoradasPrevias = []){
     
       $i=count($arrAtividadesMonitoradasPrevias);
         
@@ -197,8 +195,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
     **/
   public function recuperarChavesEstrangeirasv112(){
 
-         $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-         $chaveEstrangeira = ""; 
+         new ProtocoloIntegradoPacoteEnvioDTO();
     if (BancoSEI::getInstance() instanceof InfraMySql || BancoSEI::getInstance() instanceof InfraSqlServer){
 
       $sql = "SELECT constraint_name FROM information_schema.TABLE_CONSTRAINTS  WHERE information_schema.TABLE_CONSTRAINTS.CONSTRAINT_TYPE = 'FOREIGN KEY' AND information_schema.TABLE_CONSTRAINTS.TABLE_SCHEMA = 'sei' AND information_schema.TABLE_CONSTRAINTS.TABLE_NAME = 'protocolo_integrado_monitoramento_processos';";
@@ -223,14 +220,14 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
           
       $resultadoDocumentos = $this->getObjInfraIBanco()->consultarSql($sql);
       $objParticipanteDTO = new ProtocoloDTO();
-      $arrParticipanteDTO = array();
+      $arrParticipanteDTO = [];
          
     foreach($resultadoDocumentos as $item) {
         $objParticipanteDTO = new ParticipanteDTO();
         $objParticipanteDTO->setStrNomeContato($item['nome']);
         $objParticipanteDTO->setNumIdContato($item['id_contato']);
         $objParticipanteDTO->setStrSiglaContato($item['sigla']);
-        array_push($arrParticipanteDTO, $objParticipanteDTO);
+        $arrParticipanteDTO[] = $objParticipanteDTO;
     }
         
       return $arrParticipanteDTO; 
@@ -246,7 +243,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
             " where pepi.id_md_pi_pacote_envio = ".$idPacote.
             " and  pi.sin_publicar='S'".
             " order by a.dth_abertura";
-      $arrProtocoloIntegradoMonitoramentoProcessosDTO = array();
+      $arrProtocoloIntegradoMonitoramentoProcessosDTO = [];
       $resultadoDocumentos = $this->getObjInfraIBanco()->consultarSql($sql);
     
     foreach ($resultadoDocumentos as $item) {
@@ -257,7 +254,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
         $objProtocoloIntegradoMonitoramentoProcessosDTO->setStrMensagemPublicacao($item['mensagem_publicacao']);
         $objProtocoloIntegradoMonitoramentoProcessosDTO->setDthDataAbertura($item['dth_abertura']);
         $objProtocoloIntegradoMonitoramentoProcessosDTO->setNumIdUnidade($item['id_unidade']);
-        array_push($arrProtocoloIntegradoMonitoramentoProcessosDTO, $objProtocoloIntegradoMonitoramentoProcessosDTO);
+        $arrProtocoloIntegradoMonitoramentoProcessosDTO[] = $objProtocoloIntegradoMonitoramentoProcessosDTO;
     }
     
       return $arrProtocoloIntegradoMonitoramentoProcessosDTO;
@@ -268,18 +265,18 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
         
     if (($this->getObjInfraIBanco() instanceof InfraMySQL)) {
         return "STR_TO_DATE('". $strData ."', '%d/%m/%Y %H:%i:%s')";
-    } else if ($this->getObjInfraIBanco() instanceof InfraOracle) {
+    }
+    if ($this->getObjInfraIBanco() instanceof InfraOracle) {
         return "TO_DATE('". $strData ."', 'dd/mm/yyyy hh24:mi:ss')";
     }
-        
-      //SQL Server, monta clasusula dele
-    else if ( $this->getObjInfraIBanco() instanceof InfraSQLServer) {
+    if ( $this->getObjInfraIBanco() instanceof InfraSQLServer) {
         // Remove espaços e substitui barras por hifem
         $strNovaData = trim($strData);
         $strNovaData = str_replace("/", "-", $strNovaData);
             
         return " convert(datetime, '". substr($strNovaData, 6, 4) . "-". substr($strNovaData, 3, 2) . "-". substr($strNovaData, 0, 2) . " " . substr($strNovaData, 11, 8) . "', 120)";
     }
+    return null;
   }
 
   public function recuperarIdsTabelaMonitoramentov112() {
@@ -287,11 +284,11 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
       $sql = 'select id_protocolo_integrado_monitoramento_processos from protocolo_integrado_monitoramento_processos';
       $rs = $this->getObjInfraIBanco()->consultarSql($sql);
         
-      $arrMonitoramentoProcessosDTO = array();
+      $arrMonitoramentoProcessosDTO = [];
     foreach ($rs as $item) {
         $objMonitoramentoProcessosDTO = new ProtocoloIntegradoMonitoramentoProcessosDTO();
         $objMonitoramentoProcessosDTO->setNumIdProtocoloIntegradoMonitoramentoProcessos($item[0]);
-        array_push($arrMonitoramentoProcessosDTO, $objMonitoramentoProcessosDTO);
+        $arrMonitoramentoProcessosDTO[] = $objMonitoramentoProcessosDTO;
     }
         
       return $arrMonitoramentoProcessosDTO;

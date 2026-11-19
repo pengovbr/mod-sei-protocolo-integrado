@@ -12,7 +12,7 @@ class ProtocoloIntegradoRN extends InfraRN {
   }
   
   public function montaTarefasPadraoPublicacao(){
-         $tarefasPadraoPublicacao = array(
+         return [
                                         TarefaRN::$TI_GERACAO_PROCEDIMENTO,TarefaRN::$TI_RELACIONAR_PROCEDIMENTO,TarefaRN::$TI_REMOCAO_RELACIONAMENTO_PROCEDIMENTO,TarefaRN::$TI_SOBRESTAMENTO,
                                         TarefaRN::$TI_REMOCAO_SOBRESTAMENTO,
                                         TarefaRN::$TI_CONCLUSAO_PROCESSO_UNIDADE,TarefaRN::$TI_REABERTURA_PROCESSO_UNIDADE,
@@ -21,8 +21,7 @@ class ProtocoloIntegradoRN extends InfraRN {
                                         TarefaRN::$TI_REMOCAO_SOBRESTADO_AO_PROCESSO,TarefaRN::$TI_PROCESSO_RECEBIDO_UNIDADE,TarefaRN::$TI_ALTERACAO_NIVEL_ACESSO_GLOBAL,
                                         TarefaRN::$TI_CONCLUSAO_PROCESSO_USUARIO,TarefaRN::$TI_PROCESSO_CIENCIA,
                                         TarefaRN::$TI_ANEXADO_PROCESSO,TarefaRN::$TI_ANEXADO_AO_PROCESSO,TarefaRN::$TI_DESANEXADO_PROCESSO,TarefaRN::$TI_DESANEXADO_DO_PROCESSO,TarefaRN::$TI_ALTERACAO_NIVEL_ACESSO_PROCESSO,TarefaRN::$TI_ALTERACAO_GRAU_SIGILO_PROCESSO,TarefaRN::$TI_ALTERACAO_HIPOTESE_LEGAL_PROCESSO,TarefaRN::$TI_PROCESSO_ANEXADO_CIENCIA,TarefaRN::$TI_ATUALIZACAO_ANDAMENTO,
-                                        );
-         return $tarefasPadraoPublicacao;
+                                        ];
   }
   
   protected function inicializarObjInfraIBanco(){
@@ -42,11 +41,10 @@ class ProtocoloIntegradoRN extends InfraRN {
   
   
       $objProtocoloBD = new ProtocoloIntegradoBD($this->getObjInfraIBanco());
-      $ret = $objProtocoloBD->listar($objProtocoloDTO);
   
       //Auditoria
   
-      return $ret;
+      return $objProtocoloBD->listar($objProtocoloDTO);
   
     }catch(Exception $e){
       throw new InfraException('Módulo Protocolo Integrado: Erro listando Tarefas.', $e);
@@ -65,11 +63,10 @@ class ProtocoloIntegradoRN extends InfraRN {
   
   
       $objProtocoloBD = new ProtocoloIntegradoBD($this->getObjInfraIBanco());
-      $ret = $objProtocoloBD->consultar($objProtocoloDTO);
   
       //Auditoria
   
-      return $ret;
+      return $objProtocoloBD->consultar($objProtocoloDTO);
   
     }catch(Exception $e){
       throw new InfraException('Módulo Protocolo Integrado: Erro listando Tarefas.', $e);
@@ -378,9 +375,8 @@ class ProtocoloIntegradoRN extends InfraRN {
       }   
             
     }
-        $strNomeTarefa = str_replace(array('@NIVEL_ACESSO@','@GRAU_SIGILO@','@TIPO_CONFERENCIA@', '@DATA_AUTUACAO@','@HIPOTESE_LEGAL@'), '', $strNomeTarefa);
          
-        return $strNomeTarefa;
+        return str_replace(['@NIVEL_ACESSO@','@GRAU_SIGILO@','@TIPO_CONFERENCIA@', '@DATA_AUTUACAO@','@HIPOTESE_LEGAL@'], '', $strNomeTarefa);
 
   }
   public function substituirAtributoDocumentoHistorico(AtributoAndamentoDTO $objAtributoAndamentoDTO, $arrObjDocumentoDTO, $bolAcaoDocumentoVisualizar, &$strNomeTarefa){
@@ -390,22 +386,18 @@ class ProtocoloIntegradoRN extends InfraRN {
   } 
   public function montarAtributoDocumentoHistorico(AtributoAndamentoDTO $objAtributoAndamentoDTO, $arrObjDocumentoDTO, $bolAcaoDocumentoVisualizar){
     
-    $strSubstituicao = $objAtributoAndamentoDTO->getStrValor();
+    $objAtributoAndamentoDTO->getStrValor();
 
     if (!isset($arrObjDocumentoDTO[$objAtributoAndamentoDTO->getStrIdOrigem()])){
-        $strSubstituicao = $objAtributoAndamentoDTO->getStrValor();
-    }else{
-     
-        $strSubstituicao = $arrObjDocumentoDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrProtocoloDocumentoFormatado().' ('.$arrObjDocumentoDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrNomeSerie().')';
-      
+        return $objAtributoAndamentoDTO->getStrValor();
     }
     
-    return $strSubstituicao;
+    return $arrObjDocumentoDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrProtocoloDocumentoFormatado().' ('.$arrObjDocumentoDTO[$objAtributoAndamentoDTO->getStrIdOrigem()]->getStrNomeSerie().')';
   }
   public function substitutirAtributoMultiploDocumentos($objAtributoAndamentoDTO, $arrObjAtributoAndamentoDTO, $arrObjDocumentoDTO, $bolAcaoDocumentoVisualizar, &$strNomeTarefa){
     if (is_array($arrObjAtributoAndamentoDTO)){
         
-        $arr = array();
+        $arr = [];
           
         $numAtributosTotal = count($arrObjAtributoAndamentoDTO);
       for($i=0; $i<$numAtributosTotal; $i++){
@@ -417,8 +409,8 @@ class ProtocoloIntegradoRN extends InfraRN {
         $n = count($arr);
         $strValorMultiplo = '';
       for($i=0; $i<$n; $i++){
-        if ($strValorMultiplo!=''){
-          if ($i == ($n-1)){
+        if ($strValorMultiplo !== ''){
+          if ($i === $n - 1){
             $strValorMultiplo .= ' e ';
           }else{
             $strValorMultiplo .= ', ';
@@ -446,7 +438,7 @@ class ProtocoloIntegradoRN extends InfraRN {
   }
   public function substituirAtributoLocalizadorHistorico(AtributoAndamentoDTO $objAtributoAndamentoDTO, $bolAcaoLocalizadorProtocoloListar, &$strNomeTarefa){
 
-    $arrIdOrigem = explode('¥', $objAtributoAndamentoDTO->getStrIdOrigem());
+    explode('¥', $objAtributoAndamentoDTO->getStrIdOrigem());
 
     //só mostra link se o localizador é da unidade atual
     $strSubstituicao = $objAtributoAndamentoDTO->getStrValor(); 
@@ -458,7 +450,7 @@ class ProtocoloIntegradoRN extends InfraRN {
   public function substitutirAtributoMultiploUsuarios($objAtributoAndamentoDTO, $arrObjAtributoAndamentoDTO, &$strNomeTarefa){
     if (is_array($arrObjAtributoAndamentoDTO)){
         
-        $arr = array();
+        $arr = [];
           
         $numAtributosTotal = count($arrObjAtributoAndamentoDTO);
       for($i=0; $i<$numAtributosTotal; $i++){
@@ -470,8 +462,8 @@ class ProtocoloIntegradoRN extends InfraRN {
         $n = count($arr);
         $strValorMultiplo = '';
       for($i=0; $i<$n; $i++){
-        if ($strValorMultiplo!=''){
-          if ($i == ($n-1)){
+        if ($strValorMultiplo !== ''){
+          if ($i === $n - 1){
             $strValorMultiplo .= ' e ';
           }else{
             $strValorMultiplo .= ', ';

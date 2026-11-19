@@ -36,21 +36,21 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
     switch($strAcao) {
       case 'md_pi_configurar_publicacao':
       case 'md_pi_mensagens_listar':
-        require_once 'protocolo_integrado_mensagens_listar.php';
+        require_once __DIR__ . '/protocolo_integrado_mensagens_listar.php';
           return true;
             
       case 'md_pi_mensagens_alterar':
-          require_once 'protocolo_integrado_mensagens_cadastro.php';
+          require_once __DIR__ . '/protocolo_integrado_mensagens_cadastro.php';
           return true;
             
       case 'md_pi_monitoramento':
       case 'md_pi_forcar_reenvio':
-          require_once 'protocolo_integrado_monitoramento.php';
+          require_once __DIR__ . '/protocolo_integrado_monitoramento.php';
           return true;
                 
       case 'md_pi_visualizar_metadados':
       case 'md_pi_visualizar_erro_envio_metadados':
-          require_once 'protocolo_integrado_acesso_arquivo_metadados.php';
+          require_once __DIR__ . '/protocolo_integrado_acesso_arquivo_metadados.php';
           return true;
     }
       return false;
@@ -60,7 +60,7 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
     try{
         $strArquivoConfiguracao = $strDiretorioSeiWeb . '/mod-protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';
         include_once $strArquivoConfiguracao;       
-    } catch(Exception $e){
+    } catch(Exception){
         LogSEI::getInstance()->gravar("Arquivo de configuração do módulo Protocolo Integrado não pode ser localizado em " . $strArquivoConfiguracao);
     }
   }

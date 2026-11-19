@@ -18,11 +18,11 @@ class ProtocoloIntegradoPacoteEnvioBD extends InfraBD {
       $sql = 'select ' . $coluna . ' from ' . $objPacoteDTO->getStrNomeTabela();
       $rs = $this->getObjInfraIBanco()->consultarSql($sql);
         
-      $arrPacotesDTO = array();
+      $arrPacotesDTO = [];
     foreach ($rs as $item) {
         $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
         $objPacoteDTO->setNumIdProtocoloIntegradoPacoteEnvio($item[0]);
-        array_push($arrPacotesDTO, $objPacoteDTO);
+        $arrPacotesDTO[] = $objPacoteDTO;
     }
         
       return $arrPacotesDTO;
@@ -60,8 +60,7 @@ class ProtocoloIntegradoPacoteEnvioBD extends InfraBD {
       **/
   public function recuperarChavesEstrangeirasv112(){
 
-    $objPacoteDTO = new ProtocoloIntegradoPacoteEnvioDTO();
-    $chaveEstrangeira = ""; 
+    new ProtocoloIntegradoPacoteEnvioDTO();
     if (BancoSEI::getInstance() instanceof InfraMySql || BancoSEI::getInstance() instanceof InfraSqlServer){
 
            $sql = "SELECT constraint_name FROM information_schema.TABLE_CONSTRAINTS  WHERE information_schema.TABLE_CONSTRAINTS.CONSTRAINT_TYPE = 'FOREIGN KEY' AND information_schema.TABLE_CONSTRAINTS.TABLE_SCHEMA = 'sei' AND information_schema.TABLE_CONSTRAINTS.TABLE_NAME = 'protocolo_integrado_pacote_envio';";

@@ -40,7 +40,7 @@ try {
     $filtroIncluirUnidadesFilhas = "";
   }
 
-  if (isset($_POST['sbmPesquisar']) || isset($_POST['hdnInfraPaginaAtual']) == false || $_POST['hdnInfraPaginaAtual'] == '') {
+  if (isset($_POST['sbmPesquisar']) || isset($_POST['hdnInfraPaginaAtual']) === false || $_POST['hdnInfraPaginaAtual'] == '') {
     $_POST['hdnInfraPaginaAtual'] = '0';
   }
 
@@ -54,14 +54,14 @@ try {
       $objProtocoloIntegradoParametrosDTO = new ProtocoloIntegradoParametrosDTO();
       $objProtocoloIntegradoParametrosDTO->retTodos();
       $objRetornoProtocoloIntegradoParametros = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
-      $filtro = array();
-      $filtro['pacotes'] = array();
+      $filtro = [];
+      $filtro['pacotes'] = [];
 
       for ($i = 0; $i < count($arrStrItensSelecionados); $i++) {
-        array_push($filtro['pacotes'], $arrStrItensSelecionados[$i]);
+        $filtro['pacotes'][] = $arrStrItensSelecionados[$i];
         PaginaSEI::getInstance()->adicionarMensagem('Operação realizada com sucesso.');
       }
-      $arrParam = array();
+      $arrParam = [];
       $arrParam[0] = $objRetornoProtocoloIntegradoParametros;
       $arrParam[1] = $filtro;
 
@@ -118,7 +118,7 @@ try {
   $objProtocoloIntegradoParametrosRN = new ProtocoloIntegradoParametrosRN();
   $objParametrosDTO = $objProtocoloIntegradoParametrosRN->consultar($objProtocoloIntegradoParametrosDTO);
 
-  $arrComandos = array();
+  $arrComandos = [];
 
   $bolAcaoForcarReenvio = SessaoSEI::getInstance()->verificarPermissao('md_pi_forcar_reenvio');
 
@@ -191,13 +191,13 @@ try {
     $strResultadoRecebidos = '';
     $strResultadoGerados = '';
     $strResultadoDetalhado = '';
-    $arrRetIconeIntegracao = array();
+    $arrRetIconeIntegracao = [];
 
 
     $i = 0;
     $maxPacotesReenvio = 0;
     $indicePacoteComFalha = 0;
-    foreach ($arrObjPacotesMonitoradosDTO as $key => $pacote) {
+    foreach ($arrObjPacotesMonitoradosDTO as $pacote) {
 
 
       $strImagemStatus = '';
@@ -220,25 +220,13 @@ try {
 
       $strResultado .= '<td width="10%" align="center" style="font-size:.9em"><a onclick="abrirProcesso(\'' . PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=procedimento_trabalhar&acao_origem=' . $_GET['acao'] . '&acao_retorno=' . $_GET['acao'] . '&id_procedimento=' . $pacote['protocolo']->getDblIdProtocolo())) . '\');" tabindex="' . PaginaSEI::getInstance()->getProxTabTabela() . '">' . $pacote['protocolo']->getStrProtocoloFormatado() . '</a></td>';
 
-      switch (trim($pacote['sta_integracao'])) {
-
-        case ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Não Integrado </td>';
-            break;
-        case ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Integrado </td>';
-            break;
-        case ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Falha Infra </td>';
-            break;
-        case ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL:
-          $strResultado .= '<td width="10%" style="font-size:1em"> Erro Negocial </td>';
-            break;
-
-        default:
-          $strResultado .= '<td width="10%" style="font-size:1em"> - </td>';
-            break;
-      }
+      match (trim($pacote['sta_integracao'])) {
+          ProtocoloIntegradoPacoteEnvioRN::$STA_NAO_INTEGRADO => $strResultado .= '<td width="10%" style="font-size:1em"> Não Integrado </td>',
+          ProtocoloIntegradoPacoteEnvioRN::$STA_INTEGRADO => $strResultado .= '<td width="10%" style="font-size:1em"> Integrado </td>',
+          ProtocoloIntegradoPacoteEnvioRN::$STA_FALHA_INFRA => $strResultado .= '<td width="10%" style="font-size:1em"> Falha Infra </td>',
+          ProtocoloIntegradoPacoteEnvioRN::$STA_ERRO_NEGOCIAL => $strResultado .= '<td width="10%" style="font-size:1em"> Erro Negocial </td>',
+          default => $strResultado .= '<td width="10%" style="font-size:1em"> - </td>',
+      };
 
       if ($pacote['dth_situacao'] == '') { $pacote['dth_situacao'] = '-';
       }

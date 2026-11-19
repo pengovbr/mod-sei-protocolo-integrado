@@ -23,7 +23,7 @@ class ProtocoloIntegradoParametrosRN extends InfraRN {
       $objProtocoloBD = new ProtocoloIntegradoParametrosBD($this->getObjInfraIBanco());
       $ret = $objProtocoloBD->listar($protocoloIntegradoParametrosDTO);
     
-      if(count($ret)==1){       
+      if(count($ret) === 1){       
               return $ret[0];
       }
         
@@ -37,9 +37,8 @@ class ProtocoloIntegradoParametrosRN extends InfraRN {
   protected function consultarControlado(ProtocoloIntegradoParametrosDTO $protocoloIntegradoParametrosDTO) {
     try {
       $objProtocoloBD = new ProtocoloIntegradoParametrosBD($this->getObjInfraIBanco());
-      $ret = $objProtocoloBD->consultar($protocoloIntegradoParametrosDTO);
   
-      return $ret;
+      return $objProtocoloBD->consultar($protocoloIntegradoParametrosDTO);
   
     }catch(Exception $e){
       throw new InfraException('Módulo Protocolo Integrado: Erro consultando Parâmetros.', $e);

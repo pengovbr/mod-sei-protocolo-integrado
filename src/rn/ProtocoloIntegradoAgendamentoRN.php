@@ -101,7 +101,7 @@ class ProtocoloIntegradoAgendamentoRN extends InfraRN {
         InfraDebug::getInstance()->gravar('Inicializando Notificações de Processos Não Publicados no Protocolo Integrado');
         $objProtocoloIntegradoMonitoramento = new ProtocoloIntegradoMonitoramentoProcessosDTO();    
         $objProtocoloIntegrado = new ProtocoloIntegradoMonitoramentoProcessosRN();
-        $objProtocoloIntegrado->notificarProcessosComFalha($objProtocoloIntegradoMonitoramento);
+        $objProtocoloIntegrado->notificarProcessosComFalha();
         $numSeg = InfraUtil::verificarTempoProcessamento($numSeg);
         InfraDebug::getInstance()->gravar('TEMPO TOTAL DE EXECUCAO: '.$numSeg.' s');
         InfraDebug::getInstance()->gravar('FIM');

@@ -54,7 +54,6 @@ try {
       }   
         header('Location: '.SessaoSEI::getInstance()->assinarLink('controlador.php?acao='.$_GET['acao_origem']));
         die;
-      break;
     case 'md_pi_mensagens_alterar':
         break;
 
@@ -66,7 +65,7 @@ try {
         throw new InfraException("Módulo Protocolo Integrado: Ação '".$_GET['acao']."' não reconhecida.");
   }
 
-  $arrComandos = array();
+  $arrComandos = [];
   
   $bolAcaoConfigurarPublicacao = SessaoSEI::getInstance()->verificarPermissao('md_pi_configurar_publicacao');
   
@@ -115,7 +114,7 @@ try {
     
     for($i = 0; $i < $numRegistros; $i++){
         
-      $strCssTr = ($strCssTr=='<tr class="infraTrClara">')?'<tr class="infraTrEscura">':'<tr class="infraTrClara">';
+      $strCssTr = ($strCssTr === '<tr class="infraTrClara">')?'<tr class="infraTrEscura">':'<tr class="infraTrClara">';
       //$strResultado .= $strCssTr;
       $strResultado .= $strCssTr;
       

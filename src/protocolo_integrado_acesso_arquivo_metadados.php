@@ -29,7 +29,6 @@ try {
         header("Content-Type: text/xml");
         print($objRetornoPacote->getStrArquivoMetadados());
         die;
-          break;
             
     case 'md_pi_visualizar_erro_envio_metadados':
         $idPacote = $_REQUEST['id_pacote'];
@@ -43,7 +42,6 @@ try {
         header("Content-Type: text/xml");
         print ($objRetornoPacote->getStrArquivoErro());
         die;
-          break;
             
     default:
         throw new InfraException("Módulo Protocolo Integrado: Ação '".$_GET['acao']."' não reconhecida.");

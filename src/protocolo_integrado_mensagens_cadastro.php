@@ -17,7 +17,7 @@ try {
 
   SessaoSEI::getInstance()->validarPermissao($_GET['acao']);
 
-  $arrComandos = array();
+  $arrComandos = [];
   
   $objProtocoloIntegradoDTO = new ProtocoloIntegradoDTO();
   $objProtocoloIntegradoDTO->retNumIdProtocoloIntegrado();
