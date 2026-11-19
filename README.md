@@ -1,5 +1,7 @@
 # Módulo do Protocolo Integrado para o SEI
 
+[![Testes para SEI main Bancos oracle, mysql, sqlserver e postgres](https://github.com/pengovbr/mod-sei-protocolo-integrado/actions/workflows/tests50.yml/badge.svg)](https://github.com/pengovbr/mod-sei-protocolo-integrado/actions/workflows/tests50.yml)
+
 ## Orientações Iniciais
 
 Para maiores informações sobre o Protocolo Integrado e como aderir ao projeto, acesse a página [Protocolo Integrado](https://www.gov.br/gestao/pt-br/assuntos/gestaoeinovacao/informacoes-sistemas-e-servicos-de-gestao/processo-eletronico-nacional/conteudo/protocolo-integrado-1) para maiores informações.
