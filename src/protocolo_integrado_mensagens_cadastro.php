@@ -89,7 +89,7 @@ PaginaSEI::getInstance()->fecharJavaScript();
 PaginaSEI::getInstance()->fecharHead();
 PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
 ?>
-<form id="frmProtocoloIntegrado" method="post" onsubmit="return OnSubmitForm();" action="<?=PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao='.$_GET['acao'].'&acao_origem='.$_GET['acao']))?>">
+<form id="frmProtocoloIntegrado" method="post" onsubmit="return OnSubmitForm();" action="<?=PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao='.htmlspecialchars($_GET['acao'], ENT_QUOTES, 'ISO-8859-1').'&acao_origem='.htmlspecialchars($_GET['acao'], ENT_QUOTES, 'ISO-8859-1')))?>">
 <input type="hidden" id="hdnFomularioSubmetido" name="hdnFomularioSubmetido" value="true" />
 <input type="hidden" id="id_mensagem_protocolo_integrado" name="id_mensagem_protocolo_integrado" value="<?=$idProtocolo?>" />
 <?

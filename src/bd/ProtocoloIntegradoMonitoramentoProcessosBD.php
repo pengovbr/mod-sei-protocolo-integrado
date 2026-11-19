@@ -261,7 +261,7 @@ class ProtocoloIntegradoMonitoramentoProcessosBD extends InfraBD {
   }
 
     // Função que recebe a data no formato dd/mm/yyyy hh:mm:ss e retorna uma funcao correspondente ao banco do sistema
-  public function retornarFormatoData ($strData) {
+  public function retornarFormatoData($strData) {
         
     if (($this->getObjInfraIBanco() instanceof InfraMySQL)) {
         return "STR_TO_DATE('". $strData ."', '%d/%m/%Y %H:%i:%s')";

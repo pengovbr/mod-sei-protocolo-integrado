@@ -25,9 +25,9 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
 
   public function inicializar($strVersaoSEI)
     {      
-      if (!defined('DIR_SEI_WEB')) {
-        define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
-      }
+    if (!defined('DIR_SEI_WEB')) {
+      define('DIR_SEI_WEB', realpath(DIR_SEI_CONFIG.'/../web'));
+    }
 
       $this->carregarArquivoConfiguracaoModulo(DIR_SEI_CONFIG);
   }    
@@ -59,7 +59,7 @@ class ProtocoloIntegradoIntegracao extends SeiIntegracao {
   private function carregarArquivoConfiguracaoModulo($strDiretorioSeiWeb){
     try{
         $strArquivoConfiguracao = $strDiretorioSeiWeb . '/mod-protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';
-        include_once $strArquivoConfiguracao;       
+        include_once $strDiretorioSeiWeb . '/mod-protocolo-integrado/ConfiguracaoModProtocoloIntegrado.php';       
     } catch(Exception){
         LogSEI::getInstance()->gravar("Arquivo de configuração do módulo Protocolo Integrado não pode ser localizado em " . $strArquivoConfiguracao);
     }

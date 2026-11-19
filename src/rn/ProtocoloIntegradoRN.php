@@ -126,6 +126,7 @@ class ProtocoloIntegradoRN extends InfraRN {
       throw new InfraException('Módulo Protocolo Integrado: Erro alterando Mensagens de Publicação no Protocolo Integrado.', $e);
     }
   }
+  //phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded
   public function transformarMensagemOperacao($numAtividade, $strNomeTarefa){
         
         $objAtributoAndamentoDTO = new AtributoAndamentoDTO();
@@ -174,11 +175,11 @@ class ProtocoloIntegradoRN extends InfraRN {
                 $objProtocoloRN = new ProtocoloRN();
                 $arrObjNivelAcessoDTO = InfraArray::indexarArrInfraDTO($objProtocoloRN->listarNiveisAcessoRN0878(), 'StaNivel');
                 $idNivelAcesso = $objAtributoAndamentoDTO->getStrIdOrigem();
-                if (isset($arrObjNivelAcessoDTO[$idNivelAcesso])) {
-                    $strNomeTarefa = str_replace('@NIVEL_ACESSO@', $arrObjNivelAcessoDTO[$idNivelAcesso]->getStrDescricao(), $strNomeTarefa);
-                } else {
-                    $strNomeTarefa = str_replace('@NIVEL_ACESSO@', '"nível de acesso não encontrado"', $strNomeTarefa);
-                }                         
+          if (isset($arrObjNivelAcessoDTO[$idNivelAcesso])) {
+              $strNomeTarefa = str_replace('@NIVEL_ACESSO@', $arrObjNivelAcessoDTO[$idNivelAcesso]->getStrDescricao(), $strNomeTarefa);
+          } else {
+              $strNomeTarefa = str_replace('@NIVEL_ACESSO@', '"nível de acesso não encontrado"', $strNomeTarefa);
+          }                         
             break;
     
         case 'GRAU_SIGILO':
@@ -192,11 +193,11 @@ class ProtocoloIntegradoRN extends InfraRN {
                     $objAtributoAndamentoDTO->getNumIdAtividade()==TarefaRN::$TI_RECEBIMENTO_DOCUMENTO ||
                     $objAtributoAndamentoDTO->getNumIdAtividade()==TarefaRN::$TI_ALTERACAO_NIVEL_ACESSO_GLOBAL){
                         
-              if (isset($arrObjGrauSigiloDTO[$idGrauSigilo])) {
-                $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' (' . $arrObjGrauSigiloDTO[$idGrauSigilo]->getStrDescricao() . ')', $strNomeTarefa);
-              } else {
-                $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' ("grau de sigilo não encontrado")', $strNomeTarefa);
-              }                   
+            if (isset($arrObjGrauSigiloDTO[$idGrauSigilo])) {
+              $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' (' . $arrObjGrauSigiloDTO[$idGrauSigilo]->getStrDescricao() . ')', $strNomeTarefa);
+            } else {
+              $strNomeTarefa = str_replace('@GRAU_SIGILO@', ' ("grau de sigilo não encontrado")', $strNomeTarefa);
+            }                   
           }else{
                         
             if (isset($arrObjGrauSigiloDTO[$idGrauSigilo])) {
@@ -239,8 +240,8 @@ class ProtocoloIntegradoRN extends InfraRN {
             $idHipoteseLegal = $objAtributoAndamentoDTO->getStrIdOrigem();
             if (isset($arrObjHipoteseLegalDTO[$idHipoteseLegal])) {
               $strNomeTarefa = str_replace('@HIPOTESE_LEGAL@', ', ' . HipoteseLegalINT::formatarHipoteseLegal($arrObjHipoteseLegalDTO[$idHipoteseLegal]->getStrNome(), $arrObjHipoteseLegalDTO[$idHipoteseLegal]->getStrBaseLegal()), $strNomeTarefa);
+            }
           }
-        }
                     
             break;
                 

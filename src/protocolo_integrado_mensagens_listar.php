@@ -178,7 +178,7 @@ PaginaSEI::getInstance()->abrirJavaScript();
 ?>
 
 function inicializar(){
-  if ('<?=$_GET['acao']?>'=='tarefa_selecionar'){
+  if ('<?=htmlspecialchars($_GET['acao'], ENT_QUOTES, 'ISO-8859-1')?>'=='tarefa_selecionar'){
     infraReceberSelecao();
     document.getElementById('btnFecharSelecao').focus();
   }else{
@@ -248,7 +248,7 @@ PaginaSEI::getInstance()->fecharJavaScript();
 PaginaSEI::getInstance()->fecharHead();
 PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
 ?>
-<form id="frmMensagemLista" method="post" action="<?=PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao='.$_GET['acao'].'&acao_origem='.$_GET['acao']))?>">
+<form id="frmMensagemLista" method="post" action="<?=PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao='.htmlspecialchars($_GET['acao'], ENT_QUOTES, 'ISO-8859-1').'&acao_origem='.htmlspecialchars($_GET['acao'], ENT_QUOTES, 'ISO-8859-1')))?>">
   <input type="hidden" id="chkPublicarItemAlterados" name="chkPublicarItemAlterados"/>
   <?
   PaginaSEI::getInstance()->montarBarraComandosSuperior($arrComandos);

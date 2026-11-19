@@ -30,7 +30,7 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
                     'verify_peer_name' => false,
                     'allow_self_signed' => true
                 ],
-        ]);
+            ]);
 
         $opcoes = array_merge(
             $opcoes, ['stream_context' => $this->context, 
@@ -53,26 +53,26 @@ class ProtocoloIntegradoClienteWS extends SoapClient {
 
       $ch = curl_init();
 
-      try{
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_setopt($ch, CURLOPT_URL, $this->url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2 );
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_FAILONERROR, true);
-        curl_exec($ch);
+    try{
+      curl_setopt($ch, CURLOPT_HEADER, true);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_NOBODY, true);
+      curl_setopt($ch, CURLOPT_URL, $this->url);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2 );
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+      curl_setopt($ch, CURLOPT_FAILONERROR, true);
+      curl_exec($ch);
                         
-        $curl_error = null;
-        if (curl_errno($ch)){
-          $curl_error = curl_error($ch);
-        }
+      $curl_error = null;
+      if (curl_errno($ch)){
+        $curl_error = curl_error($ch);
+      }
 
-        if ($curl_error) {       
-          throw new Exception($this->url." Erro ao obter requisição CURL. Erro detalhado: " . $curl_error );
-        }
-      }finally {
-      } 
+      if ($curl_error) {       
+        throw new Exception($this->url." Erro ao obter requisição CURL. Erro detalhado: " . $curl_error );
+      }
+    }finally {
+    } 
   }
 
     // Override doRequest to calculate the authentication hash from the $request.

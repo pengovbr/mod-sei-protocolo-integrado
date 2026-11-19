@@ -9,30 +9,31 @@ class PaginaAgendamentos extends PaginaTeste
      * 
      * @return void
      */
-    public function __construct($test)
+  public function __construct($test)
     {
-        parent::__construct($test);
-    }
+      parent::__construct($test);
+  }
 
-    public function navegarAgendamento()
+  public function navegarAgendamento()
     {
-        $this->test->byId("txtInfraPesquisarMenu")->value(utf8_encode('Agendamentos'));
-        $this->test->byXPath("//a[@link='infra_agendamento_tarefa_listar']")->click();
-    }
+      $this->test->byId("txtInfraPesquisarMenu")->value(utf8_encode('Agendamentos'));
+      $this->test->byXPath("//a[@link='infra_agendamento_tarefa_listar']")->click();
+  }
 
-    public function executarAgendamento($agendamento)
+  public function executarAgendamento($agendamento)
     {
-        $linhasAgendamentos = $this->test->elements($this->test->using('xpath')->value('//table[contains(@class, "infraTable")]/tbody/tr'));
-        unset($linhasAgendamentos[0]);
+      $linhasAgendamentos = $this->test->elements($this->test->using('xpath')->value('//table[contains(@class, "infraTable")]/tbody/tr'));
+      unset($linhasAgendamentos[0]);
 
-        foreach($linhasAgendamentos as $idx => $linha) {
-            $colunaComando = $linha->byXPath('./td[2]');
+    foreach($linhasAgendamentos as $idx => $linha) {
+        $colunaComando = $linha->byXPath('./td[2]');
 
-            if ($colunaComando->text() === $agendamento) {
-                $this->test->byXPath("(//img[@title='Executar Agendamento'])[$idx]")->click();
-                $bolExisteAlerta = $this->alertTextAndClose();
-                if ($bolExisteAlerta != null) $this->test->keys(Keys::ENTER);
-            }
+      if ($colunaComando->text() === $agendamento) {
+        $this->test->byXPath("(//img[@title='Executar Agendamento'])[$idx]")->click();
+        $bolExisteAlerta = $this->alertTextAndClose();
+        if ($bolExisteAlerta != null) { $this->test->keys(Keys::ENTER);
         }
+      }
     }
+  }
 }

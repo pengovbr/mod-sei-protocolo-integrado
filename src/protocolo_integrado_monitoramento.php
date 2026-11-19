@@ -347,7 +347,7 @@ PaginaSEI::getInstance()->fecharJavaScript();
 PaginaSEI::getInstance()->fecharHead();
 PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
 ?>
-<form id="frmMonitoramentoIntegracaoProcessosLista" method="post" action="<?= PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=' . $_GET['acao'] . '&acao_origem=' . $_GET['acao'])) ?>">
+<form id="frmMonitoramentoIntegracaoProcessosLista" method="post" action="<?= PaginaSEI::getInstance()->formatarXHTML(SessaoSEI::getInstance()->assinarLink('controlador.php?acao=' . htmlspecialchars($_GET['acao'], ENT_QUOTES, 'ISO-8859-1') . '&acao_origem=' . htmlspecialchars($_GET['acao'], ENT_QUOTES, 'ISO-8859-1'))) ?>">
 
   <input type="hidden" id="chkPacoteAcao" name="chkPacoteAcao" />
 
@@ -440,7 +440,7 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
     ?>
     <div style="float:right;padding:0 1.5em">
       <label style="">Quantidade de registros por página</label>
-      <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' value="<?= $_REQUEST['numRegistosPaginaSuperior'] ?>" onkeyup='replicaValorNumeroRegistrosPorPagina(this)' id='numRegistosPaginaSuperior' name='numRegistosPaginaSuperior'>
+      <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' value="<?= htmlspecialchars($_REQUEST['numRegistosPaginaSuperior'], ENT_QUOTES, 'ISO-8859-1') ?>" onkeyup='replicaValorNumeroRegistrosPorPagina(this)' id='numRegistosPaginaSuperior' name='numRegistosPaginaSuperior'>
       <input size="10" value="OK" class="infraButton" style="vertical-align:top" type="submit">
     </div>
     <?
@@ -456,7 +456,7 @@ PaginaSEI::getInstance()->abrirBody($strTitulo, 'onload="inicializar();"');
     ?>
     <div style="float:right;padding:0 1.5em">
       <label style="">Quantidade de registros por página</label>
-      <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' id='numRegistosPaginaInferior' value="<?= $_REQUEST['numRegistosPaginaSuperior'] ?>" name='numRegistosPaginaInferior' onkeyup='replicaValorNumeroRegistrosPorPagina(this)'>
+      <input style="background-color: #FFF;border: 1px solid #333;" size="5" type='number' id='numRegistosPaginaInferior' value="<?= htmlspecialchars($_REQUEST['numRegistosPaginaSuperior'], ENT_QUOTES, 'ISO-8859-1') ?>" name='numRegistosPaginaInferior' onkeyup='replicaValorNumeroRegistrosPorPagina(this)'>
       <input size="10" value="OK" class="infraButton" style="vertical-align:top" type="submit">
     </div>
     <?

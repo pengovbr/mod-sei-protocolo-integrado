@@ -38,7 +38,7 @@ class Encoding {
   const ICONV_TRANSLIT = "TRANSLIT";
   const ICONV_IGNORE = "IGNORE";
   const WITHOUT_ICONV = "";
-  
+  //phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
   public function convert_xml_entities($string) {
         return strtr(
             $string, 
@@ -51,6 +51,7 @@ class Encoding {
             ]
         );
   }
+  //phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
   public function deconvert_xml_entities($string) {
         return strtr(
             $string, 
@@ -245,9 +246,9 @@ class Encoding {
   }
   public static function toWin1252($text, $option = self::WITHOUT_ICONV) {
     if (is_array($text)) {
-        foreach($text as $k => $v) {
-          $text[$k] = self::toWin1252($v, $option);
-        }
+      foreach($text as $k => $v) {
+        $text[$k] = self::toWin1252($v, $option);
+      }
         return $text;
     }
     if (is_string($text)) {
@@ -318,6 +319,7 @@ class Encoding {
     }
     return Encoding::toUTF8($text);
   }
+  //phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
   protected static function utf8_decode($text, $option)
   {
     if ($option == self::WITHOUT_ICONV || !function_exists('iconv')) {
